@@ -1,4 +1,6 @@
 import random
+import pandas as pd
+import matplotlib.pyplot as plt
 
 
 class FullyMixedSIR:
@@ -13,36 +15,52 @@ class FullyMixedSIR:
 
         self.time = None
 
-    def initialisePopulation(self, initial_infected: int):
+        self.dataframe = None
+
+    def initialise_population(self, initial_infected: int):
         self.susceptible = self.population_size - initial_infected
         self.infectious = initial_infected
         self.removed = 0
 
         self.time = 0
 
-        print(f"S: {self.susceptible}, I: {self.infectious}, R: {self.removed}")
+        self.dataframe = pd.DataFrame(columns=['Time', 'Susceptible', 'Infectious', 'Removed'])
 
-    def increaseTime(self):
+        self.dataframe.loc[self.time] = [self.time, self.susceptible, self.infectious, self.removed]
+
+    def increase_time(self):
+        self.time += 1
+
         newly_infected = 0
         for i in range(self.susceptible):
-            if random.random() >= self.INFECTION_RATE:
+            if random.random() <= self.INFECTION_RATE:
                 newly_infected += 1
 
         newly_removed = 0
         for i in range(self.infectious):
-            if random.random() >= self.RECOVERY_RATE:
+            if random.random() <= self.RECOVERY_RATE:
                 newly_removed += 1
 
         self.susceptible = self.susceptible - newly_infected
         self.infectious = self.infectious + newly_infected - newly_removed
         self.removed = self.removed + newly_removed
 
-        print(f"S: {self.susceptible}, I: {self.infectious}, R: {self.removed}")
+        self.dataframe.loc[self.time] = [self.time, self.susceptible, self.infectious, self.removed]
+
+    def save_model(self, filename='fully_mixed_model.csv'):
+        self.dataframe.to_csv(filename, index=False)
+
+    def view_model(self):
+        self.dataframe.plot(x='Time', y=['Susceptible', 'Infectious', 'Removed'], kind='line', figsize=(10, 10))
+        plt.show()
 
 
 if __name__ == '__main__':
-    fully_mixed_model = FullyMixedSIR(infection_rate=0.4, recovery_rate=0.04, population_size=1000)
-    fully_mixed_model.initialisePopulation(initial_infected=3)
+    fully_mixed_model = FullyMixedSIR(infection_rate=0.04, recovery_rate=0.035, population_size=1000)
+    fully_mixed_model.initialise_population(initial_infected=3)
 
-    for t in range(10):
-        fully_mixed_model.increaseTime()
+    for t in range(100):
+        fully_mixed_model.increase_time()
+
+    fully_mixed_model.save_model()
+    fully_mixed_model.view_model()
