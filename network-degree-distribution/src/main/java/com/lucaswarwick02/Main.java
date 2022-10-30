@@ -2,18 +2,21 @@ package com.lucaswarwick02;
 
 import org.jfree.ui.RefineryUtilities;
 
-public class Main {
-    public static void main (String[] args) {
-        Model model = new Model(0.0004f, 0.035f, 1000);
-        model.runSimulation(10, 3);
-        model.printSimulation();
+import java.io.FileWriter;
+import java.io.IOException;
 
-        LineChart_AWT chart = new LineChart_AWT(
-                "Schools Vs Years",
-                "Number of Schools vs years"
-        );
-        chart.pack();
-        RefineryUtilities.centerFrameOnScreen( chart );
-        chart.setVisible( true );
+public class Main {
+    public static void main (String[] args) throws IOException {
+        Model model = new Model(0.0004f, 0.035f, 1000);
+        model.runSimulation(100, 3);
+
+        FileWriter fileWriter = new FileWriter("C:\\Users\\Lucas\\Documents\\Projects\\Part-III-Individual-Project\\out\\test.csv");
+
+        fileWriter.write(ModelState.getCSVHeaders() + "\n");
+        for (ModelState modelState : model.getModelStates()) {
+            fileWriter.write(modelState.getCSVRow() + "\n");
+        }
+
+        fileWriter.close();
     }
 }

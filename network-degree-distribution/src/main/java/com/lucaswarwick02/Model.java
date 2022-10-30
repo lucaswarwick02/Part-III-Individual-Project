@@ -48,9 +48,7 @@ public class Model {
         }
     }
 
-    public void printSimulation () {
-        for (ModelState modelState : modelStates) {
-            if (modelState != null) System.out.println(modelState.toString());
-        }
+    public ModelState[] getModelStates () {
+        return modelStates;
     }
 }

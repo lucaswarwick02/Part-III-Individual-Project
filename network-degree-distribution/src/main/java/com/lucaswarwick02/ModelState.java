@@ -1,11 +1,11 @@
 package com.lucaswarwick02;
 
 public class ModelState {
-    private int time;
+    private final int time;
 
-    private int susceptible;
-    private int infected;
-    private int removed;
+    private final int susceptible;
+    private final int infected;
+    private final int removed;
 
     public ModelState (int time, int susceptible, int infected, int removed) {
         this.time = time;
@@ -29,5 +29,13 @@ public class ModelState {
     @Override
     public String toString() {
         return "ModelState(susceptible=" + susceptible + ", infected=" + infected + ", removed=" + removed + ")";
+    }
+
+    public static String getCSVHeaders () {
+        return "Time|Susceptible|Infected|Removed";
+    }
+
+    public String getCSVRow () {
+        return time + "|" + susceptible + "|" + infected + "|" + removed;
     }
 }
