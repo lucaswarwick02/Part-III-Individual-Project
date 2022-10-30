@@ -32,10 +32,10 @@ public class ModelState {
     }
 
     public static String getCSVHeaders () {
-        return "Time|Susceptible|Infected|Removed";
+        return "Time,Susceptible,Infected,Removed";
     }
 
     public String getCSVRow () {
-        return time + "|" + susceptible + "|" + infected + "|" + removed;
+        return time + "," + susceptible + "," + infected + "," + removed;
     }
 }
