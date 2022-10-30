@@ -1,11 +1,12 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib
+import sys
 import os
 
 if __name__ == '__main__':
-    PATH = r'C:\Users\Lucas\Documents\Projects\Part-III-Individual-Project\out\test.csv'
-    df = pd.read_csv(PATH, index_col=None)
+    ROOT_PATH = sys.argv[1]
+    FILE_NAME = sys.argv[2]
+    df = pd.read_csv(os.path.join(ROOT_PATH, 'data', FILE_NAME), index_col=None)
     
     ax = plt.gca()
 
