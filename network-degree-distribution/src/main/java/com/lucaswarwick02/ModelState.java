@@ -26,11 +26,6 @@ public class ModelState {
         return removed;
     }
 
-    @Override
-    public String toString() {
-        return "ModelState(susceptible=" + susceptible + ", infected=" + infected + ", removed=" + removed + ")";
-    }
-
     public static String getCSVHeaders () {
         return "Time,Susceptible,Infected,Removed";
     }
