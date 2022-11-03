@@ -13,21 +13,21 @@ public class Model {
 
     private int time;
 
-    public Model (float rateOfInfection, float rateOfRecovery, int populationSize) {
+    public Model(float rateOfInfection, float rateOfRecovery, int populationSize) {
         this.RATE_OF_INFECTION = rateOfInfection;
         this.RATE_OF_RECOVERY = rateOfRecovery;
 
         this.POPULATION_SIZE = populationSize;
     }
 
-    public void runSimulation (int iterations, int initialInfected) {
+    public void runSimulation(int iterations, int initialInfected) {
         Random r = new Random();
 
         modelStates = new ModelState[iterations];
 
         // Initialise the model at t=0
         time = 0;
-        modelStates[0] = new ModelState(time, POPULATION_SIZE - initialInfected, initialInfected, 0);
+        modelStates[0] = new ModelState(time, POPULATION_SIZE - initialInfected, initialInfected, 0, initialInfected);
 
         for (int time = 1; time < iterations; time++) {
             int newlyInfected = 0;
@@ -44,11 +44,15 @@ public class Model {
                 }
             }
 
-            modelStates[time] = new ModelState(time, modelStates[time - 1].getSusceptible() - newlyInfected, modelStates[time - 1].getInfected() + newlyInfected - newlyRemoved, modelStates[time - 1].getRemoved() + newlyRemoved);
+            modelStates[time] = new ModelState(time,
+                    modelStates[time - 1].getSusceptible() - newlyInfected,
+                    modelStates[time - 1].getInfected() + newlyInfected - newlyRemoved,
+                    modelStates[time - 1].getRemoved() + newlyRemoved,
+                    modelStates[time - 1].getCumulativeInfected() + newlyInfected);
         }
     }
 
-    public ModelState[] getModelStates () {
+    public ModelState[] getModelStates() {
         return modelStates;
     }
 }

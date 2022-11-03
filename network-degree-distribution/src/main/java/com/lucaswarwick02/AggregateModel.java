@@ -1,19 +1,19 @@
 package com.lucaswarwick02;
 
 import java.util.Arrays;
+import java.util.function.DoubleBinaryOperator;
 import java.util.stream.Stream;
 
 public class AggregateModel {
 
     public AggregateModelState[] aggregateModelStates;
 
-    public AggregateModel (Model[] models) {
-        aggregateModels( models );
+    public AggregateModel(Model[] models) {
+        aggregateModels(models);
     }
 
-    private void aggregateModels (Model[] models) {
+    private void aggregateModels(Model[] models) {
         int iterations = models[0].getModelStates().length;
-
 
         aggregateModelStates = new AggregateModelState[iterations];
 
@@ -21,11 +21,13 @@ public class AggregateModel {
             int[] susceptibleArray = new int[models.length];
             int[] infectedArray = new int[models.length];
             int[] removedArray = new int[models.length];
+            int[] cumulativeInfectedArray = new int[models.length];
 
             for (int m = 0; m < models.length; m++) {
                 susceptibleArray[m] = models[m].getModelStates()[time].getSusceptible();
                 infectedArray[m] = models[m].getModelStates()[time].getInfected();
                 removedArray[m] = models[m].getModelStates()[time].getRemoved();
+                cumulativeInfectedArray[m] = models[m].getModelStates()[time].getCumulativeInfected();
             }
 
             aggregateModelStates[time] = new AggregateModelState(
@@ -38,9 +40,10 @@ public class AggregateModel {
                     Arrays.stream(infectedArray).average().orElse(Double.NaN),
                     Arrays.stream(removedArray).min().getAsInt(),
                     Arrays.stream(removedArray).max().getAsInt(),
-                    Arrays.stream(removedArray).average().orElse(Double.NaN)
-
-            );
+                    Arrays.stream(removedArray).average().orElse(Double.NaN),
+                    Arrays.stream(cumulativeInfectedArray).min().getAsInt(),
+                    Arrays.stream(cumulativeInfectedArray).max().getAsInt(),
+                    Arrays.stream(cumulativeInfectedArray).average().orElse(Double.NaN));
         }
     }
 }

@@ -5,14 +5,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class Main {
-    public static void main (String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         String ROOT_PATH = args[0];
         String FOLDER_NAME = args[1];
 
-        final int MODELS_TO_GENERATE = 100;
+        final int MODELS_TO_GENERATE = 50;
 
         Model[] models = new Model[MODELS_TO_GENERATE];
-
         for (int i = 0; i < MODELS_TO_GENERATE; i++) {
             models[i] = new Model(0.0004f, 0.035f, 1000);
             models[i].runSimulation(100, 3);

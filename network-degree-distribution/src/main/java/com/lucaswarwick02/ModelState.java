@@ -7,11 +7,14 @@ public class ModelState {
     private final int infected;
     private final int removed;
 
-    public ModelState (int time, int susceptible, int infected, int removed) {
+    private final int cumulativeInfected;
+
+    public ModelState(int time, int susceptible, int infected, int removed, int cumulativeInfected) {
         this.time = time;
         this.susceptible = susceptible;
         this.infected = infected;
         this.removed = removed;
+        this.cumulativeInfected = cumulativeInfected;
     }
 
     public int getSusceptible() {
@@ -26,11 +29,15 @@ public class ModelState {
         return removed;
     }
 
-    public static String getCSVHeaders () {
-        return "Time,Susceptible,Infected,Removed";
+    public int getCumulativeInfected() {
+        return cumulativeInfected;
     }
 
-    public String getCSVRow () {
-        return time + "," + susceptible + "," + infected + "," + removed;
+    public static String getCSVHeaders() {
+        return "Time,Susceptible,Infected,Removed,CumulativeInfected";
+    }
+
+    public String getCSVRow() {
+        return time + "," + susceptible + "," + infected + "," + removed + ", " + cumulativeInfected;
     }
 }
