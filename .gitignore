@@ -8,3 +8,5 @@ data/
 tempCodeRunnerFile.bat
 
 network-degree-distribution/target/
+
+network-models/target/
