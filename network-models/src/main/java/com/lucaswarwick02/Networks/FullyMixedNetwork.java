@@ -5,10 +5,17 @@ import com.lucaswarwick02.Components.Node;
 
 public class FullyMixedNetwork extends AbstractNetwork {
 
+    /**
+     * Create an empty underlying network
+     */
     public FullyMixedNetwork() {
         super();
     }
 
+    /**
+     * Generate the Nodes and Edges for the underlying fully-mixed network
+     * @param numberOfNodes Number of Nodes in the network
+     */
     @Override
     public void generateNetwork(int numberOfNodes) {
         for (int n = 0; n < numberOfNodes; n++) {
