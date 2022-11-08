@@ -4,7 +4,7 @@ public class Node {
     /**
      * Compartmental model states
      */
-    enum State {
+    public enum State {
         Susceptible,
         Infected,
         Recovered
