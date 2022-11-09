@@ -1,6 +1,5 @@
 package com.lucaswarwick02.Networks;
 
-import com.lucaswarwick02.Components.Edge;
 import com.lucaswarwick02.Components.Node;
 
 public class FullyMixedNetwork extends AbstractNetwork {
