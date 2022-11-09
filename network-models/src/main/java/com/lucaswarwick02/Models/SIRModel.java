@@ -1,9 +1,10 @@
-package com.lucaswarwick02;
+package com.lucaswarwick02.Models;
 
 import com.lucaswarwick02.Components.Node;
 import com.lucaswarwick02.Networks.AbstractNetwork;
 import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 import tech.tablesaw.plotly.Plot;
 import tech.tablesaw.plotly.api.LinePlot;
 import tech.tablesaw.plotly.components.Figure;
@@ -14,21 +15,13 @@ import tech.tablesaw.plotly.traces.Trace;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SIRModel {
-    AbstractNetwork underlyingNetwork;
-
-    final float RATE_OF_INFECTION;
-    final float RATE_OF_RECOVERY;
-
-    Table results;
+public class SIRModel extends AbstractModel {
 
     public SIRModel (AbstractNetwork underlyingNetwork, float rateOfInfection, float rateOfRecovery) {
-        this.underlyingNetwork = underlyingNetwork;
-
-        this.RATE_OF_INFECTION = rateOfInfection;
-        this.RATE_OF_RECOVERY = rateOfRecovery;
+        super(underlyingNetwork, rateOfInfection, rateOfRecovery);
     }
 
+    @Override
     public void runSimulation (int iterations, int initialInfected) {
         int[] timeCount = new int[iterations];
         int[] susceptibleCount = new int[iterations];
@@ -84,37 +77,5 @@ public class SIRModel {
                         IntColumn.create("Infected", infectedCount),
                         IntColumn.create("Recovered", recoveredCount)
                 );
-    }
-
-    public void viewResults () {
-        Layout layout = Layout.builder()
-                .title("My Title")
-                .height(500)
-                .width(650)
-                .build();
-
-        ScatterTrace susceptibleTrace = ScatterTrace.builder(
-                results.column(0), results.column(1))
-                .mode(ScatterTrace.Mode.LINE)
-                .name("Susceptible")
-                .build();
-
-        ScatterTrace infectedTrace = ScatterTrace.builder(
-                        results.column(0), results.column(2))
-                .mode(ScatterTrace.Mode.LINE)
-                .name("Infected")
-                .build();
-
-        ScatterTrace recoveredTrace = ScatterTrace.builder(
-                        results.column(0), results.column(3))
-                .mode(ScatterTrace.Mode.LINE)
-                .name("Recovered")
-                .build();
-
-        Plot.show(new Figure(layout, susceptibleTrace, infectedTrace, recoveredTrace));
-    }
-
-    private static <E> List<E> pickRandom(List<E> list, int n) {
-        return new Random().ints(n, 0, list.size()).mapToObj(list::get).collect(Collectors.toList());
     }
 }

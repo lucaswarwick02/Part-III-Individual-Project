@@ -10,7 +10,8 @@ public class Node {
     public enum State {
         Susceptible,
         Infected,
-        Recovered
+        Recovered,
+        Vaccinated
     }
 
     public State state; // Compartmental model state
