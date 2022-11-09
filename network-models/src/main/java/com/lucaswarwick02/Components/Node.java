@@ -1,5 +1,8 @@
 package com.lucaswarwick02.Components;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Node {
     /**
      * Compartmental model states
@@ -10,9 +13,10 @@ public class Node {
         Recovered
     }
 
-    private State state; // Compartmental model state
-    private final int ID; // Unique identifier
-    private int degree; // Number of adjacent neighbours
+    public State state; // Compartmental model state
+    public final int ID; // Unique identifier
+
+    public List<Node> neighbours;
 
     /**
      * Create a Susceptible Node
@@ -21,45 +25,6 @@ public class Node {
     public Node (int ID) {
         this.ID = ID;
         this.state = State.Susceptible;
-    }
-
-    /**
-     * Get the ID of the Node
-     * @return Node's ID
-     */
-    public int getID () {
-        return this.ID;
-    }
-
-    /**
-     * Get the state of the Node
-     * @return Node's state
-     */
-    public State getState () {
-        return this.state;
-    }
-
-    /**
-     * Get the degree of the Node (number of neighbours)
-     * @return Node's degree
-     */
-    public int getDegree () {
-        return this.degree;
-    }
-
-    /**
-     * Set the state of the Node (compartmental)
-     * @param newState Compartment state
-     */
-    public void setState (State newState) {
-        this.state = newState;
-    }
-
-    /**
-     * Set the degree of the Node
-     * @param newDegree
-     */
-    public void setDegree (int newDegree) {
-        this.degree = newDegree;
+        neighbours = new ArrayList<>();
     }
 }

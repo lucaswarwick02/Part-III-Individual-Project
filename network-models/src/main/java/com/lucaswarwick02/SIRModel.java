@@ -29,7 +29,7 @@ public class SIRModel {
 
         // set initialInfected nodes to Infected
         List<Node> initialInfectedNodes = pickRandom(underlyingNetwork.getNodes(), initialInfected);
-        initialInfectedNodes.forEach(node -> node.setState(Node.State.Infected));
+        initialInfectedNodes.forEach(node -> node.state = Node.State.Infected);
 
         printModelState();
 
@@ -42,17 +42,16 @@ public class SIRModel {
             // For each infected Node...
             for (Node infectedNode : underlyingNetwork.getNodesFromState(Node.State.Infected)) {
                 // ... get a list of the Nodes they are going to infect
-                List<Node> neighbours = underlyingNetwork.getNeighbours(infectedNode);
-                neighbours.forEach(node -> {if (r.nextFloat() <= RATE_OF_INFECTION) nodesToInfect.add(node); });
+                infectedNode.neighbours.forEach(node -> {if (r.nextFloat() <= RATE_OF_INFECTION) nodesToInfect.add(node); });
 
                 // ... maybe recover the Node
                 if (r.nextFloat() <= RATE_OF_RECOVERY) nodesToRecover.add(infectedNode);
             }
 
             // Infect the nodes
-            nodesToInfect.forEach(node -> node.setState(Node.State.Infected));
+            nodesToInfect.forEach(node -> node.state = Node.State.Infected);
             // Recover the nodes
-            nodesToRecover.forEach(node -> node.setState(Node.State.Recovered));
+            nodesToRecover.forEach(node -> node.state = Node.State.Recovered);
 
             printModelState();
         }
