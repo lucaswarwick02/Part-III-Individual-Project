@@ -32,4 +32,8 @@ public abstract class AbstractNetwork {
     public ArrayList<Node> getNodes () {
         return this.nodes;
     }
+
+    public double getAverageDegree () {
+        return this.nodes.stream().mapToDouble(node -> node.getDegree()).average().orElse(Double.NaN);
+    }
 }

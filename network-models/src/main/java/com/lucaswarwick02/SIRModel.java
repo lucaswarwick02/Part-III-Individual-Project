@@ -2,6 +2,14 @@ package com.lucaswarwick02;
 
 import com.lucaswarwick02.Components.Node;
 import com.lucaswarwick02.Networks.AbstractNetwork;
+import tech.tablesaw.api.IntColumn;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.plotly.Plot;
+import tech.tablesaw.plotly.api.LinePlot;
+import tech.tablesaw.plotly.components.Figure;
+import tech.tablesaw.plotly.components.Layout;
+import tech.tablesaw.plotly.traces.ScatterTrace;
+import tech.tablesaw.plotly.traces.Trace;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,7 +20,7 @@ public class SIRModel {
     final float RATE_OF_INFECTION;
     final float RATE_OF_RECOVERY;
 
-    int time;
+    Table results;
 
     public SIRModel (AbstractNetwork underlyingNetwork, float rateOfInfection, float rateOfRecovery) {
         this.underlyingNetwork = underlyingNetwork;
@@ -22,19 +30,25 @@ public class SIRModel {
     }
 
     public void runSimulation (int iterations, int initialInfected) {
+        int[] timeCount = new int[iterations];
+        int[] susceptibleCount = new int[iterations];
+        int[] infectedCount = new int[iterations];
+        int[] recoveredCount = new int[iterations];
+
         Random r = new Random();
 
         // Initialise the model at time = 0
-        time = 0;
 
         // set initialInfected nodes to Infected
         List<Node> initialInfectedNodes = pickRandom(underlyingNetwork.getNodes(), initialInfected);
         initialInfectedNodes.forEach(node -> node.state = Node.State.Infected);
 
-        printModelState();
+        timeCount[0] = 0;
+        susceptibleCount[0] = this.underlyingNetwork.getNodesFromState(Node.State.Susceptible).size();
+        infectedCount[0] = this.underlyingNetwork.getNodesFromState(Node.State.Infected).size();
+        recoveredCount[0] = this.underlyingNetwork.getNodesFromState(Node.State.Recovered).size();
 
         for (int t = 1; t < iterations; t++) {
-            time = t;
 
             List<Node> nodesToInfect = new ArrayList<>();
             List<Node> nodesToRecover = new ArrayList<>();
@@ -42,7 +56,11 @@ public class SIRModel {
             // For each infected Node...
             for (Node infectedNode : underlyingNetwork.getNodesFromState(Node.State.Infected)) {
                 // ... get a list of the Nodes they are going to infect
-                infectedNode.neighbours.forEach(node -> {if (r.nextFloat() <= RATE_OF_INFECTION) nodesToInfect.add(node); });
+                infectedNode.neighbours.forEach(neighbour -> {
+                    if (neighbour.state == Node.State.Susceptible) {
+                        if (r.nextFloat() <= RATE_OF_INFECTION) nodesToInfect.add(neighbour);
+                    }
+                });
 
                 // ... maybe recover the Node
                 if (r.nextFloat() <= RATE_OF_RECOVERY) nodesToRecover.add(infectedNode);
@@ -53,29 +71,50 @@ public class SIRModel {
             // Recover the nodes
             nodesToRecover.forEach(node -> node.state = Node.State.Recovered);
 
-            printModelState();
+            timeCount[t] = t;
+            susceptibleCount[t] = this.underlyingNetwork.getNodesFromState(Node.State.Susceptible).size();
+            infectedCount[t] = this.underlyingNetwork.getNodesFromState(Node.State.Infected).size();
+            recoveredCount[t] = this.underlyingNetwork.getNodesFromState(Node.State.Recovered).size();
         }
+
+        results = Table.create("SIR Model Results")
+                .addColumns(
+                        IntColumn.create("Time", timeCount),
+                        IntColumn.create("Susceptible", susceptibleCount),
+                        IntColumn.create("Infected", infectedCount),
+                        IntColumn.create("Recovered", recoveredCount)
+                );
+    }
+
+    public void viewResults () {
+        Layout layout = Layout.builder()
+                .title("My Title")
+                .height(500)
+                .width(650)
+                .build();
+
+        ScatterTrace susceptibleTrace = ScatterTrace.builder(
+                results.column(0), results.column(1))
+                .mode(ScatterTrace.Mode.LINE)
+                .name("Susceptible")
+                .build();
+
+        ScatterTrace infectedTrace = ScatterTrace.builder(
+                        results.column(0), results.column(2))
+                .mode(ScatterTrace.Mode.LINE)
+                .name("Infected")
+                .build();
+
+        ScatterTrace recoveredTrace = ScatterTrace.builder(
+                        results.column(0), results.column(3))
+                .mode(ScatterTrace.Mode.LINE)
+                .name("Recovered")
+                .build();
+
+        Plot.show(new Figure(layout, susceptibleTrace, infectedTrace, recoveredTrace));
     }
 
     private static <E> List<E> pickRandom(List<E> list, int n) {
         return new Random().ints(n, 0, list.size()).mapToObj(list::get).collect(Collectors.toList());
-    }
-
-    public void printModelState () {
-//        System.out.println("--------------------------------------------------");
-//        // Print time of the Model
-//        System.out.println("Time: " + this.time);
-//        // Print number of Susceptible Nodes
-//        System.out.println("Susceptible: " + underlyingNetwork.getNodesFromState(Node.State.Susceptible).size());
-//        // Print number of Infected Nodes
-//        System.out.println("Infected: " + underlyingNetwork.getNodesFromState(Node.State.Infected).size());
-//        // Print number of Recovered Nodes
-//        System.out.println("Recovered: " + underlyingNetwork.getNodesFromState(Node.State.Recovered).size());
-
-        System.out.println(
-                time + "," +
-                        underlyingNetwork.getNodesFromState(Node.State.Susceptible).size() + "," +
-                        underlyingNetwork.getNodesFromState(Node.State.Infected).size() + "," +
-                        underlyingNetwork.getNodesFromState(Node.State.Recovered).size());
     }
 }

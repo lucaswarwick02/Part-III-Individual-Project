@@ -27,4 +27,8 @@ public class Node {
         this.state = State.Susceptible;
         neighbours = new ArrayList<>();
     }
+
+    public int getDegree () {
+        return this.neighbours.size();
+    }
 }

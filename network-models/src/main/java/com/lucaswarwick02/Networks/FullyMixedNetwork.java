@@ -21,7 +21,11 @@ public class FullyMixedNetwork extends AbstractNetwork {
             // Create the Node
             Node newNode = new Node(n);
 
+            // Let this node be a neighbour for all the others...
             this.nodes.forEach(networkNode -> networkNode.neighbours.add(newNode));
+
+            // ... and let all the others be a neighbour of this node
+            newNode.neighbours.addAll(this.nodes);
 
             // Add node to the list of nodes
             this.nodes.add(newNode);
