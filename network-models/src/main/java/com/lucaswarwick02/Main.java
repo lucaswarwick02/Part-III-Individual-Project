@@ -27,11 +27,11 @@ public class Main {
         final File outputFolder = new File(DATA_FOLDER, timeStamp);
         outputFolder.mkdir();
 
-        runSimulations( outputFolder, numberOfNodes, numberOfSimulations, new FullyMixedNetwork(), new SIRModel( 0.0004f, 0.04f ) );
-        // runSimulations( outputFolder, numberOfNodes, numberOfSimulations, new FullyMixedNetwork(), new SIRVModel( 0.0004f, 0.04f, 0.04f ) );
+        runSimulations( numberOfNodes, numberOfSimulations, new FullyMixedNetwork(), new SIRModel( 0.0004f, 0.04f ) );
+        runSimulations( numberOfNodes, numberOfSimulations, new FullyMixedNetwork(), new SIRVModel( 0.0004f, 0.04f, 0.04f ) );
     }
 
-    public static void runSimulations ( File outputFolder, int numberOfNodes, int numberOfSimulations, AbstractNetwork network, AbstractModel model ) {
+    public static void runSimulations ( int numberOfNodes, int numberOfSimulations, AbstractNetwork network, AbstractModel model ) {
         AggregateModel aggregateModel = new AggregateModel( numberOfSimulations );
 
         try (ProgressBar pb = new ProgressBar(network.getClass().getSimpleName() + " - " + model.getClass().getSimpleName(), numberOfSimulations )) {
@@ -47,8 +47,6 @@ public class Main {
             }
         }
 
-        // System.out.println(aggregateModel.aggregateResults().first(10));
-        aggregateModel.viewResults(aggregateModel.aggregateResults());
-        aggregateModel.viewResults(aggregateModel.results[0]);
+        AbstractModel.ViewResults( aggregateModel.aggregateResults() );
     }
 }

@@ -30,6 +30,39 @@ public class AggregateModel {
 
         int numberOfColumns = results[0].columnCount();
         int numberOfRows = results[0].rowCount();
+        List<String> columnNames = results[0].columnNames();
+        IntColumn timeColumn = IntColumn.create("Time");
+
+        HashMap<String, DoubleColumn> averageColumns = new HashMap<>();
+
+        // For each column ( excluding 0 ) ...
+        for ( int c = 1; c < numberOfColumns; c++ ) {
+            String columnName = columnNames.get( c );
+            // ... Create Min, Max and Mean columns
+            averageColumns.put(columnName, DoubleColumn.create(columnName));
+        }
+
+        for (int r = 0; r < numberOfRows; r++) {
+            for (int c = 1; c < numberOfColumns; c++) {
+                int finalR = r;
+                int finalC = c;
+                String columnName = columnNames.get( c );
+                List<Double> values = Arrays.stream( results )
+                        .mapToDouble( resultsTable -> resultsTable.row( finalR ).getInt( finalC ) ).boxed().toList();
+                averageColumns.get(columnName).append( values.stream().mapToDouble( a -> a).average().orElse(Double.NaN) );
+            }
+            timeColumn.append( r );
+        }
+
+        Table table = Table.create("Aggregate " + results[0].name()).addColumns( timeColumn );
+        averageColumns.values().forEach(table::addColumns);
+        return table;
+    }
+
+    public Table aggregateResultsOld () {
+
+        int numberOfColumns = results[0].columnCount();
+        int numberOfRows = results[0].rowCount();
 
         HashMap<String, DoubleColumn> newColumns = new HashMap<>();
 
@@ -66,21 +99,5 @@ public class AggregateModel {
         Table table = Table.create("Aggregate " + results[0].name()).addColumns( timeColumn );
         newColumns.values().forEach(table::addColumns);
         return table;
-    }
-
-    public void viewResults (Table results) {
-        Trace[] traces = new ScatterTrace[ results.columnCount() - 1 ];
-
-        for ( int i = 1; i < results.columnCount(); i++ ) {
-            ScatterTrace columnTrace = ScatterTrace
-                    .builder( results.column( 0 ), results.column( i ) )
-                    .mode( ScatterTrace.Mode.LINE )
-                    .name( results.column( i ).name() )
-                    .build();
-            traces[ i - 1 ] = columnTrace;
-        }
-
-        Layout layout = Layout.builder().title( results.name() ).height( 500 ).width( 650 ).build();
-        Plot.show( new Figure( layout, traces ) );
     }
 }

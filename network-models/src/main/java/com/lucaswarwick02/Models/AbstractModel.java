@@ -38,8 +38,14 @@ public abstract class AbstractModel
 
     public abstract void runSimulation (int iterations, int initialInfected);
 
-    public void viewResults () {
-        Trace[] traces = new ScatterTrace[ results.columnCount() - 1 ];
+    public void saveResults (File outputFolder) {
+        String fileName = this.results.name().replaceAll("\\s+", "_").toLowerCase() + ".csv";
+        File outputFile = new File(outputFolder, fileName);
+        this.results.write().csv(outputFile);
+    }
+
+    public static void ViewResults (Table results) {
+        Trace[] traces = new ScatterTrace[  results.columnCount() - 1 ];
 
         for ( int i = 1; i < results.columnCount(); i++ ) {
             ScatterTrace columnTrace = ScatterTrace
@@ -52,11 +58,5 @@ public abstract class AbstractModel
 
         Layout layout = Layout.builder().title( results.name() ).height( 500 ).width( 650 ).build();
         Plot.show( new Figure( layout, traces ) );
-    }
-
-    public void saveResults (File outputFolder) {
-        String fileName = this.results.name().replaceAll("\\s+", "_").toLowerCase() + ".csv";
-        File outputFile = new File(outputFolder, fileName);
-        this.results.write().csv(outputFile);
     }
 }
