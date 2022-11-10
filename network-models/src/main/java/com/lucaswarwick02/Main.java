@@ -34,20 +34,18 @@ public class Main {
     public static void runSimulations ( File outputFolder, int numberOfNodes, int numberOfSimulations, AbstractNetwork network, AbstractModel model ) {
         AggregateModel aggregateModel = new AggregateModel( numberOfSimulations );
 
-        ProgressBar pb = new ProgressBar(network.getClass().getSimpleName() + " - " + model.getClass().getSimpleName(), numberOfSimulations, ProgressBarStyle.UNICODE_BLOCK);
+        try (ProgressBar pb = new ProgressBar(network.getClass().getSimpleName() + " - " + model.getClass().getSimpleName(), numberOfSimulations )) {
+            for (int s = 0; s < numberOfSimulations; s++) {
 
-        pb.start();
-        for (int s = 0; s < numberOfSimulations; s++) {
+                network.generateNetwork( numberOfNodes );
 
-            network.generateNetwork( numberOfNodes );
+                model.setUnderlyingNetwork( network );
+                model.runSimulation( 100, 3 );
 
-            model.setUnderlyingNetwork( network );
-            model.runSimulation( 100, 3 );
-
-            aggregateModel.results[s] = model.results;
-            pb.step();
+                aggregateModel.results[s] = model.results;
+                pb.step();
+            }
         }
-        pb.stop();
 
         // System.out.println(aggregateModel.aggregateResults().first(10));
         aggregateModel.viewResults(aggregateModel.aggregateResults());
