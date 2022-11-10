@@ -2,51 +2,54 @@ package com.lucaswarwick02;
 
 import com.lucaswarwick02.Models.AbstractModel;
 import com.lucaswarwick02.Models.AggregateModel;
+import com.lucaswarwick02.Models.MathematicalSIRModel;
 import com.lucaswarwick02.Models.SIRModel;
-import com.lucaswarwick02.Models.SIRVModel;
 import com.lucaswarwick02.Networks.AbstractNetwork;
 import com.lucaswarwick02.Networks.FullyMixedNetwork;
-import me.tongfei.progressbar.ProgressBar;
-import me.tongfei.progressbar.ProgressBarStyle;
+import tech.tablesaw.api.Table;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class Main {
 
     public static void main (String[] args) {
 
         // Store arguments from command line
-        final String DATA_FOLDER = args[0];
+        final String ROOT_FOLDER = args[0];
         final int numberOfNodes = Integer.parseInt(args[1]);
         final int numberOfSimulations = Integer.parseInt(args[2]);
 
         // Create a new data folder for this current run-through
-        final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-        final File outputFolder = new File(DATA_FOLDER, timeStamp);
-        outputFolder.mkdir();
+        final File dataFolder = new File(ROOT_FOLDER, "data");
+        dataFolder.mkdir();
 
-        runSimulations( numberOfNodes, numberOfSimulations, new FullyMixedNetwork(), new SIRModel( 0.0004f, 0.04f ) );
-        runSimulations( numberOfNodes, numberOfSimulations, new FullyMixedNetwork(), new SIRVModel( 0.0004f, 0.04f, 0.04f ) );
-    }
+        // * Create and save Aggregate Model
+        AbstractNetwork network = new FullyMixedNetwork();
+        AbstractModel model = new SIRModel( 0.0004f, 0.04f );
 
-    public static void runSimulations ( int numberOfNodes, int numberOfSimulations, AbstractNetwork network, AbstractModel model ) {
         AggregateModel aggregateModel = new AggregateModel( numberOfSimulations );
 
-        try (ProgressBar pb = new ProgressBar(network.getClass().getSimpleName() + " - " + model.getClass().getSimpleName(), numberOfSimulations )) {
-            for (int s = 0; s < numberOfSimulations; s++) {
+        for (int s = 0; s < numberOfSimulations; s++) {
 
-                network.generateNetwork( numberOfNodes );
+            network.generateNetwork( numberOfNodes );
 
-                model.setUnderlyingNetwork( network );
-                model.runSimulation( 100, 3 );
+            model.setUnderlyingNetwork( network );
+            model.runSimulation( 100, 3 );
 
-                aggregateModel.results[s] = model.results;
-                pb.step();
-            }
+            aggregateModel.results[s] = model.results;
         }
 
-        AbstractModel.ViewResults( aggregateModel.aggregateResults() );
+        saveTableToCSV(aggregateModel.aggregateResults(), dataFolder, "stochastic_model.csv");
+
+        // * Create and save Mathematical Model
+        MathematicalSIRModel mathematicalModel = new MathematicalSIRModel( 0.0004f, 0.04f, numberOfNodes );
+        mathematicalModel.runSimulation( 100, 3 );
+
+        saveTableToCSV(mathematicalModel.results, dataFolder, "mathematical_model.csv");
+    }
+
+    static void saveTableToCSV (Table table, File dataFolder, String fileName) {
+        File outputFile = new File(dataFolder, fileName);
+        table.write().csv(outputFile);
     }
 }

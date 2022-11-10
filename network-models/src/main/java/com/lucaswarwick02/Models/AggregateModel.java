@@ -58,46 +58,4 @@ public class AggregateModel {
         averageColumns.values().forEach(table::addColumns);
         return table;
     }
-
-    public Table aggregateResultsOld () {
-
-        int numberOfColumns = results[0].columnCount();
-        int numberOfRows = results[0].rowCount();
-
-        HashMap<String, DoubleColumn> newColumns = new HashMap<>();
-
-        IntColumn timeColumn = IntColumn.create("Time");
-
-        // For each column ( excluding 0 ) ...
-        for (int columnNumber = 1; columnNumber < numberOfColumns; columnNumber++) {
-            // ... Create Min, Max and Mean columns
-            String columnName = results[0].column( columnNumber ).name();
-            String[] newColumnNames = { columnName + "_Min", columnName + "_Max", columnName + "_Mean" };
-            for (String newColumnName : newColumnNames) {
-                newColumns.put(newColumnName, DoubleColumn.create(newColumnName));
-            }
-        }
-
-        for (int r = 0; r < numberOfRows; r++) {
-            for (int c = 1; c < numberOfColumns; c++) {
-                String columnName = results[0].column(c).name();
-                String[] newColumnNames = { columnName + "_Min", columnName + "_Max", columnName + "_Mean" };
-                int finalR = r;
-                int finalC = c;
-                List<Double> values = Arrays.stream( results )
-                        .mapToDouble( resultsTable -> resultsTable.row( finalR ).getInt( finalC ) ).boxed().toList();
-                double average = values.stream().mapToDouble(a -> a).average().orElse(Double.NaN);
-                double min = values.stream().mapToDouble(a -> a).min().orElse(Double.NaN);
-                double max = values.stream().mapToDouble(a -> a).max().orElse(Double.NaN);
-                newColumns.get(newColumnNames[0]).append(min);
-                newColumns.get(newColumnNames[1]).append(max);
-                newColumns.get(newColumnNames[2]).append(average);
-            }
-            timeColumn.append( r );
-        }
-
-        Table table = Table.create("Aggregate " + results[0].name()).addColumns( timeColumn );
-        newColumns.values().forEach(table::addColumns);
-        return table;
-    }
 }

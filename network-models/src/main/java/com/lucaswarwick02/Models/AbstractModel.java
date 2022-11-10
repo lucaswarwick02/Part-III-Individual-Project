@@ -38,12 +38,6 @@ public abstract class AbstractModel
 
     public abstract void runSimulation (int iterations, int initialInfected);
 
-    public void saveResults (File outputFolder) {
-        String fileName = this.results.name().replaceAll("\\s+", "_").toLowerCase() + ".csv";
-        File outputFile = new File(outputFolder, fileName);
-        this.results.write().csv(outputFile);
-    }
-
     public static void ViewResults (Table results) {
         Trace[] traces = new ScatterTrace[  results.columnCount() - 1 ];
 

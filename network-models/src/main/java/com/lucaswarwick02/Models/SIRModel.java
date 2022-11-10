@@ -28,6 +28,8 @@ public class SIRModel extends AbstractModel {
         int[] infectedCount = new int[iterations];
         int[] recoveredCount = new int[iterations];
 
+        int[] cumulativeInfected = new int[iterations];
+
         Random r = new Random();
 
         // Initialise the model at time = 0
@@ -40,6 +42,8 @@ public class SIRModel extends AbstractModel {
         susceptibleCount[0] = this.underlyingNetwork.getNodesFromState(Node.State.Susceptible).size();
         infectedCount[0] = this.underlyingNetwork.getNodesFromState(Node.State.Infected).size();
         recoveredCount[0] = this.underlyingNetwork.getNodesFromState(Node.State.Recovered).size();
+
+        cumulativeInfected[0] = this.underlyingNetwork.getNodesFromState(Node.State.Infected).size();
 
         for (int t = 1; t < iterations; t++) {
 
@@ -68,6 +72,8 @@ public class SIRModel extends AbstractModel {
             susceptibleCount[t] = this.underlyingNetwork.getNodesFromState(Node.State.Susceptible).size();
             infectedCount[t] = this.underlyingNetwork.getNodesFromState(Node.State.Infected).size();
             recoveredCount[t] = this.underlyingNetwork.getNodesFromState(Node.State.Recovered).size();
+
+            cumulativeInfected[t] = cumulativeInfected[t - 1] + nodesToInfect.size();
         }
 
         results = Table.create("SIR Model Results")
@@ -75,7 +81,8 @@ public class SIRModel extends AbstractModel {
                         IntColumn.create("Time", timeCount),
                         IntColumn.create("Susceptible", susceptibleCount),
                         IntColumn.create("Infected", infectedCount),
-                        IntColumn.create("Recovered", recoveredCount)
+                        IntColumn.create("Recovered", recoveredCount),
+                        IntColumn.create("CumulativeInfected", cumulativeInfected)
                 );
     }
 }
