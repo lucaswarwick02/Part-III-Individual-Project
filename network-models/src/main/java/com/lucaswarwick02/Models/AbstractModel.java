@@ -1,12 +1,10 @@
 package com.lucaswarwick02.Models;
 
-import java.io.File;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.lucaswarwick02.Networks.AbstractNetwork;
-import org.apache.commons.math3.analysis.function.Abs;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.Plot;
 import tech.tablesaw.plotly.components.Figure;

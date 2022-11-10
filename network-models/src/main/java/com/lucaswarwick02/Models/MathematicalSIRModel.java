@@ -1,9 +1,6 @@
 package com.lucaswarwick02.Models;
 
-import java.util.Random;
-
 import tech.tablesaw.api.FloatColumn;
-import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.Table;
 
 public class MathematicalSIRModel extends AbstractModel {
@@ -24,8 +21,6 @@ public class MathematicalSIRModel extends AbstractModel {
         float[] recoveredCount = new float[iterations];
 
         float[] cumulativeInfected = new float[iterations];
-
-        Random r = new Random();
 
         timeCount[0] = 0;
         susceptibleCount[0] = populationSize - initialInfected;

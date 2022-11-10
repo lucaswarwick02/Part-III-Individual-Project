@@ -1,19 +1,9 @@
 package com.lucaswarwick02.Models;
 
 import com.lucaswarwick02.Components.Node;
-import com.lucaswarwick02.Networks.AbstractNetwork;
 import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.columns.Column;
-import tech.tablesaw.plotly.Plot;
-import tech.tablesaw.plotly.api.LinePlot;
-import tech.tablesaw.plotly.components.Figure;
-import tech.tablesaw.plotly.components.Layout;
-import tech.tablesaw.plotly.traces.ScatterTrace;
-import tech.tablesaw.plotly.traces.Trace;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SIRModel extends AbstractModel {
 

@@ -5,17 +5,13 @@ import java.util.List;
 import java.util.Random;
 
 import com.lucaswarwick02.Components.Node;
-import com.lucaswarwick02.Networks.AbstractNetwork;
 import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.plotly.Plot;
-import tech.tablesaw.plotly.components.Figure;
-import tech.tablesaw.plotly.components.Layout;
-import tech.tablesaw.plotly.traces.ScatterTrace;
-import tech.tablesaw.plotly.traces.Trace;
 
 public class SIRVModel extends AbstractModel
 {
+    Random r = new Random();
+
     final float RATE_OF_VACCINATION;
 
     public SIRVModel ( float rateOfInfection, float rateOfRecovery, float rateOfVaccination ) {
@@ -31,8 +27,6 @@ public class SIRVModel extends AbstractModel
         int[] infectedCount = new int[iterations];
         int[] recoveredCount = new int[iterations];
         int[] vaccinatedCount = new int[iterations];
-
-        Random r = new Random();
 
         // Initialise the model at time = 0
 
@@ -54,9 +48,7 @@ public class SIRVModel extends AbstractModel
             for (Node infectedNode : underlyingNetwork.getNodesFromState(Node.State.Infected)) {
                 // ... get a list of the Nodes they are going to infect
                 infectedNode.neighbours.forEach(neighbour -> {
-                    if (neighbour.state == Node.State.Susceptible) {
-                        if (r.nextFloat() <= RATE_OF_INFECTION) nodesToInfect.add(neighbour);
-                    }
+                    if ((neighbour.state == Node.State.Susceptible) && (r.nextFloat() <= RATE_OF_INFECTION)) nodesToInfect.add(neighbour);
                 });
 
                 // ... maybe recover the Node
