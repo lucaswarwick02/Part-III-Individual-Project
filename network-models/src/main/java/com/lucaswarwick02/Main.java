@@ -6,22 +6,14 @@ import com.lucaswarwick02.Models.SIRModel;
 import com.lucaswarwick02.Models.SIRVModel;
 import com.lucaswarwick02.Networks.AbstractNetwork;
 import com.lucaswarwick02.Networks.FullyMixedNetwork;
-import tech.tablesaw.plotly.Plot;
-import tech.tablesaw.plotly.components.Figure;
-import tech.tablesaw.plotly.components.Grid;
-import tech.tablesaw.plotly.components.Layout;
-import tech.tablesaw.plotly.traces.ScatterTrace;
-import tech.tablesaw.plotly.traces.Trace;
+import me.tongfei.progressbar.ProgressBar;
+import me.tongfei.progressbar.ProgressBarStyle;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.logging.Logger;
 
 public class Main {
-
-    static Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main (String[] args) {
 
@@ -36,14 +28,16 @@ public class Main {
         outputFolder.mkdir();
 
         runSimulations( outputFolder, numberOfNodes, numberOfSimulations, new FullyMixedNetwork(), new SIRModel( 0.0004f, 0.04f ) );
-        runSimulations( outputFolder, numberOfNodes, numberOfSimulations, new FullyMixedNetwork(), new SIRVModel( 0.0004f, 0.04f, 0.04f ) );
+        // runSimulations( outputFolder, numberOfNodes, numberOfSimulations, new FullyMixedNetwork(), new SIRVModel( 0.0004f, 0.04f, 0.04f ) );
     }
 
     public static void runSimulations ( File outputFolder, int numberOfNodes, int numberOfSimulations, AbstractNetwork network, AbstractModel model ) {
         AggregateModel aggregateModel = new AggregateModel( numberOfSimulations );
 
+        ProgressBar pb = new ProgressBar(network.getClass().getSimpleName() + " - " + model.getClass().getSimpleName(), numberOfSimulations, ProgressBarStyle.UNICODE_BLOCK);
+
+        pb.start();
         for (int s = 0; s < numberOfSimulations; s++) {
-            LOGGER.info( network.getClass().getSimpleName() + " - " + model.getClass().getSimpleName() + ": Simulation #" + s );
 
             network.generateNetwork( numberOfNodes );
 
@@ -51,6 +45,12 @@ public class Main {
             model.runSimulation( 100, 3 );
 
             aggregateModel.results[s] = model.results;
+            pb.step();
         }
+        pb.stop();
+
+        // System.out.println(aggregateModel.aggregateResults().first(10));
+        aggregateModel.viewResults(aggregateModel.aggregateResults());
+        aggregateModel.viewResults(aggregateModel.results[0]);
     }
 }
