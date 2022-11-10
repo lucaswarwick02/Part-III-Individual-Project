@@ -1,6 +1,7 @@
 package com.lucaswarwick02;
 
 import com.lucaswarwick02.Models.AbstractModel;
+import com.lucaswarwick02.Models.AggregateModel;
 import com.lucaswarwick02.Models.SIRModel;
 import com.lucaswarwick02.Models.SIRVModel;
 import com.lucaswarwick02.Networks.AbstractNetwork;
@@ -12,62 +13,44 @@ import tech.tablesaw.plotly.components.Layout;
 import tech.tablesaw.plotly.traces.ScatterTrace;
 import tech.tablesaw.plotly.traces.Trace;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.logging.Logger;
+
 public class Main {
+
+    static Logger LOGGER = Logger.getLogger(Main.class.getName());
+
     public static void main (String[] args) {
 
-        AbstractNetwork network;
-        AbstractModel model;
+        // Store arguments from command line
+        final String DATA_FOLDER = args[0];
+        final int numberOfNodes = Integer.parseInt(args[1]);
+        final int numberOfSimulations = Integer.parseInt(args[2]);
 
-        // * Fully-Mixed Network / SIR Model
-        network = new FullyMixedNetwork();
-        network.generateNetwork( 1000 );
+        // Create a new data folder for this current run-through
+        final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+        final File outputFolder = new File(DATA_FOLDER, timeStamp);
+        outputFolder.mkdir();
 
-        model = new SIRModel( network, 0.0004f, 0.04f );
-        model.runSimulation( 100, 3 );
-        model.viewResults();
+        runSimulations( outputFolder, numberOfNodes, numberOfSimulations, new FullyMixedNetwork(), new SIRModel( 0.0004f, 0.04f ) );
+        runSimulations( outputFolder, numberOfNodes, numberOfSimulations, new FullyMixedNetwork(), new SIRVModel( 0.0004f, 0.04f, 0.04f ) );
+    }
 
-        // * Fully-Mixed Network / SIRV Model
-        network = new FullyMixedNetwork();
-        network.generateNetwork( 1000 );
+    public static void runSimulations ( File outputFolder, int numberOfNodes, int numberOfSimulations, AbstractNetwork network, AbstractModel model ) {
+        AggregateModel aggregateModel = new AggregateModel( numberOfSimulations );
 
-        model = new SIRVModel( network, 0.0004f, 0.04f, 0.04f );
-        model.runSimulation( 100, 3 );
-        model.viewResults();
+        for (int s = 0; s < numberOfSimulations; s++) {
+            LOGGER.info( network.getClass().getSimpleName() + " - " + model.getClass().getSimpleName() + ": Simulation #" + s );
 
-        // ! Experimental
+            network.generateNetwork( numberOfNodes );
 
-//        ScatterTrace susceptibleTrace = ScatterTrace
-//                .builder( model.results.column( 0 ), model.results.column( 1 ) )
-//                .mode( ScatterTrace.Mode.LINE )
-//                .name( "Susceptible" )
-//                .build();
-//
-//        ScatterTrace infectedTrace = ScatterTrace
-//                .builder( model.results.column( 0 ), model.results.column( 2 ) )
-//                .mode( ScatterTrace.Mode.LINE )
-//                .name( "Infected" )
-//                .build();
-//
-//        ScatterTrace recoveredTrace = ScatterTrace
-//                .builder( model.results.column( 0 ), model.results.column( 3 ) )
-//                .mode( ScatterTrace.Mode.LINE )
-//                .name( "Recovered" )
-//                .build();
-//
-//        ScatterTrace vaccinatedTrace = ScatterTrace
-//                .builder( model.results.column( 0 ), model.results.column( 4 ) )
-//                .mode( ScatterTrace.Mode.LINE )
-//                .name( "Vaccinated" )
-//                .build();
-//
-//        Trace[] traces = new ScatterTrace[] {susceptibleTrace, infectedTrace, recoveredTrace, vaccinatedTrace};
-//        Grid grid = Grid.builder().columns( 2 ).rows( 2 ).pattern( Grid.Pattern.INDEPENDENT ).build();
-//        Layout layout = Layout.builder()
-//                .title( "Test Suplot" )
-//                .height( 700 )
-//                .width( 1000 )
-//                .grid( grid )
-//                .build();
-//        Plot.show( new Figure( layout, traces ) );
+            model.setUnderlyingNetwork( network );
+            model.runSimulation( 100, 3 );
+
+            aggregateModel.results[s] = model.results;
+        }
     }
 }

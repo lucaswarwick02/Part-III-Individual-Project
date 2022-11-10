@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 
 public class SIRModel extends AbstractModel {
 
-    public SIRModel (AbstractNetwork underlyingNetwork, float rateOfInfection, float rateOfRecovery) {
-        super(underlyingNetwork, rateOfInfection, rateOfRecovery);
+    public SIRModel ( float rateOfInfection, float rateOfRecovery ) {
+        super( rateOfInfection, rateOfRecovery );
     }
 
     @Override

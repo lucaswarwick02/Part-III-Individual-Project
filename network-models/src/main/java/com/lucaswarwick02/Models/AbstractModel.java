@@ -1,10 +1,12 @@
 package com.lucaswarwick02.Models;
 
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.lucaswarwick02.Networks.AbstractNetwork;
+import org.apache.commons.math3.analysis.function.Abs;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.Plot;
 import tech.tablesaw.plotly.components.Figure;
@@ -21,14 +23,17 @@ public abstract class AbstractModel
 
     public Table results;
 
-    public AbstractModel ( AbstractNetwork abstractNetwork, float rateOfInfection, float rateOfRecovery ) {
-        this.underlyingNetwork = abstractNetwork;
+    public AbstractModel ( float rateOfInfection, float rateOfRecovery ) {
         this.RATE_OF_INFECTION = rateOfInfection;
         this.RATE_OF_RECOVERY = rateOfRecovery;
     }
 
     static <E> List<E> pickRandom( List<E> list, int n) {
         return new Random().ints(n, 0, list.size()).mapToObj(list::get).collect( Collectors.toList());
+    }
+
+    public void setUnderlyingNetwork (AbstractNetwork underlyingNetwork) {
+        this.underlyingNetwork = underlyingNetwork;
     }
 
     public abstract void runSimulation (int iterations, int initialInfected);
@@ -47,5 +52,11 @@ public abstract class AbstractModel
 
         Layout layout = Layout.builder().title( results.name() ).height( 500 ).width( 650 ).build();
         Plot.show( new Figure( layout, traces ) );
+    }
+
+    public void saveResults (File outputFolder) {
+        String fileName = this.results.name().replaceAll("\\s+", "_").toLowerCase() + ".csv";
+        File outputFile = new File(outputFolder, fileName);
+        this.results.write().csv(outputFile);
     }
 }

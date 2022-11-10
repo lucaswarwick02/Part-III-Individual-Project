@@ -18,8 +18,8 @@ public class SIRVModel extends AbstractModel
 {
     final float RATE_OF_VACCINATION;
 
-    public SIRVModel ( AbstractNetwork abstractNetwork, float rateOfInfection, float rateOfRecovery, float rateOfVaccination ) {
-        super(abstractNetwork, rateOfInfection, rateOfRecovery);
+    public SIRVModel ( float rateOfInfection, float rateOfRecovery, float rateOfVaccination ) {
+        super( rateOfInfection, rateOfRecovery );
         this.RATE_OF_VACCINATION = rateOfVaccination;
     }
 
@@ -80,7 +80,7 @@ public class SIRVModel extends AbstractModel
             vaccinatedCount[t] = this.underlyingNetwork.getNodesFromState(Node.State.Vaccinated).size();
         }
 
-        results = Table.create( "SIR Model Results" )
+        results = Table.create( "SIRV Model Results" )
                 .addColumns(
                         IntColumn.create( "Time", timeCount ),
                         IntColumn.create( "Susceptible", susceptibleCount ),
