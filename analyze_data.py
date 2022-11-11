@@ -20,6 +20,9 @@ def aggregate_mathematical_sir ():
     axes[0].plot(agg_df['Time'], agg_df['Recovered'], label='Recovered', color='green')
     axes[0].plot(math_df['Time'], math_df['Recovered'], linestyle='dashed', color='black')
     
+    # axes[0].plot(agg_df['Time'], agg_df['Vaccinated'], label='Recovered', color='purple')
+    # axes[0].plot(math_df['Time'], math_df['Vaccinated'], linestyle='dashed', color='black')
+    
     axes[0].legend(loc='upper right')
     axes[0].set_title('Number of Individuals vs Time')
     axes[0].set(xlabel='Time', ylabel='Number of Individuals')

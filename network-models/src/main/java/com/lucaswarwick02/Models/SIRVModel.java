@@ -8,25 +8,25 @@ import com.lucaswarwick02.Components.Node;
 import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.Table;
 
-public class SIRVModel extends AbstractModel
-{
+public class SIRVModel extends AbstractModel {
     Random r = new Random();
 
     final float RATE_OF_VACCINATION;
 
-    public SIRVModel ( float rateOfInfection, float rateOfRecovery, float rateOfVaccination ) {
-        super( rateOfInfection, rateOfRecovery );
+    public SIRVModel(float rateOfInfection, float rateOfRecovery, float rateOfVaccination) {
+        super(rateOfInfection, rateOfRecovery);
         this.RATE_OF_VACCINATION = rateOfVaccination;
     }
 
     @Override
-    public void runSimulation( int iterations, int initialInfected )
-    {
+    public void runSimulation(int iterations, int initialInfected) {
         int[] timeCount = new int[iterations];
         int[] susceptibleCount = new int[iterations];
         int[] infectedCount = new int[iterations];
         int[] recoveredCount = new int[iterations];
         int[] vaccinatedCount = new int[iterations];
+
+        int[] cumulativeInfected = new int[iterations];
 
         // Initialise the model at time = 0
 
@@ -39,6 +39,8 @@ public class SIRVModel extends AbstractModel
         infectedCount[0] = this.underlyingNetwork.getNodesFromState(Node.State.Infected).size();
         recoveredCount[0] = this.underlyingNetwork.getNodesFromState(Node.State.Recovered).size();
 
+        cumulativeInfected[0] = this.underlyingNetwork.getNodesFromState(Node.State.Infected).size();
+
         for (int t = 1; t < iterations; t++) {
 
             List<Node> nodesToInfect = new ArrayList<>();
@@ -48,11 +50,13 @@ public class SIRVModel extends AbstractModel
             for (Node infectedNode : underlyingNetwork.getNodesFromState(Node.State.Infected)) {
                 // ... get a list of the Nodes they are going to infect
                 infectedNode.neighbours.forEach(neighbour -> {
-                    if ((neighbour.state == Node.State.Susceptible) && (r.nextFloat() <= RATE_OF_INFECTION)) nodesToInfect.add(neighbour);
+                    if ((neighbour.state == Node.State.Susceptible) && (r.nextFloat() <= RATE_OF_INFECTION))
+                        nodesToInfect.add(neighbour);
                 });
 
                 // ... maybe recover the Node
-                if (r.nextFloat() <= RATE_OF_RECOVERY) nodesToRecover.add(infectedNode);
+                if (r.nextFloat() <= RATE_OF_RECOVERY)
+                    nodesToRecover.add(infectedNode);
             }
 
             // Infect the nodes
@@ -61,8 +65,9 @@ public class SIRVModel extends AbstractModel
             nodesToRecover.forEach(node -> node.state = Node.State.Recovered);
 
             // With the leftover nodes, vaccinate them
-            for (Node susceptibleNode : underlyingNetwork.getNodesFromState( Node.State.Susceptible )) {
-                if (r.nextFloat() <= RATE_OF_VACCINATION) susceptibleNode.state = Node.State.Vaccinated;
+            for (Node susceptibleNode : underlyingNetwork.getNodesFromState(Node.State.Susceptible)) {
+                if (r.nextFloat() <= RATE_OF_VACCINATION)
+                    susceptibleNode.state = Node.State.Vaccinated;
             }
 
             timeCount[t] = t;
@@ -70,15 +75,17 @@ public class SIRVModel extends AbstractModel
             infectedCount[t] = this.underlyingNetwork.getNodesFromState(Node.State.Infected).size();
             recoveredCount[t] = this.underlyingNetwork.getNodesFromState(Node.State.Recovered).size();
             vaccinatedCount[t] = this.underlyingNetwork.getNodesFromState(Node.State.Vaccinated).size();
+
+            cumulativeInfected[t] = cumulativeInfected[t - 1] + nodesToInfect.size();
         }
 
-        results = Table.create( "SIRV Model Results" )
+        results = Table.create("SIRV Model Results")
                 .addColumns(
-                        IntColumn.create( "Time", timeCount ),
-                        IntColumn.create( "Susceptible", susceptibleCount ),
-                        IntColumn.create( "Infected", infectedCount ),
-                        IntColumn.create( "Recovered", recoveredCount ),
-                        IntColumn.create( "Vaccinated", vaccinatedCount )
-                );
+                        IntColumn.create("Time", timeCount),
+                        IntColumn.create("Susceptible", susceptibleCount),
+                        IntColumn.create("Infected", infectedCount),
+                        IntColumn.create("Recovered", recoveredCount),
+                        IntColumn.create("Vaccinated", vaccinatedCount),
+                        IntColumn.create("CumulativeInfected", cumulativeInfected));
     }
 }
