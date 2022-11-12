@@ -1,9 +1,11 @@
 package com.lucaswarwick02.networks;
 
+import com.lucaswarwick02.components.Node;
 import java.util.ArrayList;
 
-import com.lucaswarwick02.components.Node;
-
+/**
+ * Fully homogeneous network. All nodes are connected to eachother
+ */
 public class FullyMixedNetwork extends AbstractNetwork {
 
     /**

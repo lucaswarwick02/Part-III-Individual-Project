@@ -1,23 +1,33 @@
 package com.lucaswarwick02.models;
 
+import com.lucaswarwick02.components.Node;
+import com.lucaswarwick02.models.states.ModelState;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import com.lucaswarwick02.components.Node;
-import com.lucaswarwick02.models.states.ModelState;
-
+/**
+ * Each iteration, use ODEs instead of random probabilities
+ */
 public class MathematicalModel {
-    Random r = new Random();
 
-    final float rateOfInfection;
-    final float rateOfRecovery;
-    final float rateOfVaccination;
+    Random r = new Random(); // Used for getting random numbers
 
-    final int populationSize;
+    final float rateOfInfection; // Probability of an infected node spreading
+    final float rateOfRecovery; // Probability of an infected node recovering
+    final float rateOfVaccination; // Probability of a susceptible node being vaccinated
 
-    ModelState[] modelStates;
+    final int populationSize; // Size of the population
 
+    ModelState[] modelStates; // Stores the state of the model at each time step
+
+    /**
+     * 
+     * @param populationSize Size of the population
+     * @param rateOfInfection Probability of an infected node spreading
+     * @param rateOfRecovery Probability of an infected node recovering
+     * @param rateOfVaccination Probability of a susceptible node being vaccinated
+     */
     public MathematicalModel ( int populationSize, float rateOfInfection, float rateOfRecovery, float rateOfVaccination ) {
         this.rateOfInfection = rateOfInfection;
         this.rateOfRecovery = rateOfRecovery;
@@ -25,6 +35,11 @@ public class MathematicalModel {
         this.populationSize = populationSize;
     }
 
+    /**
+     * Percolate the virus throughout the network
+     * @param iterations Number of time steps
+     * @param initialInfected Number of infected individuals at t=0
+     */
     public void runSimulation(int iterations, int initialInfected) {
         modelStates = new ModelState[iterations];
 
@@ -48,10 +63,20 @@ public class MathematicalModel {
         }
     }
 
+    /**
+     * Randomly pick N nodes
+     * @param list List of Nodes to pick from
+     * @param n Number of Nodes to pick
+     * @return List of Nodes of length N
+     */
     List<Node> pickRandomNodes( List<Node> list, int n ) {
         return r.ints(n, 0, list.size()).mapToObj(list::get).collect( Collectors.toList());
     }
 
+    /**
+     * Get the Model States
+     * @return ModelState[]
+     */
     public ModelState[] getModelStates () {
         return this.modelStates;
     }
