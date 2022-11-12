@@ -1,4 +1,4 @@
-package com.lucaswarwick02.Components;
+package com.lucaswarwick02.components;
 
 import java.util.ArrayList;
 import java.util.List;

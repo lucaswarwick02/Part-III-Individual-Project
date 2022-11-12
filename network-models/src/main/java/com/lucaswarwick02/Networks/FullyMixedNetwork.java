@@ -1,8 +1,8 @@
-package com.lucaswarwick02.Networks;
-
-import com.lucaswarwick02.Components.Node;
+package com.lucaswarwick02.networks;
 
 import java.util.ArrayList;
+
+import com.lucaswarwick02.components.Node;
 
 public class FullyMixedNetwork extends AbstractNetwork {
 

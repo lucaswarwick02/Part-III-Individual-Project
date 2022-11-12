@@ -1,63 +1,64 @@
-package com.lucaswarwick02.Models;
+package com.lucaswarwick02.models;
 
-import tech.tablesaw.api.DoubleColumn;
-import tech.tablesaw.api.IntColumn;
-import tech.tablesaw.api.Table;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.lucaswarwick02.models.states.AggregateModelState;
+import com.lucaswarwick02.models.states.ModelState;
 
 public class AggregateModel {
 
-    public Table[] results;
+    public ModelState[][] modelStatesList;
 
-    public AggregateModel(int numberOfModels) {
-        results = new Table[numberOfModels];
+    private final int iterations;
+
+    public AggregateModel(int numberOfModels, int iterations) {
+        modelStatesList = new ModelState[numberOfModels][iterations];
+        this.iterations = iterations;
     }
 
-    public Table aggregateResults() {
+    public AggregateModelState[] aggregateResults() {
+        AggregateModelState[] aggregateModelStates = new AggregateModelState[iterations];
 
-        int numberOfColumns = results[0].columnCount();
-        int numberOfRows = results[0].rowCount();
-        List<String> columnNames = results[0].columnNames();
-        IntColumn timeColumn = IntColumn.create("Time");
+        for (int i = 0; i < iterations; i++) {
+            List<Float> susceptibleValues = new ArrayList<>();
+            List<Float> infectedValues = new ArrayList<>();
+            List<Float> recoveredValues = new ArrayList<>();
+            List<Float> vaccinatedValues = new ArrayList<>();
 
-        HashMap<String, DoubleColumn> averageColumns = new HashMap<>();
-        HashMap<String, DoubleColumn> stdColumns = new HashMap<>();
-        DoubleColumn cumulativeInfected = DoubleColumn.create("CumulativeInfected");
-
-        // For each column ( excluding 0 ) ...
-        for (int c = 1; c < numberOfColumns; c++) {
-            String columnName = columnNames.get(c);
-            // ... Create Min, Max and Mean columns
-            averageColumns.put(columnName, DoubleColumn.create(columnName));
-            stdColumns.put(columnName + "_STD", DoubleColumn.create(columnName + "_STD"));
-        }
-
-        for (int r = 0; r < numberOfRows; r++) {
-            for (int c = 1; c < numberOfColumns; c++) {
-                int finalR = r;
-                int finalC = c;
-                String columnName = columnNames.get(c);
-                List<Double> values = Arrays.stream(results)
-                        .mapToDouble(resultsTable -> resultsTable.row(finalR).getInt(finalC)).boxed().toList();
-                double mean = values.stream().mapToDouble(a -> a).average().orElse(Double.NaN);
-                double std = CalculateStandardDeviation(values, mean);
-                averageColumns.get(columnName).append(mean);
-                stdColumns.get(columnName + "_STD").append(std);
-
-                // Calculate the newlyInfected;
+            for (ModelState[] modelStates : modelStatesList) {
+                susceptibleValues.add(modelStates[i].susceptible());
+                infectedValues.add(modelStates[i].infected());
+                recoveredValues.add(modelStates[i].recovered());
+                vaccinatedValues.add(modelStates[i].vaccinated());
             }
-            timeColumn.append(r);
+
+            aggregateModelStates[i] = new AggregateModelState(
+                i,
+                calculateMean(susceptibleValues),
+                calculateStandardDeviation(susceptibleValues),
+                calculateMean(infectedValues),
+                calculateStandardDeviation(infectedValues),
+                calculateMean(recoveredValues),
+                calculateStandardDeviation(recoveredValues),
+                calculateMean(vaccinatedValues),
+                calculateStandardDeviation(vaccinatedValues)
+            );
         }
 
-        Table table = Table.create("Aggregate " + results[0].name()).addColumns(timeColumn);
-        averageColumns.values().forEach(table::addColumns);
-        stdColumns.values().forEach(table::addColumns);
-        return table;
+        return aggregateModelStates;
     }
 
-    public static double CalculateStandardDeviation(List<Double> input, double mean) {
-        return Math.sqrt(input.stream().mapToDouble(x -> Math.pow(x - mean, 2)).sum() / input.size());
+    private float calculateMean (List<Float> list) {
+        float sum = 0;
+        for (float val : list) sum += val;
+        return sum / list.size();
+    }
+
+    private float calculateStandardDeviation (List<Float> list) {
+        float mean = calculateMean(list);
+        float diffSum = 0;
+        for (float val : list) diffSum += Math.pow(val - mean, 2);
+        return (float) Math.sqrt(diffSum / list.size());
     }
 }

@@ -1,60 +1,72 @@
 package com.lucaswarwick02;
 
-import com.lucaswarwick02.Models.AbstractModel;
-import com.lucaswarwick02.Models.AggregateModel;
-import com.lucaswarwick02.Models.MathematicalSIRModel;
-import com.lucaswarwick02.Models.MathematicalSIRVModel;
-import com.lucaswarwick02.Models.SIRModel;
-import com.lucaswarwick02.Models.SIRVModel;
-import com.lucaswarwick02.Networks.AbstractNetwork;
-import com.lucaswarwick02.Networks.FullyMixedNetwork;
-import tech.tablesaw.api.Table;
-
-import java.util.*;
+import com.lucaswarwick02.networks.AbstractNetwork;
+import com.lucaswarwick02.networks.NetworkFactory;
+import com.lucaswarwick02.networks.NetworkType;
+import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.models.VaccinationStrategy;
+import com.lucaswarwick02.models.states.AggregateModelState;
+import com.lucaswarwick02.models.states.ModelState;
+import com.lucaswarwick02.models.MathematicalModel;
+import com.lucaswarwick02.models.AggregateModel;
 
 import java.io.File;
-
 public class Main {
+    
+    static final int ITERATIONS = 100;
+    static final int INITIAL_INFECTED = 3;
+    static int NODES;
+    static int SIMULATIONS;
+    static String ROOT_FOLDER;
+    static File DATA_FOLDER;
 
     public static void main(String[] args) {
 
         // Store arguments from command line
-        final String ROOT_FOLDER = args[0];
-        final int numberOfNodes = Integer.parseInt(args[1]);
-        final int numberOfSimulations = Integer.parseInt(args[2]);
+        ROOT_FOLDER = args[0];
+        NODES = Integer.parseInt(args[1]);
+        SIMULATIONS = Integer.parseInt(args[2]);
 
         // Create a new data folder for this current run-through
-        final File dataFolder = new File(ROOT_FOLDER, "data");
-        dataFolder.mkdir();
+        DATA_FOLDER = new File(ROOT_FOLDER, "data");
+        DATA_FOLDER.mkdir();
 
-        // * Create and save Aggregate Model
-        AbstractNetwork network = new FullyMixedNetwork();
-        AbstractModel model = new SIRModel(0.0004f, 0.04f);
+        stochasticSimulation(NetworkType.FULLY_MIXED, VaccinationStrategy.GLOBAL, 0.0004f, 0.04f, 0f, "stochastic_model.csv");
+        stochasticSimulation(NetworkType.FULLY_MIXED, VaccinationStrategy.GLOBAL, 0.0004f, 0.04f, 0.04f, "stochastic_vac_model.csv");
 
-        AggregateModel aggregateModel = new AggregateModel(numberOfSimulations);
+        mathematicalSimumation(0.0004f, 0.04f, 0f, "mathematical_model.csv");
+        mathematicalSimumation(0.0004f, 0.04f, 0.04f, "mathematical_vac_model.csv");
+    }
 
-        for (int s = 0; s < numberOfSimulations; s++) {
+    /**
+     * Run, aggreggate and save multiple stochastic simulations to the data folder
+     */
+    public static void stochasticSimulation (NetworkType networkType, VaccinationStrategy vaccinationStrategy, float rateOfInfection, float rateOfRecovery, float rateOfVaccination, String outputFileName) {
+        AbstractNetwork network = NetworkFactory.getNetwork(networkType);
+        StochasticModel model = new StochasticModel( vaccinationStrategy, rateOfInfection, rateOfRecovery, rateOfVaccination );
 
-            network.generateNetwork(numberOfNodes);
+        AggregateModel aggregateModel = new AggregateModel(SIMULATIONS, 100);
+
+        for (int s = 0; s < SIMULATIONS; s++) {
+
+            network.generateNetwork(NODES);
 
             model.setUnderlyingNetwork(network);
             model.runSimulation(100, 3);
 
-            aggregateModel.results[s] = model.results;
+            aggregateModel.modelStatesList[s] = model.modelStates;
         }
 
-        saveTableToCSV(aggregateModel.aggregateResults(), dataFolder, "stochastic_model.csv");
-
-        // * Create and save Mathematical Model
-        AbstractModel mathematicalModel = new MathematicalSIRModel(0.0004f, 0.04f, numberOfNodes);
-        mathematicalModel.runSimulation(100, 3);
-
-        saveTableToCSV(mathematicalModel.results, dataFolder, "mathematical_model.csv");
+        AggregateModelState.saveArrayToCSV(aggregateModel.aggregateResults(), DATA_FOLDER, outputFileName);
     }
 
-    static void saveTableToCSV(Table table, File dataFolder, String fileName) {
-        File outputFile = new File(dataFolder, fileName);
-        table.write().csv(outputFile);
-        ArrayList<Double> list = new ArrayList<Double>();
+    /**
+     * Run and save a mathematical simulation to the data folder
+     */
+    public static void mathematicalSimumation ( float rateOfInfection, float rateOfRecovery, float rateOfVaccination, String outputFileName ) {
+        MathematicalModel mathematicalModel = new MathematicalModel( NODES, rateOfInfection, rateOfRecovery, rateOfVaccination );
+        mathematicalModel.runSimulation( 100, 3 );
+
+        ModelState.saveArrayToCSV (mathematicalModel.getModelStates(), DATA_FOLDER, outputFileName );
     }
 }

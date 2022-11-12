@@ -1,17 +1,18 @@
-package com.lucaswarwick02.Networks;
-
-import com.lucaswarwick02.Components.Node;
+package com.lucaswarwick02.networks;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import com.lucaswarwick02.components.Node;
+
 public abstract class AbstractNetwork {
-    ArrayList<Node> nodes;
+    List<Node> nodes;
 
     /**
      * Create an empty underlying network
      */
-    public AbstractNetwork() {
+    protected AbstractNetwork() {
         this.nodes = new ArrayList<>();
     }
 
@@ -21,15 +22,15 @@ public abstract class AbstractNetwork {
      */
     public abstract void generateNetwork (int numberOfNodes);
 
-    public ArrayList<Node> getNodesFromState (Node.State state) {
-        return (ArrayList<Node>) this.getNodes().stream().filter(node -> node.state == state).collect(Collectors.toList());
+    public List<Node> getNodesFromState (Node.State state) {
+        return this.getNodes().stream().filter(node -> node.state == state).collect(Collectors.toList());
     }
 
     /**
      * Get the Nodes within the underlying network
      * @return
      */
-    public ArrayList<Node> getNodes () {
+    public List<Node> getNodes () {
         return this.nodes;
     }
 
