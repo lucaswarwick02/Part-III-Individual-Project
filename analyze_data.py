@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def aggregate_mathematical_sir ():
     
-    fig, axes = plt.subplots(1, 2)
+    fig, axes = plt.subplots(1, 2, figsize=(6, 3))
     
     # * Compartments
 
@@ -12,12 +12,15 @@ def aggregate_mathematical_sir ():
     math_df = pd.read_csv('./data/mathematical_model.csv', index_col=None)
     
     axes[0].plot(agg_df['Time'], agg_df['Susceptible'], label='Susceptible', color='blue')
+    axes[0].fill_between(agg_df['Time'], agg_df['Susceptible'] + agg_df['Susceptible_STD'], agg_df['Susceptible'] - agg_df['Susceptible_STD'], color='blue', alpha=0.2)
     axes[0].plot(math_df['Time'], math_df['Susceptible'], linestyle='dashed', color='black')
     
     axes[0].plot(agg_df['Time'], agg_df['Infected'], label='Infected', color='red')
+    axes[0].fill_between(agg_df['Time'], agg_df['Infected'] + agg_df['Infected_STD'], agg_df['Infected'] - agg_df['Infected_STD'], color='red', alpha=0.2)
     axes[0].plot(math_df['Time'], math_df['Infected'], linestyle='dashed', color='black')
     
     axes[0].plot(agg_df['Time'], agg_df['Recovered'], label='Recovered', color='green')
+    axes[0].fill_between(agg_df['Time'], agg_df['Recovered'] + agg_df['Recovered_STD'], agg_df['Recovered'] - agg_df['Recovered_STD'], color='green', alpha=0.2)
     axes[0].plot(math_df['Time'], math_df['Recovered'], linestyle='dashed', color='black')
     
     # axes[0].plot(agg_df['Time'], agg_df['Vaccinated'], label='Recovered', color='purple')
@@ -29,12 +32,12 @@ def aggregate_mathematical_sir ():
     
     # * Show Cumulative Infected
     
-    axes[1].plot(agg_df['Time'], agg_df['CumulativeInfected'], label='Recovered', color='green')
+    # axes[1].plot(agg_df['Time'], agg_df['CumulativeInfected'], label='Recovered', color='green')
     axes[1].plot(math_df['Time'], math_df['CumulativeInfected'], linestyle='dashed', color='black')
     
     axes[1].legend(loc='upper right')
     axes[1].set_title('Cumulative Infected vs Time')
-    axes[0].set(xlabel='Time', ylabel='Cumulative Infected')
+    axes[1].set(xlabel='Time', ylabel='Cumulative Infected')
     
     plt.show()
 

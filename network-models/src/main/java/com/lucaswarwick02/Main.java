@@ -10,6 +10,8 @@ import com.lucaswarwick02.Networks.AbstractNetwork;
 import com.lucaswarwick02.Networks.FullyMixedNetwork;
 import tech.tablesaw.api.Table;
 
+import java.util.*;
+
 import java.io.File;
 
 public class Main {
@@ -53,5 +55,6 @@ public class Main {
     static void saveTableToCSV(Table table, File dataFolder, String fileName) {
         File outputFile = new File(dataFolder, fileName);
         table.write().csv(outputFile);
+        ArrayList<Double> list = new ArrayList<Double>();
     }
 }

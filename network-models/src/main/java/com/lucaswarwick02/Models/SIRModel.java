@@ -7,18 +7,18 @@ import java.util.*;
 
 public class SIRModel extends AbstractModel {
 
-    public SIRModel ( float rateOfInfection, float rateOfRecovery ) {
-        super( rateOfInfection, rateOfRecovery );
+    public SIRModel(float rateOfInfection, float rateOfRecovery) {
+        super(rateOfInfection, rateOfRecovery);
     }
 
     @Override
-    public void runSimulation (int iterations, int initialInfected) {
+    public void runSimulation(int iterations, int initialInfected) {
         int[] timeCount = new int[iterations];
         int[] susceptibleCount = new int[iterations];
         int[] infectedCount = new int[iterations];
         int[] recoveredCount = new int[iterations];
 
-        int[] cumulativeInfected = new int[iterations];
+        // int[] cumulativeInfected = new int[iterations];
 
         Random r = new Random();
 
@@ -33,7 +33,8 @@ public class SIRModel extends AbstractModel {
         infectedCount[0] = this.underlyingNetwork.getNodesFromState(Node.State.Infected).size();
         recoveredCount[0] = this.underlyingNetwork.getNodesFromState(Node.State.Recovered).size();
 
-        cumulativeInfected[0] = this.underlyingNetwork.getNodesFromState(Node.State.Infected).size();
+        // cumulativeInfected[0] =
+        // this.underlyingNetwork.getNodesFromState(Node.State.Infected).size();
 
         for (int t = 1; t < iterations; t++) {
 
@@ -45,12 +46,14 @@ public class SIRModel extends AbstractModel {
                 // ... get a list of the Nodes they are going to infect
                 infectedNode.neighbours.forEach(neighbour -> {
                     if (neighbour.state == Node.State.Susceptible) {
-                        if (r.nextFloat() <= RATE_OF_INFECTION) nodesToInfect.add(neighbour);
+                        if (r.nextFloat() <= RATE_OF_INFECTION)
+                            nodesToInfect.add(neighbour);
                     }
                 });
 
                 // ... maybe recover the Node
-                if (r.nextFloat() <= RATE_OF_RECOVERY) nodesToRecover.add(infectedNode);
+                if (r.nextFloat() <= RATE_OF_RECOVERY)
+                    nodesToRecover.add(infectedNode);
             }
 
             // Infect the nodes
@@ -63,7 +66,7 @@ public class SIRModel extends AbstractModel {
             infectedCount[t] = this.underlyingNetwork.getNodesFromState(Node.State.Infected).size();
             recoveredCount[t] = this.underlyingNetwork.getNodesFromState(Node.State.Recovered).size();
 
-            cumulativeInfected[t] = cumulativeInfected[t - 1] + nodesToInfect.size();
+            // cumulativeInfected[t] = cumulativeInfected[t - 1] + nodesToInfect.size();
         }
 
         results = Table.create("SIR Model Results")
@@ -71,8 +74,8 @@ public class SIRModel extends AbstractModel {
                         IntColumn.create("Time", timeCount),
                         IntColumn.create("Susceptible", susceptibleCount),
                         IntColumn.create("Infected", infectedCount),
-                        IntColumn.create("Recovered", recoveredCount),
-                        IntColumn.create("CumulativeInfected", cumulativeInfected)
+                        IntColumn.create("Recovered", recoveredCount)
+                // IntColumn.create("CumulativeInfected", cumulativeInfected)
                 );
     }
 }

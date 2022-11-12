@@ -1,6 +1,5 @@
 package com.lucaswarwick02.Models;
 
-import it.unimi.dsi.fastutil.floats.FloatCollection;
 import tech.tablesaw.api.FloatColumn;
 import tech.tablesaw.api.Table;
 
@@ -40,7 +39,8 @@ public class MathematicalSIRVModel extends AbstractModel {
                     - (this.RATE_OF_RECOVERY * infectedCount[t - 1]);
             float changeInR = (this.RATE_OF_RECOVERY * infectedCount[t - 1]);
             float changeInV = (this.rateOfVaccination * susceptibleCount[t - 1]);
-            float newlyInfected = (this.RATE_OF_INFECTION * infectedCount[t - 1] * susceptibleCount[t - 1]);
+            float newlyInfected = (this.RATE_OF_INFECTION * infectedCount[t - 1] *
+                    susceptibleCount[t - 1]);
 
             timeCount[t] = t;
             susceptibleCount[t] = susceptibleCount[t - 1] + changeInS;
