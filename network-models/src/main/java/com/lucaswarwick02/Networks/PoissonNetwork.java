@@ -5,8 +5,6 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Arrays;
 
-import javafx.stage.Popup;
-
 import java.math.BigDecimal;
 
 public class PoissonNetwork extends AbstractNetwork {
@@ -34,8 +32,7 @@ public class PoissonNetwork extends AbstractNetwork {
     }
 
     public int[] generateDegreeSequence(int numberOfNodes) {
-        BigDecimal[] probabilities = new BigDecimal[maxDegree - 1]; // We don't want any nodes to have a degree of 0, so
-                                                                    // we
+        BigDecimal[] probabilities = new BigDecimal[maxDegree - 1]; // Ignore case: degree = 0
         // ignore
         int[] nodesPerDegree = new int[maxDegree - 1];
         for (int k = 1; k < maxDegree; k++) {

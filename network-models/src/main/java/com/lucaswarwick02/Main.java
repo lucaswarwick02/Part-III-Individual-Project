@@ -13,7 +13,6 @@ import com.lucaswarwick02.models.MathematicalModel;
 import com.lucaswarwick02.models.AggregateModel;
 
 import java.io.File;
-import java.util.Arrays;
 
 public class Main {
 
@@ -25,23 +24,9 @@ public class Main {
     static File DATA_FOLDER;
 
     public static void main(String[] args) {
-        PoissonNetwork network = new PoissonNetwork(4, 15);
-        int[] degreeSequence = network.generateDegreeSequence(1500);
-        System.out.println("Number of Nodes = " + Arrays.stream(degreeSequence).sum());
-        int numberOfStubs = 0;
-        for (int i = 0; i < degreeSequence.length; i++) {
-            numberOfStubs += (i + 1) * degreeSequence[i];
-        }
-        System.out.println("Number of Stubs = " + numberOfStubs);
+        PoissonNetwork poissonNetwork = new PoissonNetwork(4, 15);
 
-        ScaleFreeNetwork network2 = new ScaleFreeNetwork(2, 15);
-        int[] degreeSequence2 = network2.generateDegreeSequence(1500);
-        System.out.println("Number of Nodes = " + Arrays.stream(degreeSequence2).sum());
-        int numberOfStubs2 = 0;
-        for (int i = 0; i < degreeSequence2.length; i++) {
-            numberOfStubs2 += (i + 1) * degreeSequence2[i];
-        }
-        System.out.println("Number of Stubs = " + numberOfStubs2);
+        ScaleFreeNetwork scaleFreeNetwork = new ScaleFreeNetwork(2, 15);
 
         // // Store arguments from command line
         // ROOT_FOLDER = args[0];

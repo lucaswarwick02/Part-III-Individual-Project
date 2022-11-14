@@ -1,7 +1,6 @@
 package com.lucaswarwick02.networks;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.Arrays;
 
@@ -30,23 +29,21 @@ public class ScaleFreeNetwork extends AbstractNetwork {
     }
 
     public int[] generateDegreeSequence(int numberOfNodes) {
-        BigDecimal[] probabilities = new BigDecimal[kappa - 1]; // We don't want any nodes to have a degree of 0, so
-                                                                // we
-        // ignore
+        double[] probabilities = new double[kappa - 1]; // Ignore case: degree = 0
         int[] nodesPerDegree = new int[kappa - 1];
+        double polylogarithmValue = polylogarithm(gamma, Math.exp(-1d / (double) kappa), 100);
+
         for (int k = 1; k < kappa; k++) {
-            probabilities[k - 1] = powerLawDegreeProbability(k, gamma, kappa);
-            nodesPerDegree[k - 1] = (probabilities[k - 1].multiply(BigDecimal.valueOf(numberOfNodes)))
-                    .setScale(0, RoundingMode.UP).intValue();
+            probabilities[k - 1] = powerLawDegreeProbability(k, gamma, kappa, polylogarithmValue);
+            nodesPerDegree[k - 1] = (int) Math.ceil(probabilities[k - 1] * numberOfNodes);
         }
 
         int nodesLeft = numberOfNodes - Arrays.stream(nodesPerDegree).sum();
 
         float averageDegree = 0f;
         for (int k = 1; k < kappa; k++) {
-            averageDegree += probabilities[k - 1].multiply(BigDecimal.valueOf(k)).floatValue();
+            averageDegree += probabilities[k - 1] * k;
         }
-        System.out.println("Average Degree = " + averageDegree);
 
         while (nodesLeft > 0) {
             if (nodesLeft == 1) {
@@ -61,28 +58,38 @@ public class ScaleFreeNetwork extends AbstractNetwork {
             nodesLeft--;
         }
 
-        for (int k = 1; k < kappa; k++) {
-            System.out.printf("%d (%.5f): %d", k, probabilities[k - 1], nodesPerDegree[k - 1]);
-        }
-
         return nodesPerDegree;
     }
 
-    private BigDecimal powerLawDegreeProbability(int k, int gamma, int kappa) {
-        BigDecimal top = BigDecimal.valueOf(Math.pow(k, -gamma) * Math.exp(-k / kappa));
-        BigDecimal bottom = polylogarithm(gamma, Math.exp(-1 / kappa), 100);
+    /**
+     * Generate the probability of a node having a degree of k
+     * @param k
+     * @param gamma
+     * @param kappa
+     * @param polylogarithmValue
+     * @return Probability between 0-1
+     */
+    private double powerLawDegreeProbability(int k, int gamma, int kappa, double polylogarithmValue) {
+        BigDecimal top1 = BigDecimal.valueOf(Math.pow(k, -gamma));
+        BigDecimal top2 = BigDecimal.valueOf(Math.exp((double) -k / (double) kappa));
+        double bottom = polylogarithmValue;
 
-        return top.divide(bottom);
+        return top1.multiply(top2).divide(BigDecimal.valueOf(bottom), 6, RoundingMode.HALF_UP).floatValue();
     }
 
-    private BigDecimal polylogarithm(int s, double z, int precision) {
-        BigDecimal power_sum = BigDecimal.ZERO;
+    /**
+     * Calculate the polylogarithm using a power series in z
+     * @param s
+     * @param z
+     * @param precision Number of times the series is applied, greater = more accurate
+     * @return Polylogarithm using s and z
+     */
+    private double polylogarithm(int s, double z, int precision) {
+        double powerSum = 0;
         for (int k = 1; k < precision; k++) {
-            BigDecimal top = BigDecimal.valueOf(Math.pow(s, z)).setScale(0, RoundingMode.HALF_UP);
-            BigDecimal bottom = BigDecimal.valueOf(Math.pow(k, s)).setScale(0, RoundingMode.HALF_UP);
-            power_sum.add(top.divide(bottom).setScale(0, RoundingMode.HALF_UP));
+            powerSum += Math.pow(z, k) / Math.pow(k, s);
         }
-        return power_sum;
+        return powerSum;
     }
 
     /***
