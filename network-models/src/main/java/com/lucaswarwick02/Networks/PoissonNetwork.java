@@ -3,11 +3,19 @@ package com.lucaswarwick02.networks;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
+import com.lucaswarwick02.components.Node;
 
 import java.math.BigDecimal;
 
 public class PoissonNetwork extends AbstractNetwork {
+
+    Random r = new Random(); // Used for getting random numbers
 
     float z;
     int maxDegree;
@@ -28,8 +36,29 @@ public class PoissonNetwork extends AbstractNetwork {
      */
     @Override
     public void generateNetwork(int numberOfNodes) {
-        // ! EXPERIMENTAL
-    }
+        int[] degreeSequence = generateDegreeSequence(numberOfNodes);
+        this.nodes = new ArrayList<>();
+
+        int nodeID = 0;
+        for (int i = 0; i < degreeSequence.length; i++) {
+            int k = i + 1;
+            for (int j = 0; j < degreeSequence[i]; j++) {
+                Node newNode = new Node(nodeID);
+                newNode.stubs = k;
+                this.nodes.add(newNode);
+                nodeID++;
+            }
+        }
+
+        while (numberOfStubs(nodes) > 0) {
+            List<Node> nodesWithStubs = nodes.stream().filter(node -> node.stubs > 0).collect(Collectors.toList());
+            List<Node> randomNodes = pickRandomNodes(nodesWithStubs, 2);
+            randomNodes.get(0).neighbours.add(randomNodes.get(1));
+            randomNodes.get(0).stubs--;
+            randomNodes.get(1).neighbours.add(randomNodes.get(0));
+            randomNodes.get(1).stubs--;
+        }
+    }   
 
     public int[] generateDegreeSequence(int numberOfNodes) {
         BigDecimal[] probabilities = new BigDecimal[maxDegree - 1]; // Ignore case: degree = 0
@@ -101,4 +130,23 @@ public class PoissonNetwork extends AbstractNetwork {
         return stubs;
     }
 
+    /***
+     * Calculate the number of 'stubs' in the distribution sequence
+     * 
+     * @param nodes
+     * @return
+     */
+    private int numberOfStubs(List<Node> nodes) {
+        return nodes.stream().mapToInt(node -> node.stubs).sum();
+    }
+
+    /**
+     * Randomly pick N nodes
+     * @param list List of Nodes to pick from
+     * @param n Number of Nodes to pick
+     * @return List of Nodes of length N
+     */
+    List<Node> pickRandomNodes( List<Node> list, int n ) {
+        return r.ints(n, 0, list.size()).mapToObj(list::get).collect( Collectors.toList());
+    }
 }

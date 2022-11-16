@@ -4,7 +4,7 @@ set rootpath=%~dp0
 
 cd network-models
 echo on
-call mvn clean compile exec:java -Dexec.args="%rootpath% 1000 250"
+call mvn clean compile exec:java -Dexec.args="%rootpath% 1500 250"
 
 cd ../
 python analyze_data.py

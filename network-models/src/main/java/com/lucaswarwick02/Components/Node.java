@@ -23,6 +23,8 @@ public class Node {
 
     public List<Node> neighbours;
 
+    public int stubs;
+
     /**
      * Create a Susceptible Node
      * @param ID Unique identifier

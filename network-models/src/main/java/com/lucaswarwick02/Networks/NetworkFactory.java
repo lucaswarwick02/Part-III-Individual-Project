@@ -20,6 +20,10 @@ public class NetworkFactory {
         switch (networkType) {
             case FULLY_MIXED:
                 return new FullyMixedNetwork();
+            case POISSON:
+                return new PoissonNetwork(4, 15);
+            case SCALE_FREE:
+                return new ScaleFreeNetwork(2, 15);
             default:
                 return new FullyMixedNetwork();
         }

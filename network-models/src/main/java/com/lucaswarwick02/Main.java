@@ -16,7 +16,7 @@ import java.io.File;
 
 public class Main {
 
-    static final int ITERATIONS = 100;
+    static final int ITERATIONS = 250;
     static final int INITIAL_INFECTED = 3;
     static int NODES;
     static int SIMULATIONS;
@@ -24,23 +24,19 @@ public class Main {
     static File DATA_FOLDER;
 
     public static void main(String[] args) {
-        PoissonNetwork poissonNetwork = new PoissonNetwork(4, 15);
+        // Store arguments from command line
+        ROOT_FOLDER = args[0];
+        NODES = Integer.parseInt(args[1]);
+        SIMULATIONS = Integer.parseInt(args[2]);
 
-        ScaleFreeNetwork scaleFreeNetwork = new ScaleFreeNetwork(2, 15);
+        // Create a new data folder for this current run-through
+        DATA_FOLDER = new File(ROOT_FOLDER, "data");
+        DATA_FOLDER.mkdir();
 
-        // // Store arguments from command line
-        // ROOT_FOLDER = args[0];
-        // NODES = Integer.parseInt(args[1]);
-        // SIMULATIONS = Integer.parseInt(args[2]);
-
-        // // Create a new data folder for this current run-through
-        // DATA_FOLDER = new File(ROOT_FOLDER, "data");
-        // DATA_FOLDER.mkdir();
-
-        // stochasticSimulation(NetworkType.FULLY_MIXED, VaccinationStrategy.GLOBAL,
-        // 0.0004f, 0.04f, 0f, "stochastic_model.csv");
-        // stochasticSimulation(NetworkType.FULLY_MIXED, VaccinationStrategy.GLOBAL,
-        // 0.0004f, 0.04f, 0.04f, "stochastic_vac_model.csv");
+        stochasticSimulation(NetworkType.SCALE_FREE, VaccinationStrategy.GLOBAL,
+        0.4f, 0.1f, 0f, "stochastic_model.csv");
+        stochasticSimulation(NetworkType.SCALE_FREE, VaccinationStrategy.GLOBAL,
+        0.4f, 0.04f, 0.04f, "stochastic_vac_model.csv");
 
         // mathematicalSimumation(0.0004f, 0.04f, 0f, "mathematical_model.csv");
         // mathematicalSimumation(0.0004f, 0.04f, 0.04f, "mathematical_vac_model.csv");
@@ -55,14 +51,14 @@ public class Main {
         StochasticModel model = new StochasticModel(vaccinationStrategy, rateOfInfection, rateOfRecovery,
                 rateOfVaccination);
 
-        AggregateModel aggregateModel = new AggregateModel(SIMULATIONS, 100);
+        AggregateModel aggregateModel = new AggregateModel(SIMULATIONS, ITERATIONS);
 
         for (int s = 0; s < SIMULATIONS; s++) {
 
             network.generateNetwork(NODES);
 
             model.setUnderlyingNetwork(network);
-            model.runSimulation(100, 3);
+            model.runSimulation(ITERATIONS, 3);
 
             aggregateModel.modelStatesList[s] = model.modelStates;
         }
