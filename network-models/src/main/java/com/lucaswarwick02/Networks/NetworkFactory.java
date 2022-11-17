@@ -21,9 +21,9 @@ public class NetworkFactory {
             case FULLY_MIXED:
                 return new FullyMixedNetwork();
             case POISSON:
-                return new PoissonNetwork(4, 15);
+                return new PoissonNetwork(3, 20);
             case SCALE_FREE:
-                return new ScaleFreeNetwork(2, 15);
+                return new ScaleFreeNetwork(1.615f, 20);
             default:
                 return new FullyMixedNetwork();
         }

@@ -14,13 +14,13 @@ public class ScaleFreeNetwork extends AbstractNetwork {
 
     Random r = new Random(); // Used for getting random numbers
 
-    int gamma;
+    float gamma;
     int kappa;
 
     /**
      * Create an empty underlying network
      */
-    public ScaleFreeNetwork(int gamma, int kappa) {
+    public ScaleFreeNetwork(float gamma, int kappa) {
         super();
         this.gamma = gamma;
         this.kappa = kappa;
@@ -98,7 +98,7 @@ public class ScaleFreeNetwork extends AbstractNetwork {
      * @param polylogarithmValue
      * @return Probability between 0-1
      */
-    private double powerLawDegreeProbability(int k, int gamma, int kappa, double polylogarithmValue) {
+    private double powerLawDegreeProbability(int k, float gamma, int kappa, double polylogarithmValue) {
         BigDecimal top1 = BigDecimal.valueOf(Math.pow(k, -gamma));
         BigDecimal top2 = BigDecimal.valueOf(Math.exp((double) -k / (double) kappa));
         double bottom = polylogarithmValue;
@@ -113,7 +113,7 @@ public class ScaleFreeNetwork extends AbstractNetwork {
      * @param precision Number of times the series is applied, greater = more accurate
      * @return Polylogarithm using s and z
      */
-    private double polylogarithm(int s, double z, int precision) {
+    private double polylogarithm(float s, double z, int precision) {
         double powerSum = 0;
         for (int k = 1; k < precision; k++) {
             powerSum += Math.pow(z, k) / Math.pow(k, s);

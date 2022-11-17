@@ -16,7 +16,7 @@ import java.io.File;
 
 public class Main {
 
-    static final int ITERATIONS = 250;
+    static final int ITERATIONS = 100;
     static final int INITIAL_INFECTED = 3;
     static int NODES;
     static int SIMULATIONS;
@@ -34,9 +34,9 @@ public class Main {
         DATA_FOLDER.mkdir();
 
         stochasticSimulation(NetworkType.SCALE_FREE, VaccinationStrategy.GLOBAL,
-        0.4f, 0.1f, 0f, "stochastic_model.csv");
+        0.2f, 0.04f, 0f, "stochastic_model.csv");
         stochasticSimulation(NetworkType.SCALE_FREE, VaccinationStrategy.GLOBAL,
-        0.4f, 0.04f, 0.04f, "stochastic_vac_model.csv");
+        0.2f, 0.04f, 0.04f, "stochastic_vac_model.csv");
 
         // mathematicalSimumation(0.0004f, 0.04f, 0f, "mathematical_model.csv");
         // mathematicalSimumation(0.0004f, 0.04f, 0.04f, "mathematical_vac_model.csv");
