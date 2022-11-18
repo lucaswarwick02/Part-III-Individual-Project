@@ -2,11 +2,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-def display_base_and_vac (agg_df: pd.DataFrame, math_df: pd.DataFrame, agg_vac_df: pd.DataFrame, math_vac_df: pd.DataFrame):
+def display_base_and_vac (agg_df: pd.DataFrame, agg_vac_df: pd.DataFrame):
     
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
     
-    caption = 'Scale-Free: γ=1.615, κ=20 \nSIR: β=0.2, γ=0.04 \nSIRV: β=0.2, γ=0.04, ν=0.005'
+    caption = 'Poisson: z=3, max_degree=20 \nSIR: β=0.2, γ=0.04 \nSIRV: β=0.2, γ=0.04, ν=0.0075'
     
     axes[0].plot(agg_df['Time'], agg_df['Susceptible'], label='Susceptible', color='blue')
     axes[0].fill_between(agg_df['Time'], agg_df['Susceptible'] + agg_df['Susceptible_STD'], agg_df['Susceptible'] - agg_df['Susceptible_STD'], color='blue', alpha=0.2)  # type: ignore
@@ -44,16 +44,17 @@ def display_base_and_vac (agg_df: pd.DataFrame, math_df: pd.DataFrame, agg_vac_d
     axes[1].set_title('Number of Individuals vs Time')
     axes[1].set(xlabel='Time', ylabel='Number of Individuals')
     
-    plt.figtext(0.5, 0.02, caption, wrap=True, horizontalalignment='center', fontsize=12)
+    plt.figtext(0.5, 0.01, caption, wrap=True, horizontalalignment='center', fontsize=12)
     
     plt.show()
 
 
 if __name__ == '__main__':
     agg_df = pd.read_csv('./data/stochastic_model.csv', index_col=None)
-    math_df = pd.read_csv('./data/mathematical_model.csv', index_col=None)
+    # math_df = pd.read_csv('./data/mathematical_model.csv', index_col=None)
     
     agg_vac_df = pd.read_csv('./data/stochastic_vac_model.csv', index_col=None)
-    math_vac_df = pd.read_csv('./data/mathematical_vac_model.csv', index_col=None)
+    # math_vac_df = pd.read_csv('./data/mathematical_vac_model.csv', index_col=None)
     
-    display_base_and_vac(agg_df, math_df, agg_vac_df, math_vac_df)
+    # display_base_and_vac(agg_df, math_df, agg_vac_df, math_vac_df)
+    display_base_and_vac(agg_df, agg_vac_df)

@@ -17,7 +17,7 @@ public class AggregateModel {
     /**
      * 
      * @param numberOfModels Number of Models
-     * @param iterations Number fo time steps each model performed
+     * @param iterations     Number fo time steps each model performed
      */
     public AggregateModel(int numberOfModels, int iterations) {
         modelStatesList = new ModelState[numberOfModels][iterations];
@@ -25,7 +25,9 @@ public class AggregateModel {
     }
 
     /**
-     * Use each model's ModelStates and calcualte the mean and standard deviation for each time step
+     * Use each model's ModelStates and calcualte the mean and standard deviation
+     * for each time step
+     * 
      * @return AggregateModelState[]
      */
     public AggregateModelState[] aggregateResults() {
@@ -45,16 +47,15 @@ public class AggregateModel {
             }
 
             aggregateModelStates[i] = new AggregateModelState(
-                i,
-                calculateMean(susceptibleValues),
-                calculateStandardDeviation(susceptibleValues),
-                calculateMean(infectedValues),
-                calculateStandardDeviation(infectedValues),
-                calculateMean(recoveredValues),
-                calculateStandardDeviation(recoveredValues),
-                calculateMean(vaccinatedValues),
-                calculateStandardDeviation(vaccinatedValues)
-            );
+                    i,
+                    calculateMean(susceptibleValues),
+                    calculateStandardDeviation(susceptibleValues) / 2f,
+                    calculateMean(infectedValues),
+                    calculateStandardDeviation(infectedValues) / 2f,
+                    calculateMean(recoveredValues),
+                    calculateStandardDeviation(recoveredValues) / 2f,
+                    calculateMean(vaccinatedValues),
+                    calculateStandardDeviation(vaccinatedValues) / 2f);
         }
 
         return aggregateModelStates;
@@ -62,24 +63,28 @@ public class AggregateModel {
 
     /**
      * Calculate the mean of a lists
+     * 
      * @param list List of floats
      * @return
      */
-    private float calculateMean (List<Float> list) {
+    private float calculateMean(List<Float> list) {
         float sum = 0;
-        for (float val : list) sum += val;
+        for (float val : list)
+            sum += val;
         return sum / list.size();
     }
 
     /**
      * Calculate the standard deviation of a list
+     * 
      * @param list List of floats
-     * @return 
+     * @return
      */
-    private float calculateStandardDeviation (List<Float> list) {
+    private float calculateStandardDeviation(List<Float> list) {
         float mean = calculateMean(list);
         float diffSum = 0;
-        for (float val : list) diffSum += Math.pow(val - mean, 2);
+        for (float val : list)
+            diffSum += Math.pow(val - mean, 2);
         return (float) Math.sqrt(diffSum / list.size());
     }
 }

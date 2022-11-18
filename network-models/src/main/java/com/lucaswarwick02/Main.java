@@ -31,10 +31,10 @@ public class Main {
         DATA_FOLDER = new File(ROOT_FOLDER, "data");
         DATA_FOLDER.mkdir();
 
-        stochasticSimulation(NetworkType.SCALE_FREE, VaccinationStrategy.GLOBAL,
-        0.2f, 0.04f, 0f, "stochastic_model.csv");
-        stochasticSimulation(NetworkType.SCALE_FREE, VaccinationStrategy.GLOBAL,
-        0.2f, 0.04f, 0.005f, "stochastic_vac_model.csv");
+        stochasticSimulation(NetworkType.POISSON, VaccinationStrategy.GLOBAL,
+                0.2f, 0.04f, 0f, "stochastic_model.csv");
+        stochasticSimulation(NetworkType.POISSON, VaccinationStrategy.GLOBAL,
+                0.2f, 0.04f, 0.0075f, "stochastic_vac_model.csv");
     }
 
     /**
