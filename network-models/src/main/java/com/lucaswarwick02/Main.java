@@ -3,8 +3,6 @@ package com.lucaswarwick02;
 import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkType;
-import com.lucaswarwick02.networks.PoissonNetwork;
-import com.lucaswarwick02.networks.ScaleFreeNetwork;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.models.VaccinationStrategy;
 import com.lucaswarwick02.models.states.AggregateModelState;
@@ -36,10 +34,7 @@ public class Main {
         stochasticSimulation(NetworkType.SCALE_FREE, VaccinationStrategy.GLOBAL,
         0.2f, 0.04f, 0f, "stochastic_model.csv");
         stochasticSimulation(NetworkType.SCALE_FREE, VaccinationStrategy.GLOBAL,
-        0.2f, 0.04f, 0.04f, "stochastic_vac_model.csv");
-
-        // mathematicalSimumation(0.0004f, 0.04f, 0f, "mathematical_model.csv");
-        // mathematicalSimumation(0.0004f, 0.04f, 0.04f, "mathematical_vac_model.csv");
+        0.2f, 0.04f, 0.005f, "stochastic_vac_model.csv");
     }
 
     /**

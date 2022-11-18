@@ -6,6 +6,8 @@ def display_base_and_vac (agg_df: pd.DataFrame, math_df: pd.DataFrame, agg_vac_d
     
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
     
+    caption = 'Scale-Free: γ=1.615, κ=20 \nSIR: β=0.2, γ=0.04 \nSIRV: β=0.2, γ=0.04, ν=0.005'
+    
     axes[0].plot(agg_df['Time'], agg_df['Susceptible'], label='Susceptible', color='blue')
     axes[0].fill_between(agg_df['Time'], agg_df['Susceptible'] + agg_df['Susceptible_STD'], agg_df['Susceptible'] - agg_df['Susceptible_STD'], color='blue', alpha=0.2)  # type: ignore
     # axes[0].plot(math_df['Time'], math_df['Susceptible'], linestyle='dashed', color='blue')
@@ -41,6 +43,8 @@ def display_base_and_vac (agg_df: pd.DataFrame, math_df: pd.DataFrame, agg_vac_d
     axes[1].legend(loc='upper right')
     axes[1].set_title('Number of Individuals vs Time')
     axes[1].set(xlabel='Time', ylabel='Number of Individuals')
+    
+    plt.figtext(0.5, 0.02, caption, wrap=True, horizontalalignment='center', fontsize=12)
     
     plt.show()
 
