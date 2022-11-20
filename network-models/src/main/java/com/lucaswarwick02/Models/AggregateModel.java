@@ -49,13 +49,13 @@ public class AggregateModel {
             aggregateModelStates[i] = new AggregateModelState(
                     i,
                     calculateMean(susceptibleValues),
-                    calculateStandardDeviation(susceptibleValues) / 2f,
+                    calculateStandardDeviation(susceptibleValues),
                     calculateMean(infectedValues),
-                    calculateStandardDeviation(infectedValues) / 2f,
+                    calculateStandardDeviation(infectedValues),
                     calculateMean(recoveredValues),
-                    calculateStandardDeviation(recoveredValues) / 2f,
+                    calculateStandardDeviation(recoveredValues),
                     calculateMean(vaccinatedValues),
-                    calculateStandardDeviation(vaccinatedValues) / 2f);
+                    calculateStandardDeviation(vaccinatedValues));
         }
 
         return aggregateModelStates;

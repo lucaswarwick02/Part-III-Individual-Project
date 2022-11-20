@@ -2,7 +2,6 @@ package com.lucaswarwick02.networks;
 
 import java.math.BigInteger;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,16 +57,15 @@ public class PoissonNetwork extends AbstractNetwork {
             randomNodes.get(1).neighbours.add(randomNodes.get(0));
             randomNodes.get(1).stubs--;
         }
-    }   
+    }
 
     public int[] generateDegreeSequence(int numberOfNodes) {
-        BigDecimal[] probabilities = new BigDecimal[maxDegree - 1]; // Ignore case: degree = 0
+        double[] probabilities = new double[maxDegree - 1]; // Ignore case: degree = 0
         // ignore
         int[] nodesPerDegree = new int[maxDegree - 1];
         for (int k = 1; k < maxDegree; k++) {
             probabilities[k - 1] = poissonDegreeProbability(k, z);
-            nodesPerDegree[k - 1] = (probabilities[k - 1].multiply(BigDecimal.valueOf(numberOfNodes)))
-                    .setScale(0, RoundingMode.UP).intValue();
+            nodesPerDegree[k - 1] = (int) Math.ceil(probabilities[k - 1] * numberOfNodes);
         }
 
         int nodesLeft = numberOfNodes - Arrays.stream(nodesPerDegree).sum();
@@ -95,9 +93,9 @@ public class PoissonNetwork extends AbstractNetwork {
      * @param z
      * @return Probability between 0-1
      */
-    private BigDecimal poissonDegreeProbability(int k, float z) {
+    private double poissonDegreeProbability(int k, float z) {
         BigDecimal d = BigDecimal.valueOf(Math.pow(z, k) * Math.exp(-z));
-        return d.divide(new BigDecimal(factorial(k)), MathContext.DECIMAL128);
+        return d.divide(new BigDecimal(factorial(k)), MathContext.DECIMAL128).doubleValue();
     }
 
     /**
@@ -142,11 +140,12 @@ public class PoissonNetwork extends AbstractNetwork {
 
     /**
      * Randomly pick N nodes
+     * 
      * @param list List of Nodes to pick from
-     * @param n Number of Nodes to pick
+     * @param n    Number of Nodes to pick
      * @return List of Nodes of length N
      */
-    List<Node> pickRandomNodes( List<Node> list, int n ) {
-        return r.ints(n, 0, list.size()).mapToObj(list::get).collect( Collectors.toList());
+    List<Node> pickRandomNodes(List<Node> list, int n) {
+        return r.ints(n, 0, list.size()).mapToObj(list::get).collect(Collectors.toList());
     }
 }

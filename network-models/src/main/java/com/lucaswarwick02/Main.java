@@ -31,25 +31,29 @@ public class Main {
         DATA_FOLDER = new File(ROOT_FOLDER, "data");
         DATA_FOLDER.mkdir();
 
-        stochasticSimulation(NetworkType.POISSON, VaccinationStrategy.GLOBAL,
-                0.2f, 0.04f, 0f, "stochastic_model.csv");
-        stochasticSimulation(NetworkType.POISSON, VaccinationStrategy.GLOBAL,
-                0.2f, 0.04f, 0.0075f, "stochastic_vac_model.csv");
+        stochasticSimulation(NetworkType.POISSON, VaccinationStrategy.NONE, "no_vaccination.csv");
+
+        stochasticSimulation(NetworkType.POISSON, VaccinationStrategy.GLOBAL, "global_vaccination.csv");
     }
 
     /**
      * Run, aggreggate and save multiple stochastic simulations to the data folder
      */
     public static void stochasticSimulation(NetworkType networkType, VaccinationStrategy vaccinationStrategy,
-            float rateOfInfection, float rateOfRecovery, float rateOfVaccination, String outputFileName) {
+            String outputFileName) {
+
         AbstractNetwork network = NetworkFactory.getNetwork(networkType);
-        StochasticModel model = new StochasticModel(vaccinationStrategy, rateOfInfection, rateOfRecovery,
-                rateOfVaccination);
+        StochasticModel model = new StochasticModel(vaccinationStrategy);
 
         AggregateModel aggregateModel = new AggregateModel(SIMULATIONS, ITERATIONS);
 
-        for (int s = 0; s < SIMULATIONS; s++) {
+        System.out.println("##################################################");
+        System.out.println("Network: " + networkType + ", Vaccination Strategy: " + vaccinationStrategy);
+        System.out.printf("... Running Simulation #00");
 
+        for (int s = 0; s < SIMULATIONS; s++) {
+            System.out.print("\b\b");
+            System.out.printf("%02d", (s + 1));
             network.generateNetwork(NODES);
 
             model.setUnderlyingNetwork(network);
@@ -57,6 +61,7 @@ public class Main {
 
             aggregateModel.modelStatesList[s] = model.modelStates;
         }
+        System.out.println("\nSimulations Complete");
 
         AggregateModelState.saveArrayToCSV(aggregateModel.aggregateResults(), DATA_FOLDER, outputFileName);
     }

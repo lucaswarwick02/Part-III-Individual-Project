@@ -19,7 +19,6 @@ public class StochasticModel {
 
     final float rateOfInfection; // Probability of an infected node spreading
     final float rateOfRecovery; // Probability of an infected node recovering
-    final float rateOfVaccination; // Probability of a susceptible node being vaccinated
 
     public ModelState[] modelStates; // Stores the state of the model at each time step
 
@@ -27,24 +26,26 @@ public class StochasticModel {
 
     /**
      * Setup the Stochastic Model
+     * 
      * @param vaccinationStrategy Strategy used in the simulation
-     * @param rateOfInfection Probability of an infected node spreading
-     * @param rateOfRecovery Probability of an infected node recovering
-     * @param rateOfVaccination Probability of a susceptible node being vaccinated
+     * @param rateOfInfection     Probability of an infected node spreading
+     * @param rateOfRecovery      Probability of an infected node recovering
+     * @param rateOfVaccination   Probability of a susceptible node being vaccinated
      */
-    public StochasticModel ( VaccinationStrategy vaccinationStrategy, float rateOfInfection, float rateOfRecovery, float rateOfVaccination ) {
+    public StochasticModel(VaccinationStrategy vaccinationStrategy) {
         this.vaccinationStrategy = vaccinationStrategy;
-        this.rateOfInfection = rateOfInfection;
-        this.rateOfRecovery = rateOfRecovery;
-        this.rateOfVaccination = rateOfVaccination;
+
+        this.rateOfInfection = 0.2f;
+        this.rateOfRecovery = 0.04f;
     }
 
     /**
      * Percolate the virus throughout the network
-     * @param iterations Number of time steps
+     * 
+     * @param iterations      Number of time steps
      * @param initialInfected Number of infected individuals at t=0
      */
-    public void runSimulation ( int iterations, int initialInfected ) {
+    public void runSimulation(int iterations, int initialInfected) {
         // Setup the storing of model states
         modelStates = new ModelState[iterations];
 
@@ -53,29 +54,14 @@ public class StochasticModel {
         initialInfectedNodes.forEach(node -> node.state = Node.State.INFECTED);
 
         // Store the initial model state
-        modelStates[0] = generateModelState(0);
+        saveModelState(0);
 
         for (int t = 1; t < iterations; t++) {
-
-            // Based on the vaccination strategy, run the interval
-            switch (vaccinationStrategy) {
-                case GLOBAL:
-                    globalVaccinationStrategy();
-                    break;
-                default:
-                    globalVaccinationStrategy();
-                    break;
-            }
-
-            // Store the model state
-            modelStates[t] = generateModelState(t);
+            performIteration(t);
         }
     }
 
-    /**
-     * Generated from VaccinationStrategy.GLOBAL
-     */
-    void globalVaccinationStrategy () {
+    void performIteration(int iterationNumber) {
         // Setup lists to store information from this iteration
         List<Node> nodesToInfect = new ArrayList<>();
         List<Node> nodesToRecover = new ArrayList<>();
@@ -98,6 +84,27 @@ public class StochasticModel {
         // Recover the nodes
         nodesToRecover.forEach(node -> node.state = Node.State.RECOVERED);
 
+        // Run vacciantion strategy
+        switch (vaccinationStrategy) {
+            case GLOBAL:
+                globalVaccinationStrategy();
+                break;
+            default:
+                break;
+        }
+
+        saveModelState(iterationNumber); // Store the model state
+    }
+
+    // region Vaccination Strategies
+
+    /**
+     * Generated from VaccinationStrategy.GLOBAL
+     */
+    void globalVaccinationStrategy() {
+        // Information used in this strategy:
+        float rateOfVaccination = 0.0075f;
+
         // With the leftover nodes, vaccinate them
         for (Node susceptibleNode : underlyingNetwork.getNodesFromState(Node.State.SUSCEPTIBLE)) {
             if (r.nextFloat() <= rateOfVaccination)
@@ -105,35 +112,43 @@ public class StochasticModel {
         }
     }
 
+    // endregion
+
+    // region Setup Functions
+
     /**
      * Store the current state of the model as record
+     * 
      * @param t Time step
      * @return ModelState
      */
-    ModelState generateModelState (int t) {
-        return new ModelState( t, 
-            this.underlyingNetwork.getNodesFromState(Node.State.SUSCEPTIBLE).size(),
-            this.underlyingNetwork.getNodesFromState(Node.State.INFECTED).size(),
-            this.underlyingNetwork.getNodesFromState(Node.State.RECOVERED).size(), 
-            this.underlyingNetwork.getNodesFromState(Node.State.VACCINATED).size()
-        );
+    void saveModelState(int t) {
+        modelStates[t] = new ModelState(t,
+                this.underlyingNetwork.getNodesFromState(Node.State.SUSCEPTIBLE).size(),
+                this.underlyingNetwork.getNodesFromState(Node.State.INFECTED).size(),
+                this.underlyingNetwork.getNodesFromState(Node.State.RECOVERED).size(),
+                this.underlyingNetwork.getNodesFromState(Node.State.VACCINATED).size());
     }
 
     /**
      * Randomly pick N nodes
+     * 
      * @param list List of Nodes to pick from
-     * @param n Number of Nodes to pick
+     * @param n    Number of Nodes to pick
      * @return List of Nodes of length N
      */
-    List<Node> pickRandomNodes( List<Node> list, int n ) {
-        return r.ints(n, 0, list.size()).mapToObj(list::get).collect( Collectors.toList());
+    List<Node> pickRandomNodes(List<Node> list, int n) {
+        return r.ints(n, 0, list.size()).mapToObj(list::get).collect(Collectors.toList());
     }
-    
+
     /**
      * Set the underlying network
+     * 
      * @param underlyingNetwork Network used in the model
-    */
-    public void setUnderlyingNetwork ( AbstractNetwork underlyingNetwork ) {
+     */
+    public void setUnderlyingNetwork(AbstractNetwork underlyingNetwork) {
         this.underlyingNetwork = underlyingNetwork;
     }
+
+    // endregion
 }
