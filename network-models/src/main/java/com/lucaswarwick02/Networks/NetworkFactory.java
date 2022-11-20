@@ -24,6 +24,8 @@ public class NetworkFactory {
                 return new PoissonNetwork(3, 20);
             case SCALE_FREE:
                 return new ScaleFreeNetwork(1.615f, 20);
+            case BARABASI_ALBERT:
+                return new BarabasiAlbertNetwork(2);
             default:
                 return new FullyMixedNetwork();
         }

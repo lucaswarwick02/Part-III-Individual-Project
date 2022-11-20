@@ -31,9 +31,9 @@ public class Main {
         DATA_FOLDER = new File(ROOT_FOLDER, "data");
         DATA_FOLDER.mkdir();
 
-        stochasticSimulation(NetworkType.POISSON, VaccinationStrategy.NONE, "no_vaccination.csv");
+        stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationStrategy.NONE, "no_vaccination.csv");
 
-        stochasticSimulation(NetworkType.POISSON, VaccinationStrategy.GLOBAL, "global_vaccination.csv");
+        stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationStrategy.GLOBAL, "global_vaccination.csv");
     }
 
     /**
@@ -49,7 +49,7 @@ public class Main {
 
         System.out.println("##################################################");
         System.out.println("Network: " + networkType + ", Vaccination Strategy: " + vaccinationStrategy);
-        System.out.printf("... Running Simulation #00");
+        System.out.print("... Running Simulation #00");
 
         for (int s = 0; s < SIMULATIONS; s++) {
             System.out.print("\b\b");
