@@ -7,33 +7,9 @@ import java.util.Objects;
 /**
  * Stores information about the average of some models at a specific time
  */
-public record AggregateModelState(int time, double susceptible, double susceptibleStd, double infected, double infectedStd, double recovered, double recoveredStd, double vaccinated, double vaccinatedStd) {
+public record AggregateModelState(int time, double susceptible, double susceptibleStd, double infected, double infectedStd, double recovered, double recoveredStd, double vaccinated, double vaccinatedStd, double cumulativeInfected) {
 
-    public static String CSV_HEADER = "Time,Susceptible,Infected,Recovered,Vaccinated,Susceptible_STD,Infected_STD,Recovered_STD,Vaccinated_STD"; // Header for the CSV file
-
-    /**
-     * Check each attribute is not null
-     * @param time Time step
-     * @param susceptible Average number of SUSCEPTIBLE Nodes
-     * @param susceptibleStd Standard deviation of SUSCEPTIBLE Nodes
-     * @param infected Average number of INFECTED Nodes
-     * @param infectedStd Standard deviation of INFECTED Nodes
-     * @param recovered Average number of RECOVERED Nodes
-     * @param recoveredStd Standard deviation of RECOVERED Nodes
-     * @param vaccinated Average number of VACCINATED Nodes
-     * @param vaccinatedStd Standard deviation of VACCINATED Nodes
-     */
-    public AggregateModelState {
-        Objects.requireNonNull(time);
-        Objects.requireNonNull(susceptible);
-        Objects.requireNonNull(susceptibleStd);
-        Objects.requireNonNull(infected);
-        Objects.requireNonNull(infectedStd);
-        Objects.requireNonNull(recovered);
-        Objects.requireNonNull(recoveredStd);
-        Objects.requireNonNull(vaccinated);
-        Objects.requireNonNull(vaccinatedStd);
-    }
+    public static String CSV_HEADER = "Time,Susceptible,Infected,Recovered,Vaccinated,Susceptible_STD,Infected_STD,Recovered_STD,Vaccinated_STD,CumulativeInfected"; // Header for the CSV file
 
     /**
      * Get the value of the State as a String
@@ -42,7 +18,7 @@ public record AggregateModelState(int time, double susceptible, double susceptib
     public String getCSVRow () {
         return time + "," + 
             susceptible + "," + infected + "," + recovered + "," + vaccinated + "," + 
-            susceptibleStd + "," + infectedStd + "," + recoveredStd + "," + vaccinatedStd;
+            susceptibleStd + "," + infectedStd + "," + recoveredStd + "," + vaccinatedStd + "," + cumulativeInfected;
     }
 
     /**

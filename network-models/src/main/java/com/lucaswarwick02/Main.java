@@ -11,10 +11,12 @@ import com.lucaswarwick02.models.MathematicalModel;
 import com.lucaswarwick02.models.AggregateModel;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
-    static final int ITERATIONS = 100;
+    static final int ITERATIONS = 150;
     static final int INITIAL_INFECTED = 3;
     static int NODES;
     static int SIMULATIONS;
@@ -51,6 +53,8 @@ public class Main {
         System.out.println("Network: " + networkType + ", Vaccination Strategy: " + vaccinationStrategy);
         System.out.print("... Running Simulation #00");
 
+        List<Float> outbreakSizes = new ArrayList<>();
+
         for (int s = 0; s < SIMULATIONS; s++) {
             System.out.print("\b\b");
             System.out.printf("%02d", (s + 1));
@@ -60,21 +64,28 @@ public class Main {
             model.runSimulation(ITERATIONS, 3);
 
             aggregateModel.modelStatesList[s] = model.modelStates;
+
+            outbreakSizes.add(model.modelStates[model.modelStates.length - 1].cumulativeInfected());
         }
         System.out.println("\nSimulations Complete");
+
+        System.out.println(getEpidemicThreshold(outbreakSizes));
 
         AggregateModelState.saveArrayToCSV(aggregateModel.aggregateResults(), DATA_FOLDER, outputFileName);
     }
 
-    /**
-     * Run and save a mathematical simulation to the data folder
-     */
-    public static void mathematicalSimumation(float rateOfInfection, float rateOfRecovery, float rateOfVaccination,
-            String outputFileName) {
-        MathematicalModel mathematicalModel = new MathematicalModel(NODES, rateOfInfection, rateOfRecovery,
-                rateOfVaccination);
-        mathematicalModel.runSimulation(100, 3);
-
-        ModelState.saveArrayToCSV(mathematicalModel.getModelStates(), DATA_FOLDER, outputFileName);
+    public static double getEpidemicThreshold (List<Float> outbreakSizes) {
+        double average = outbreakSizes.stream().mapToDouble(os -> os).average().orElse(Double.NaN);
+        double squaredAverage = outbreakSizes.stream().mapToDouble(os -> os * os).average().orElse(Double.NaN);
+        return Math.sqrt(squaredAverage - (average * average)) / average;
     }
+
+    // public static void mathematicalSimumation(float rateOfInfection, float rateOfRecovery, float rateOfVaccination,
+    //         String outputFileName) {
+    //     MathematicalModel mathematicalModel = new MathematicalModel(NODES, rateOfInfection, rateOfRecovery,
+    //             rateOfVaccination);
+    //     mathematicalModel.runSimulation(100, 3);
+
+    //     ModelState.saveArrayToCSV(mathematicalModel.getModelStates(), DATA_FOLDER, outputFileName);
+    // }
 }

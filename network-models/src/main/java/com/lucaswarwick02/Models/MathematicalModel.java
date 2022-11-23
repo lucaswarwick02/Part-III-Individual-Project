@@ -41,26 +41,26 @@ public class MathematicalModel {
      * @param initialInfected Number of infected individuals at t=0
      */
     public void runSimulation(int iterations, int initialInfected) {
-        modelStates = new ModelState[iterations];
+        // modelStates = new ModelState[iterations];
 
-        modelStates[0] = new ModelState(0, populationSize - initialInfected, initialInfected, 0, 0);
+        // modelStates[0] = new ModelState(0, populationSize - initialInfected, initialInfected, 0, 0);
 
-        for (int t = 1; t < iterations; t++) {
-            float changeInS = -1f * (this.rateOfInfection * modelStates[t - 1].infected() * modelStates[t - 1].susceptible())
-                    - (this.rateOfVaccination * modelStates[t - 1].susceptible());
-            float changeInI = (this.rateOfInfection * modelStates[t - 1].infected() * modelStates[t - 1].susceptible())
-                    - (this.rateOfRecovery * modelStates[t - 1].infected());
-            float changeInR = (this.rateOfRecovery * modelStates[t - 1].infected());
-            float changeInV = (this.rateOfVaccination * modelStates[t - 1].susceptible());
+        // for (int t = 1; t < iterations; t++) {
+        //     float changeInS = -1f * (this.rateOfInfection * modelStates[t - 1].infected() * modelStates[t - 1].susceptible())
+        //             - (this.rateOfVaccination * modelStates[t - 1].susceptible());
+        //     float changeInI = (this.rateOfInfection * modelStates[t - 1].infected() * modelStates[t - 1].susceptible())
+        //             - (this.rateOfRecovery * modelStates[t - 1].infected());
+        //     float changeInR = (this.rateOfRecovery * modelStates[t - 1].infected());
+        //     float changeInV = (this.rateOfVaccination * modelStates[t - 1].susceptible());
 
-            modelStates[t] = new ModelState(
-                t, 
-                modelStates[t - 1].susceptible() + changeInS,
-                modelStates[t - 1].infected() + changeInI,
-                modelStates[t - 1].recovered() + changeInR,
-                modelStates[t - 1].vaccinated() + changeInV
-            );
-        }
+        //     modelStates[t] = new ModelState(
+        //         t, 
+        //         modelStates[t - 1].susceptible() + changeInS,
+        //         modelStates[t - 1].infected() + changeInI,
+        //         modelStates[t - 1].recovered() + changeInR,
+        //         modelStates[t - 1].vaccinated() + changeInV
+        //     );
+        // }
     }
 
     /**

@@ -1,7 +1,11 @@
 package com.lucaswarwick02.networks;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+
+import org.apache.commons.math3.util.Pair;
 
 import com.lucaswarwick02.components.Node;
 
@@ -37,20 +41,31 @@ public class BarabasiAlbertNetwork extends AbstractNetwork {
 
             double sumOfDegrees = this.nodes.stream().mapToInt(Node::getDegree).sum();
 
-            // ... For each existing node...
-            for (Node existingNode : this.nodes) {
-                if (newNode.getDegree() > this.m) break;
-                // ... ... Get probability of connecting to new node
-                double probabilityOfConnecting = existingNode.getDegree() / sumOfDegrees;
+            List<Node> nodesToJoin = new ArrayList<>();
+            for (int i = 0; i < this.m; i++) {
+                Node node = null;
+                do {
+                    node = getWeightedNode(sumOfDegrees);
+                } while (nodesToJoin.contains(node));
+                nodesToJoin.add(node);
+            }
 
-                // ... ... Connect based on probability
-                if (r.nextFloat() <= probabilityOfConnecting) {
-                    existingNode.neighbours.add(newNode);
-                    newNode.neighbours.add(existingNode);
-                }
+            // ... For each existing node...
+            for (Node existingNode : nodesToJoin) {
+                existingNode.neighbours.add(newNode);
+                newNode.neighbours.add(existingNode);
             }
 
             this.nodes.add(newNode);
         }
+    }
+
+    private Node getWeightedNode(double sumOfDegrees) {
+        int idx = 0;
+        for (double r = Math.random(); idx < this.nodes.size(); ++idx) {
+            r -= this.nodes.get(idx).getDegree() / sumOfDegrees;
+            if (r <= 0.0) break;
+        }
+        return this.nodes.get(idx);
     }
 }

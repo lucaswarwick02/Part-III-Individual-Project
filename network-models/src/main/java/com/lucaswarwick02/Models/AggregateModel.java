@@ -38,24 +38,27 @@ public class AggregateModel {
             List<Float> infectedValues = new ArrayList<>();
             List<Float> recoveredValues = new ArrayList<>();
             List<Float> vaccinatedValues = new ArrayList<>();
+            List<Float> cumulativeInfectedValues = new ArrayList<>();
 
             for (ModelState[] modelStates : modelStatesList) {
                 susceptibleValues.add(modelStates[i].susceptible());
                 infectedValues.add(modelStates[i].infected());
                 recoveredValues.add(modelStates[i].recovered());
                 vaccinatedValues.add(modelStates[i].vaccinated());
+                cumulativeInfectedValues.add(modelStates[i].cumulativeInfected());
             }
 
             aggregateModelStates[i] = new AggregateModelState(
                     i,
                     calculateMean(susceptibleValues),
-                    calculateStandardDeviation(susceptibleValues),
+                    calculateStandardDeviation(susceptibleValues) / 2f,
                     calculateMean(infectedValues),
-                    calculateStandardDeviation(infectedValues),
+                    calculateStandardDeviation(infectedValues) / 2f,
                     calculateMean(recoveredValues),
-                    calculateStandardDeviation(recoveredValues),
+                    calculateStandardDeviation(recoveredValues) / 2f,
                     calculateMean(vaccinatedValues),
-                    calculateStandardDeviation(vaccinatedValues));
+                    calculateStandardDeviation(vaccinatedValues) / 2f,
+                    calculateMean(cumulativeInfectedValues));
         }
 
         return aggregateModelStates;

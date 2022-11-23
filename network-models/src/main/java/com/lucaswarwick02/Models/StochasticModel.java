@@ -35,7 +35,7 @@ public class StochasticModel {
     public StochasticModel(VaccinationStrategy vaccinationStrategy) {
         this.vaccinationStrategy = vaccinationStrategy;
 
-        this.rateOfInfection = 0.2f;
+        this.rateOfInfection = 0.05f;
         this.rateOfRecovery = 0.04f;
     }
 
@@ -123,11 +123,17 @@ public class StochasticModel {
      * @return ModelState
      */
     void saveModelState(int t) {
+        int totalSusceptible = this.underlyingNetwork.getNodesFromState(Node.State.SUSCEPTIBLE).size();
+        int totalInfected = this.underlyingNetwork.getNodesFromState(Node.State.INFECTED).size();
+        int totalRecovered = this.underlyingNetwork.getNodesFromState(Node.State.RECOVERED).size();
+        int totalVaccinated = this.underlyingNetwork.getNodesFromState(Node.State.VACCINATED).size();
+
         modelStates[t] = new ModelState(t,
-                this.underlyingNetwork.getNodesFromState(Node.State.SUSCEPTIBLE).size(),
-                this.underlyingNetwork.getNodesFromState(Node.State.INFECTED).size(),
-                this.underlyingNetwork.getNodesFromState(Node.State.RECOVERED).size(),
-                this.underlyingNetwork.getNodesFromState(Node.State.VACCINATED).size());
+            totalSusceptible,
+            totalInfected,
+            totalRecovered,
+            totalVaccinated,
+            totalInfected + totalRecovered);
     }
 
     /**
