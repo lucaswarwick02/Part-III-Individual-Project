@@ -14,8 +14,10 @@ public class Node {
     public enum State {
         SUSCEPTIBLE,
         INFECTED,
+        HOSPITALISED,
         RECOVERED,
-        VACCINATED
+        VACCINATED,
+        DEAD
     }
 
     public State state; // Compartmental model state
@@ -27,9 +29,10 @@ public class Node {
 
     /**
      * Create a Susceptible Node
+     * 
      * @param ID Unique identifier
      */
-    public Node (int ID) {
+    public Node(int ID) {
         this.ID = ID;
         this.state = State.SUSCEPTIBLE;
         neighbours = new ArrayList<>();
@@ -37,9 +40,10 @@ public class Node {
 
     /**
      * Get the number of connections the Node has
+     * 
      * @return Number of connections
      */
-    public int getDegree () {
+    public int getDegree() {
         return this.neighbours.size();
     }
 }

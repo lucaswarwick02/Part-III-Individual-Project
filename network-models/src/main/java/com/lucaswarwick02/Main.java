@@ -69,23 +69,18 @@ public class Main {
         }
         System.out.println("\nSimulations Complete");
 
-        System.out.println(getEpidemicThreshold(outbreakSizes));
-
         AggregateModelState.saveArrayToCSV(aggregateModel.aggregateResults(), DATA_FOLDER, outputFileName);
     }
 
-    public static double getEpidemicThreshold (List<Float> outbreakSizes) {
-        double average = outbreakSizes.stream().mapToDouble(os -> os).average().orElse(Double.NaN);
-        double squaredAverage = outbreakSizes.stream().mapToDouble(os -> os * os).average().orElse(Double.NaN);
-        return Math.sqrt(squaredAverage - (average * average)) / average;
-    }
+    // public static void mathematicalSimumation(float rateOfInfection, float
+    // rateOfRecovery, float rateOfVaccination,
+    // String outputFileName) {
+    // MathematicalModel mathematicalModel = new MathematicalModel(NODES,
+    // rateOfInfection, rateOfRecovery,
+    // rateOfVaccination);
+    // mathematicalModel.runSimulation(100, 3);
 
-    // public static void mathematicalSimumation(float rateOfInfection, float rateOfRecovery, float rateOfVaccination,
-    //         String outputFileName) {
-    //     MathematicalModel mathematicalModel = new MathematicalModel(NODES, rateOfInfection, rateOfRecovery,
-    //             rateOfVaccination);
-    //     mathematicalModel.runSimulation(100, 3);
-
-    //     ModelState.saveArrayToCSV(mathematicalModel.getModelStates(), DATA_FOLDER, outputFileName);
+    // ModelState.saveArrayToCSV(mathematicalModel.getModelStates(), DATA_FOLDER,
+    // outputFileName);
     // }
 }

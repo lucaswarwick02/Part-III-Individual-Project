@@ -6,25 +6,33 @@ import java.io.PrintWriter;
 /**
  * Stores information about a Model at a specific time
  */
-public record ModelState(int time, float susceptible, float infected, float recovered, float vaccinated, float cumulativeInfected) {
+public record ModelState(int time, float susceptible, float infected, float recovered, float vaccinated,
+        float hospitalised, float dead,
+        float cumulativeInfected) {
 
-    public static String CSV_HEADER = "Time,Susceptible,Infected,Recovered,Vaccinated,CumulativeInfected"; // Header for the CSV file
+    public static String CSV_HEADER = "Time,Susceptible,Infected,Recovered,Vaccinated,Hospitalised,Dead,CumulativeInfected"; // Header
+    // for
+    // the CSV
+    // file
 
     /**
      * Get the value of the State as a String
+     * 
      * @return String CSV row
      */
-    public String getCSVRow () {
-        return time + "," + susceptible + "," + infected + "," + recovered + "," + vaccinated + "," + cumulativeInfected;
+    public String getCSVRow() {
+        return time + "," + susceptible + "," + infected + "," + recovered + "," + vaccinated + ","
+                + hospitalised + "," + dead + "," + cumulativeInfected;
     }
 
     /**
      * Save a list of states to a CSV file
+     * 
      * @param modelStates List of states
-     * @param dataFolder Folder where the file will be stored
-     * @param fileName Name of the file
+     * @param dataFolder  Folder where the file will be stored
+     * @param fileName    Name of the file
      */
-    public static void saveArrayToCSV ( ModelState[] modelStates, File dataFolder, String fileName ) {
+    public static void saveArrayToCSV(ModelState[] modelStates, File dataFolder, String fileName) {
         File file = new File(dataFolder, fileName);
 
         try (PrintWriter writer = new PrintWriter(file, "UTF-8")) {
@@ -32,8 +40,7 @@ public record ModelState(int time, float susceptible, float infected, float reco
             for (ModelState modelState : modelStates) {
                 writer.write(modelState.getCSVRow() + "\n");
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

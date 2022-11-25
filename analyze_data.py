@@ -2,6 +2,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
+def add_plot(axes, df: pd.DataFrame, column: str, color: str):
+    axes.plot(df['Time'], df[column], label=column, color=color)
+    axes.fill_between(df['Time'], df[column] + df[column + '_STD'], df[column] - df[column + '_STD'], color=color, alpha=0.2)
+
+
 def display_base_and_vac (agg_df: pd.DataFrame, agg_vac_df: pd.DataFrame):
     
     y_max = agg_df.iloc[0]['Susceptible'] + agg_df.iloc[0]['Infected']
@@ -10,31 +15,27 @@ def display_base_and_vac (agg_df: pd.DataFrame, agg_vac_df: pd.DataFrame):
     
     legend_loc = 'upper right'
     
-    axes[0].plot(agg_df['Time'], agg_df['Susceptible'], label='Susceptible', color='blue')
-    axes[0].fill_between(agg_df['Time'], agg_df['Susceptible'] + agg_df['Susceptible_STD'], agg_df['Susceptible'] - agg_df['Susceptible_STD'], color='blue', alpha=0.2)  # type: ignore
-
-    axes[0].plot(agg_df['Time'], agg_df['Infected'], label='Infected', color='red')
-    axes[0].fill_between(agg_df['Time'], agg_df['Infected'] + agg_df['Infected_STD'], agg_df['Infected'] - agg_df['Infected_STD'], color='red', alpha=0.2)  # type: ignore
-
-    axes[0].plot(agg_df['Time'], agg_df['Recovered'], label='Recovered', color='green')
-    axes[0].fill_between(agg_df['Time'], agg_df['Recovered'] + agg_df['Recovered_STD'], agg_df['Recovered'] - agg_df['Recovered_STD'], color='green', alpha=0.2)  # type: ignore
+    # * No Vaccination
+    
+    add_plot(axes[0], agg_df, 'Susceptible', 'blue')
+    add_plot(axes[0], agg_df, 'Infected', 'orange')
+    add_plot(axes[0], agg_df, 'Recovered', 'green')
+    add_plot(axes[0], agg_df, 'Hospitalised', 'yellow')
+    add_plot(axes[0], agg_df, 'Dead', 'red')
 
     axes[0].legend(loc=legend_loc)
     axes[0].set_title('Number of Individuals vs Time')
     axes[0].set(xlabel='Time', ylabel='Number of Individuals')
     
-    axes[1].plot(agg_vac_df['Time'], agg_vac_df['Susceptible'], label='Susceptible', color='blue')
-    axes[1].fill_between(agg_vac_df['Time'], agg_vac_df['Susceptible'] + agg_vac_df['Susceptible_STD'], agg_vac_df['Susceptible'] - agg_vac_df['Susceptible_STD'], color='blue', alpha=0.2)  # type: ignore
-
-    axes[1].plot(agg_vac_df['Time'], agg_vac_df['Infected'], label='Infected', color='red')
-    axes[1].fill_between(agg_vac_df['Time'], agg_vac_df['Infected'] + agg_vac_df['Infected_STD'], agg_vac_df['Infected'] - agg_vac_df['Infected_STD'], color='red', alpha=0.2)  # type: ignore
-
-    axes[1].plot(agg_vac_df['Time'], agg_vac_df['Recovered'], label='Recovered', color='green')
-    axes[1].fill_between(agg_vac_df['Time'], agg_vac_df['Recovered'] + agg_vac_df['Recovered_STD'], agg_vac_df['Recovered'] - agg_vac_df['Recovered_STD'], color='green', alpha=0.2)  # type: ignore
-
-    axes[1].plot(agg_vac_df['Time'], agg_vac_df['Vaccinated'], label='Vaccinated', color='purple')
-    axes[1].fill_between(agg_vac_df['Time'], agg_vac_df['Vaccinated'] + agg_vac_df['Vaccinated_STD'], agg_vac_df['Vaccinated'] - agg_vac_df['Vaccinated_STD'], color='purple', alpha=0.2)  # type: ignore
-
+    # * Global Vaccination
+    
+    add_plot(axes[1], agg_vac_df, 'Susceptible', 'blue')
+    add_plot(axes[1], agg_vac_df, 'Infected', 'orange')
+    add_plot(axes[1], agg_vac_df, 'Recovered', 'green')
+    add_plot(axes[1], agg_vac_df, 'Vaccinated', 'purple')
+    add_plot(axes[1], agg_vac_df, 'Hospitalised', 'yellow')
+    add_plot(axes[1], agg_vac_df, 'Dead', 'red')
+    
     axes[1].legend(loc=legend_loc)
     axes[1].set_title('Number of Individuals vs Time')
     axes[1].set(xlabel='Time', ylabel='Number of Individuals')

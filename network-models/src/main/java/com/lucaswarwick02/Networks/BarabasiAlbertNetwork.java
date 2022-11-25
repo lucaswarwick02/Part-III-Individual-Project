@@ -3,9 +3,6 @@ package com.lucaswarwick02.networks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
-
-import org.apache.commons.math3.util.Pair;
 
 import com.lucaswarwick02.components.Node;
 
@@ -64,7 +61,8 @@ public class BarabasiAlbertNetwork extends AbstractNetwork {
         int idx = 0;
         for (double r = Math.random(); idx < this.nodes.size(); ++idx) {
             r -= this.nodes.get(idx).getDegree() / sumOfDegrees;
-            if (r <= 0.0) break;
+            if (r <= 0.0)
+                break;
         }
         return this.nodes.get(idx);
     }
