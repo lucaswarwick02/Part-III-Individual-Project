@@ -42,12 +42,12 @@ def display_base_and_vac (agg_df: pd.DataFrame, agg_vac_df: pd.DataFrame):
     
     # * Cumulative Infected vs Time
     
-    axes[2].plot(agg_df['Time'], agg_df['CumulativeInfected'], linestyle='dashed', label='No Vaccination', color='black')
-    axes[2].plot(agg_vac_df['Time'], agg_vac_df['CumulativeInfected'], label='Global Vacciantion', color='black')
+    # axes[2].plot(agg_df['Time'], agg_df['CumulativeInfected'], linestyle='dashed', label='No Vaccination', color='black')
+    # axes[2].plot(agg_vac_df['Time'], agg_vac_df['CumulativeInfected'], label='Global Vacciantion', color='black')
     
-    axes[2].legend(loc=legend_loc)
-    axes[2].set_title('Cumulative Infected vs Time')
-    axes[2].set(xlabel='Time', ylabel='Cumulative Infected')
+    # axes[2].legend(loc=legend_loc)
+    # axes[2].set_title('Cumulative Infected vs Time')
+    # axes[2].set(xlabel='Time', ylabel='Cumulative Infected')
     plt.ylim(0, y_max)
     
     plt.show()
