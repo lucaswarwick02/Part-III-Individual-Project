@@ -97,6 +97,14 @@ public class StochasticModel {
             }
         }
 
+        // For each hospitalised Node...
+        for (Node hospitalisedNode : underlyingNetwork.getNodesFromState(Node.State.HOSPITALISED)) {
+            // ... maybe recover the node
+            if (r.nextFloat() <= rateOfRecovery) {
+                nodesToRecover.add(hospitalisedNode);
+            }
+        }
+
         for (Node hospitalisedNode : underlyingNetwork.getNodesFromState(Node.State.HOSPITALISED)) {
             if (r.nextFloat() <= mortalityRate) {
                 nodesToKill.add(hospitalisedNode);
