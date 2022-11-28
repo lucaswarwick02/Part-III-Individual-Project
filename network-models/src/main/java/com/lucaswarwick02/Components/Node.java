@@ -46,4 +46,28 @@ public class Node {
     public int getDegree() {
         return this.neighbours.size();
     }
+
+    public static String StateToString(Node.State state) {
+        switch (state) {
+            case SUSCEPTIBLE:
+                return "Susceptible";
+            case INFECTED:
+                return "Infected";
+            case RECOVERED:
+                return "Recovered";
+            case VACCINATED:
+                return "Vaccinated";
+            case HOSPITALISED:
+                return "Hospitalised";
+            case DEAD:
+                return "Dead";
+            default:
+                return "INVALID_STATE";
+        }
+    }
+
+    public static Node.State[] getAllStates() {
+        return new Node.State[] { Node.State.SUSCEPTIBLE, Node.State.INFECTED, Node.State.RECOVERED,
+                Node.State.VACCINATED, Node.State.HOSPITALISED, Node.State.DEAD };
+    }
 }

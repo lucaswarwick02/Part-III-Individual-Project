@@ -5,14 +5,8 @@ import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkType;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.models.VaccinationStrategy;
-import com.lucaswarwick02.models.states.AggregateModelState;
-import com.lucaswarwick02.models.states.ModelState;
-import com.lucaswarwick02.models.MathematicalModel;
-import com.lucaswarwick02.models.AggregateModel;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
 
@@ -44,18 +38,16 @@ public class Main {
     public static void stochasticSimulation(NetworkType networkType, VaccinationStrategy vaccinationStrategy,
             String outputFileName) {
 
-        AbstractNetwork network = NetworkFactory.getNetwork(networkType);
-        StochasticModel model = new StochasticModel(vaccinationStrategy);
-
-        AggregateModel aggregateModel = new AggregateModel(SIMULATIONS, ITERATIONS);
-
         System.out.println("##################################################");
         System.out.println("Network: " + networkType + ", Vaccination Strategy: " + vaccinationStrategy);
         System.out.print("... Running Simulation #00");
 
-        List<Float> outbreakSizes = new ArrayList<>();
+        StochasticModel[] models = new StochasticModel[SIMULATIONS];
 
         for (int s = 0; s < SIMULATIONS; s++) {
+            AbstractNetwork network = NetworkFactory.getNetwork(networkType);
+            StochasticModel model = new StochasticModel(vaccinationStrategy);
+
             System.out.print("\b\b");
             System.out.printf("%02d", (s + 1));
             network.generateNetwork(NODES);
@@ -63,13 +55,13 @@ public class Main {
             model.setUnderlyingNetwork(network);
             model.runSimulation(ITERATIONS, 3);
 
-            aggregateModel.modelStatesList[s] = model.modelStates;
-
-            outbreakSizes.add(model.modelStates[model.modelStates.length - 1].cumulativeInfected());
+            models[s] = model;
         }
         System.out.println("\nSimulations Complete");
 
-        AggregateModelState.saveArrayToCSV(aggregateModel.aggregateResults(), DATA_FOLDER, outputFileName);
+        // AggregateModelState.saveArrayToCSV(aggregateModel.aggregateResults(),
+        // DATA_FOLDER, outputFileName);
+        StochasticModel.SaveToCSV(StochasticModel.aggregateResults(models, ITERATIONS), DATA_FOLDER, outputFileName);
     }
 
     // public static void mathematicalSimumation(float rateOfInfection, float
