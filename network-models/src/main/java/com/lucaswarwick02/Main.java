@@ -3,10 +3,12 @@ package com.lucaswarwick02;
 import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkType;
+import com.lucaswarwick02.models.HelperFunctions;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.models.VaccinationStrategy;
 
 import java.io.File;
+import java.util.Map;
 
 public class Main {
 
@@ -59,9 +61,11 @@ public class Main {
         }
         System.out.println("\nSimulations Complete");
 
-        // AggregateModelState.saveArrayToCSV(aggregateModel.aggregateResults(),
-        // DATA_FOLDER, outputFileName);
-        StochasticModel.SaveToCSV(StochasticModel.aggregateResults(models, ITERATIONS), DATA_FOLDER, outputFileName);
+        Map<String, double[]> aggregateModel = HelperFunctions.aggregateResults(models, ITERATIONS);
+
+        HelperFunctions.evaluateAggregateModel(aggregateModel);
+
+        HelperFunctions.saveToCSV(aggregateModel, DATA_FOLDER, outputFileName);
     }
 
     // public static void mathematicalSimumation(float rateOfInfection, float

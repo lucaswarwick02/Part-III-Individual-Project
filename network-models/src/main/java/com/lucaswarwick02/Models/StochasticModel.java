@@ -3,13 +3,11 @@ package com.lucaswarwick02.models;
 import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.components.Node;
 
-import java.io.File;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
  * Each iteration, use probability instead of ODEs
@@ -25,7 +23,7 @@ public class StochasticModel {
     final float hospitalisationRate; // Probabiliy of an infected node being hospitalised
     final float mortalityRate; // Probability of a hospitalised node 'dying'
 
-    public HashMap<String, int[]> states = new HashMap<>();
+    public Map<String, int[]> states = new HashMap<>();
 
     VaccinationStrategy vaccinationStrategy; // Strategy used in the simulation
 
@@ -41,8 +39,8 @@ public class StochasticModel {
         this.vaccinationStrategy = vaccinationStrategy;
 
         this.rateOfInfection = 0.075f;
-        this.rateOfRecovery = 0.04f;
-        this.hospitalisationRate = 0.05f;
+        this.rateOfRecovery = 0.06f;
+        this.hospitalisationRate = 0.04f;
         this.mortalityRate = 0.1f;
     }
 
@@ -63,7 +61,7 @@ public class StochasticModel {
         states.put("Dead", new int[iterations]);
 
         // set initialInfected nodes to Infected
-        List<Node> initialInfectedNodes = pickRandomNodes(underlyingNetwork.getNodes(), initialInfected);
+        List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(underlyingNetwork.getNodes(), initialInfected);
         initialInfectedNodes.forEach(node -> node.state = Node.State.INFECTED);
 
         // Store the initial model state
@@ -102,11 +100,7 @@ public class StochasticModel {
             // ... maybe recover the node
             if (r.nextFloat() <= rateOfRecovery) {
                 nodesToRecover.add(hospitalisedNode);
-            }
-        }
-
-        for (Node hospitalisedNode : underlyingNetwork.getNodesFromState(Node.State.HOSPITALISED)) {
-            if (r.nextFloat() <= mortalityRate) {
+            } else if (r.nextFloat() <= mortalityRate) {
                 nodesToKill.add(hospitalisedNode);
             }
         }
@@ -132,8 +126,6 @@ public class StochasticModel {
         saveModelState(iterationNumber); // Store the model state
     }
 
-    // region Vaccination Strategies
-
     /**
      * Generated from VaccinationStrategy.GLOBAL
      */
@@ -147,10 +139,6 @@ public class StochasticModel {
                 susceptibleNode.state = Node.State.VACCINATED;
         }
     }
-
-    // endregion
-
-    // region Setup Functions
 
     /**
      * Store the current state of the model as record
@@ -166,17 +154,6 @@ public class StochasticModel {
     }
 
     /**
-     * Randomly pick N nodes
-     * 
-     * @param list List of Nodes to pick from
-     * @param n    Number of Nodes to pick
-     * @return List of Nodes of length N
-     */
-    List<Node> pickRandomNodes(List<Node> list, int n) {
-        return r.ints(n, 0, list.size()).mapToObj(list::get).collect(Collectors.toList());
-    }
-
-    /**
      * Set the underlying network
      * 
      * @param underlyingNetwork Network used in the model
@@ -184,102 +161,4 @@ public class StochasticModel {
     public void setUnderlyingNetwork(AbstractNetwork underlyingNetwork) {
         this.underlyingNetwork = underlyingNetwork;
     }
-
-    // endregion
-
-    // region Mathematical Functions
-
-    /**
-     * Calculate the mean of a lists
-     * 
-     * @param list List of floats
-     * @return
-     */
-    public static double calculateMean(double[] list) {
-        double sum = 0;
-        for (double val : list)
-            sum += val;
-
-        return sum / list.length;
-    }
-
-    /**
-     * Calculate the standard deviation of a list
-     * 
-     * @param list List of floats
-     * @return
-     */
-    public static double calculateStandardDeviation(double[] list) {
-        double length = list.length;
-        double mean = calculateMean(list);
-        double diffSum = 0;
-        for (double val : list)
-            diffSum += Math.pow(val - mean, 2);
-        return (double) Math.sqrt(diffSum / length);
-    }
-
-    // endregion
-
-    // region Static Functions
-
-    /**
-     * Use each model's ModelStates and calcualte the mean and standard deviation
-     * for each time step
-     * 
-     * @return AggregateModelState[]
-     */
-    public static HashMap<String, double[]> aggregateResults(StochasticModel[] models, int iterations) {
-        HashMap<String, double[]> states = new HashMap<>();
-
-        states.put("Time", new double[iterations]);
-        for (Node.State state : Node.getAllStates()) {
-            String stateName = Node.StateToString(state);
-            states.put(stateName, new double[iterations]);
-            states.put(stateName + "_STD", new double[iterations]);
-        }
-
-        for (int i = 0; i < iterations; i++) {
-            states.get("Time")[i] = i;
-            for (Node.State state : Node.getAllStates()) {
-                double[] values = new double[models.length];
-                String stateName = Node.StateToString(state);
-
-                for (int m = 0; m < models.length; m++) {
-                    values[m] = models[m].states.get(stateName)[i];
-                }
-
-                double mean = calculateMean(values);
-                double standardDeviation = calculateStandardDeviation(values);
-
-                states.get(stateName)[i] = mean;
-                states.get(stateName + "_STD")[i] = standardDeviation / 2;
-            }
-        }
-
-        return states;
-    }
-
-    public static void SaveToCSV(HashMap<String, double[]> states, File dataFolder, String fileName) {
-
-        File file = new File(dataFolder, fileName);
-
-        int iterations = states.get("Time").length;
-
-        String header = String.join(",", states.keySet());
-
-        try (PrintWriter writer = new PrintWriter(file, "UTF-8")) {
-            writer.write(header + "\n");
-            for (int i = 0; i < iterations; i++) {
-                List<String> row = new ArrayList<>();
-                for (String string : states.keySet()) {
-                    row.add(Double.toString(states.get(string)[i]));
-                }
-                writer.write(String.join(",", row) + "\n");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // endregion
 }
