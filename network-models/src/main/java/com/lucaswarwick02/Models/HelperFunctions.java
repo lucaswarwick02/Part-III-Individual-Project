@@ -128,5 +128,24 @@ public class HelperFunctions {
         System.out.println("... Total Infected = " + (finalInfected + finalRecovered + finalHospitalised + finalDead));
         System.out.println("... Total Hospitalised = " + (finalHospitalised + finalDead));
         System.out.println("... Total Dead = " + (finalDead));
+
+        System.out.println("... Total Infected = " + cumulativeInfected(model));
+        System.out.println("... Total Hospitalised = " + 0);
+        System.out.println("... Total Dead = " + cumulativeDead(model));
+    }
+
+    private static double cumulativeInfected (Map<String, double[]> model) {
+        int length = model.get("Time").length;
+
+        double initalPopulation = model.get("Susceptible")[0] + model.get("Infected")[0];
+        double finalSusceptible = model.get("Susceptible")[length - 1];
+        double finalVaccinanted = model.get("Vaccinated")[length - 1];
+        
+        return initalPopulation - finalSusceptible - finalVaccinanted;
+    }
+
+    private static double cumulativeDead (Map<String, double[]> model) {
+        int length = model.get("Time").length;
+        return model.get("Dead")[length - 1];
     }
 }
