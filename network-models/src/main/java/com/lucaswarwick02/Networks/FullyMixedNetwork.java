@@ -1,5 +1,6 @@
 package com.lucaswarwick02.networks;
 
+import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
 import java.util.ArrayList;
 
@@ -20,10 +21,10 @@ public class FullyMixedNetwork extends AbstractNetwork {
      * @param numberOfNodes Number of Nodes in the network
      */
     @Override
-    public void generateNetwork(int numberOfNodes) {
+    public void generateNetwork() {
         this.nodes = new ArrayList<>();
 
-        for (int n = 0; n < numberOfNodes; n++) {
+        for (int n = 0; n < Main.NUMBER_OF_NODES; n++) {
             // Create the Node
             Node newNode = new Node(n);
 

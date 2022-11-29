@@ -23,7 +23,7 @@ public abstract class AbstractNetwork {
      * Generate the Nodes and Edges for the underlying network
      * @param numberOfNodes Number of Nodes in the network
      */
-    public abstract void generateNetwork (int numberOfNodes);
+    public abstract void generateNetwork ();
 
     /**
      * Set a subsection of the nodes within the network which match the state

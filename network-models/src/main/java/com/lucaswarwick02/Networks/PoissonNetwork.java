@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
 
 import java.math.BigDecimal;
@@ -34,8 +35,8 @@ public class PoissonNetwork extends AbstractNetwork {
      * @param numberOfNodes Number of Nodes in the network
      */
     @Override
-    public void generateNetwork(int numberOfNodes) {
-        int[] degreeSequence = generateDegreeSequence(numberOfNodes);
+    public void generateNetwork() {
+        int[] degreeSequence = generateDegreeSequence();
         this.nodes = new ArrayList<>();
 
         int nodeID = 0;
@@ -59,16 +60,16 @@ public class PoissonNetwork extends AbstractNetwork {
         }
     }
 
-    public int[] generateDegreeSequence(int numberOfNodes) {
+    public int[] generateDegreeSequence() {
         double[] probabilities = new double[maxDegree - 1]; // Ignore case: degree = 0
         // ignore
         int[] nodesPerDegree = new int[maxDegree - 1];
         for (int k = 1; k < maxDegree; k++) {
             probabilities[k - 1] = poissonDegreeProbability(k, z);
-            nodesPerDegree[k - 1] = (int) Math.ceil(probabilities[k - 1] * numberOfNodes);
+            nodesPerDegree[k - 1] = (int) Math.ceil(probabilities[k - 1] * Main.NUMBER_OF_NODES);
         }
 
-        int nodesLeft = numberOfNodes - Arrays.stream(nodesPerDegree).sum();
+        int nodesLeft = Main.NUMBER_OF_NODES - Arrays.stream(nodesPerDegree).sum();
 
         while (nodesLeft > 0) {
             if (nodesLeft == 1) {

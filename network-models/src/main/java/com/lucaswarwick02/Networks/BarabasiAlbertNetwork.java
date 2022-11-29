@@ -2,13 +2,11 @@ package com.lucaswarwick02.networks;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
+import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
 
 public class BarabasiAlbertNetwork extends AbstractNetwork {
-
-    Random r = new Random();
 
     int m;
 
@@ -18,7 +16,7 @@ public class BarabasiAlbertNetwork extends AbstractNetwork {
     }
 
     @Override
-    public void generateNetwork(int numberOfNodes) {
+    public void generateNetwork() {
         this.nodes = new ArrayList<>();
 
         // Create the first m nodes, all connected
@@ -32,7 +30,7 @@ public class BarabasiAlbertNetwork extends AbstractNetwork {
         }
 
         // For each of the remaining (numberOfNodes - m) nodes...
-        for (int n = this.m; n < numberOfNodes; n++) {
+        for (int n = this.m; n < Main.NUMBER_OF_NODES; n++) {
             // ... Create the new Node
             Node newNode = new Node(n);
 

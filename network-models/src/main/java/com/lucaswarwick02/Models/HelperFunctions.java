@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
 
 public class HelperFunctions {
@@ -48,26 +49,25 @@ public class HelperFunctions {
     }
 
     /**
-     * Use each model's ModelStates and calcualte the mean and standard deviation
-     * for each time step
-     * 
-     * @return AggregateModelState[]
+     * Aggregate together a list of states
+     * @param models List of models
+     * @return Aggregate states
      */
-    public static Map<String, double[]> aggregateStates (StochasticModel[] models, int iterations) {
+    public static Map<String, double[]> aggregateStates (StochasticModel[] models) {
         HashMap<String, double[]> states = new HashMap<>();
 
-        states.put("Time", new double[iterations]);
+        states.put("Time", new double[Main.ITERATIONS]);
         for (Node.State state : Node.getAllStates()) {
-            String stateName = Node.StateToString(state);
-            states.put(stateName, new double[iterations]);
-            states.put(stateName + "_STD", new double[iterations]);
+            String stateName = Node.stateToString(state);
+            states.put(stateName, new double[Main.ITERATIONS]);
+            states.put(stateName + "_STD", new double[Main.ITERATIONS]);
         }
 
-        for (int i = 0; i < iterations; i++) {
+        for (int i = 0; i < Main.ITERATIONS; i++) {
             states.get("Time")[i] = i;
             for (Node.State state : Node.getAllStates()) {
                 double[] values = new double[models.length];
-                String stateName = Node.StateToString(state);
+                String stateName = Node.stateToString(state);
 
                 for (int m = 0; m < models.length; m++) {
                     values[m] = models[m].states.get(stateName)[i];
@@ -84,15 +84,21 @@ public class HelperFunctions {
         return states;
     }
 
-    public static Map<String, double[]> aggregateTotals (StochasticModel[] models, int iterations) {
+    /**
+     * Aggregate together a list of totals
+     * @param models List of models
+     * @return Aggregated totals
+     */
+    public static Map<String, double[]> aggregateTotals (StochasticModel[] models) {
         HashMap<String, double[]> totals = new HashMap<>();
 
         Set<String> keys = models[0].totals.keySet();
         for (String key : keys) {
-            totals.put(key, new double[iterations]);
+            totals.put(key, new double[Main.ITERATIONS]);
+            totals.put(key + "_STD", new double[Main.ITERATIONS]);
         }
 
-        for (int i = 0; i < iterations; i++) {
+        for (int i = 0; i < Main.ITERATIONS; i++) {
             totals.get("Time")[i] = i;
             for (String key : keys) {
                 double[] values = new double[models.length];
@@ -102,25 +108,27 @@ public class HelperFunctions {
                 }
 
                 double mean = calculateMean(values);
+                double standardDeviation = calculateStandardDeviation(values) / 2;
 
                 totals.get(key)[i] = mean;
+                totals.get(key + "_STD")[i] = standardDeviation;
             }
         }
 
         return totals;
     }
 
-    public static void saveToCSV (Map<String, double[]> states, File dataFolder, String fileName) {
-
-        File file = new File(dataFolder, fileName);
-
-        int iterations = states.get("Time").length;
-
+    /**
+     * Save a mapping table to a file
+     * @param states Aggregate states
+     * @param file Aggregate totals
+     */
+    public static void saveToCSV (Map<String, double[]> states, File file) {
         String header = String.join(",", states.keySet());
 
         try (PrintWriter writer = new PrintWriter(file, "UTF-8")) {
             writer.write(header + "\n");
-            for (int i = 0; i < iterations; i++) {
+            for (int i = 0; i < Main.ITERATIONS; i++) {
                 List<String> row = new ArrayList<>();
                 for (String string : states.keySet()) {
                     row.add(Double.toString(states.get(string)[i]));
@@ -133,22 +141,27 @@ public class HelperFunctions {
     }
 
     /**
-     * Randomly pick N nodes
+     * Randomly pick N items from a list
      * 
-     * @param list List of Nodes to pick from
-     * @param n    Number of Nodes to pick
-     * @return List of Nodes of length N
+     * @param list List to pick from
+     * @param n    Number to pick
+     * @return List of length N
      */
     public static <T> List<T> pickRandomNodes(List<T> list, int n) {
         return r.ints(n, 0, list.size()).mapToObj(list::get).collect(Collectors.toList());
     }
 
+    /**
+     * Log the evaluation metrics to the console
+     * @param states Aggregated states
+     * @param totals Aggregated totals
+     */
     public static void evaluateAggregateModel (Map<String, double[]> states, Map<String, double[]> totals) {
         int length = states.get("Time").length;
 
-        System.out.println("Evaluation: ");
-        System.out.println("... Total Infected = " + totals.get("Infected")[length - 1]);
-        System.out.println("... Total Hospitalised = " + totals.get("Hospitalised")[length - 1]);
-        System.out.println("... Total Dead = " + totals.get("Dead")[length - 1]);
+        Main.LOGGER.info("Evaluation: ");
+        Main.LOGGER.info("... Total Infected = " + totals.get("Infected")[length - 1]);
+        Main.LOGGER.info("... Total Hospitalised = " + totals.get("Hospitalised")[length - 1]);
+        Main.LOGGER.info("... Total Dead = " + totals.get("Dead")[length - 1]);
     }
 }

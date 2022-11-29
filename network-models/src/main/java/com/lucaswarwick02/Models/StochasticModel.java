@@ -1,6 +1,7 @@
 package com.lucaswarwick02.models;
 
 import com.lucaswarwick02.networks.AbstractNetwork;
+import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
 
 import java.util.ArrayList;
@@ -48,34 +49,31 @@ public class StochasticModel {
 
     /**
      * Percolate the virus throughout the network
-     * 
-     * @param iterations      Number of time steps
-     * @param initialInfected Number of infected individuals at t=0
      */
-    public void runSimulation(int iterations, int initialInfected) {
+    public void runSimulation() {
         // Setup the storing of model states
-        states.put("Time", new int[iterations]);
-        states.put("Susceptible", new int[iterations]);
-        states.put("Infected", new int[iterations]);
-        states.put("Recovered", new int[iterations]);
-        states.put("Vaccinated", new int[iterations]);
-        states.put("Hospitalised", new int[iterations]);
-        states.put("Dead", new int[iterations]);
+        states.put("Time", new int[Main.ITERATIONS]);
+        states.put("Susceptible", new int[Main.ITERATIONS]);
+        states.put("Infected", new int[Main.ITERATIONS]);
+        states.put("Recovered", new int[Main.ITERATIONS]);
+        states.put("Vaccinated", new int[Main.ITERATIONS]);
+        states.put("Hospitalised", new int[Main.ITERATIONS]);
+        states.put("Dead", new int[Main.ITERATIONS]);
 
-        totals.put("Time", new int[iterations]);
-        totals.put("Hospitalised", new int[iterations]);
-        totals.put("Infected", new int[iterations]);
-        totals.put("Dead", new int[iterations]);
+        totals.put("Time", new int[Main.ITERATIONS]);
+        totals.put("Hospitalised", new int[Main.ITERATIONS]);
+        totals.put("Infected", new int[Main.ITERATIONS]);
+        totals.put("Dead", new int[Main.ITERATIONS]);
 
         // set initialInfected nodes to Infected
-        List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(underlyingNetwork.getNodes(), initialInfected);
+        List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(underlyingNetwork.getNodes(), Main.INITIAL_INFECTED);
         initialInfectedNodes.forEach(node -> node.state = Node.State.INFECTED);
 
         // Store the initial model state
         saveModelState(0);
         saveTotals(0, 3, 0, 0);
 
-        for (int t = 1; t < iterations; t++) {
+        for (int t = 1; t < Main.ITERATIONS; t++) {
             performIteration(t);
         }
     }
@@ -159,7 +157,7 @@ public class StochasticModel {
     void saveModelState(int t) {
         this.states.get("Time")[t] = t;
         for (Node.State state : Node.getAllStates()) {
-            this.states.get(Node.StateToString(state))[t] = this.underlyingNetwork.getNodesFromState(state).size();
+            this.states.get(Node.stateToString(state))[t] = this.underlyingNetwork.getNodesFromState(state).size();
         }
     }
 

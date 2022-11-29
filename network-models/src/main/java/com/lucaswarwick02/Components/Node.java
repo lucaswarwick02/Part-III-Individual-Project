@@ -23,9 +23,9 @@ public class Node {
     public State state; // Compartmental model state
     public final int ID; // Unique identifier
 
-    public List<Node> neighbours;
+    public List<Node> neighbours; // List of the connected Nodes
 
-    public int stubs;
+    public int stubs; // Used for generating the network using the Configuration Model
 
     /**
      * Create a Susceptible Node
@@ -47,7 +47,12 @@ public class Node {
         return this.neighbours.size();
     }
 
-    public static String StateToString(Node.State state) {
+    /**
+     * Convert a State to it's associated column name
+     * @param state State
+     * @return Column name for the State
+     */
+    public static String stateToString(Node.State state) {
         switch (state) {
             case SUSCEPTIBLE:
                 return "Susceptible";
@@ -66,6 +71,10 @@ public class Node {
         }
     }
 
+    /**
+     * Get a list of all the State's
+     * @return List of States
+     */
     public static Node.State[] getAllStates() {
         return new Node.State[] { Node.State.SUSCEPTIBLE, Node.State.INFECTED, Node.State.RECOVERED,
                 Node.State.VACCINATED, Node.State.HOSPITALISED, Node.State.DEAD };

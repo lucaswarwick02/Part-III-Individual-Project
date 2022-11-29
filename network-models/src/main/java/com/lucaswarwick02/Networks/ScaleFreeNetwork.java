@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
 
 public class ScaleFreeNetwork extends AbstractNetwork {
@@ -32,8 +33,8 @@ public class ScaleFreeNetwork extends AbstractNetwork {
      * @param numberOfNodes Number of Nodes in the network
      */
     @Override
-    public void generateNetwork(int numberOfNodes) {
-        int[] degreeSequence = generateDegreeSequence(numberOfNodes);
+    public void generateNetwork() {
+        int[] degreeSequence = generateDegreeSequence();
         this.nodes = new ArrayList<>();
 
         int nodeID = 0;
@@ -57,17 +58,17 @@ public class ScaleFreeNetwork extends AbstractNetwork {
         }
     }
 
-    public int[] generateDegreeSequence(int numberOfNodes) {
+    public int[] generateDegreeSequence() {
         double[] probabilities = new double[kappa - 1]; // Ignore case: degree = 0
         int[] nodesPerDegree = new int[kappa - 1];
-        double polylogarithmValue = polylogarithm(gamma, Math.exp(-1d / (double) kappa), 100);
+        double polylogarithmValue = polylogarithm(gamma, Math.exp(-1d / kappa), 100); // ? Might need to cast kappa to double
 
         for (int k = 1; k < kappa; k++) {
             probabilities[k - 1] = powerLawDegreeProbability(k, gamma, kappa, polylogarithmValue);
-            nodesPerDegree[k - 1] = (int) Math.ceil(probabilities[k - 1] * numberOfNodes);
+            nodesPerDegree[k - 1] = (int) Math.ceil(probabilities[k - 1] * Main.NUMBER_OF_NODES);
         }
 
-        int nodesLeft = numberOfNodes - Arrays.stream(nodesPerDegree).sum();
+        int nodesLeft = Main.NUMBER_OF_NODES - Arrays.stream(nodesPerDegree).sum();
 
         float averageDegree = 0f;
         for (int k = 1; k < kappa; k++) {
