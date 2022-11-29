@@ -61,22 +61,13 @@ public class Main {
         }
         System.out.println("\nSimulations Complete");
 
-        Map<String, double[]> aggregateModel = HelperFunctions.aggregateResults(models, ITERATIONS);
+        Map<String, double[]> aggregateStates = HelperFunctions.aggregateStates(models, ITERATIONS);
+        Map<String, double[]> aggregateTotals = HelperFunctions.aggregateTotals(models, ITERATIONS);
 
-        HelperFunctions.evaluateAggregateModel(aggregateModel);
+        HelperFunctions.evaluateAggregateModel(aggregateStates, aggregateTotals);
 
-        HelperFunctions.saveToCSV(aggregateModel, DATA_FOLDER, outputFileName);
+
+
+        HelperFunctions.saveToCSV(aggregateStates, DATA_FOLDER, outputFileName);
     }
-
-    // public static void mathematicalSimumation(float rateOfInfection, float
-    // rateOfRecovery, float rateOfVaccination,
-    // String outputFileName) {
-    // MathematicalModel mathematicalModel = new MathematicalModel(NODES,
-    // rateOfInfection, rateOfRecovery,
-    // rateOfVaccination);
-    // mathematicalModel.runSimulation(100, 3);
-
-    // ModelState.saveArrayToCSV(mathematicalModel.getModelStates(), DATA_FOLDER,
-    // outputFileName);
-    // }
 }

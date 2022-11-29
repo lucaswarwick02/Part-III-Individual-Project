@@ -25,6 +25,8 @@ public class StochasticModel {
 
     public Map<String, int[]> states = new HashMap<>();
 
+    public Map<String, int[]> totals = new HashMap<>();
+
     VaccinationStrategy vaccinationStrategy; // Strategy used in the simulation
 
     /**
@@ -60,12 +62,18 @@ public class StochasticModel {
         states.put("Hospitalised", new int[iterations]);
         states.put("Dead", new int[iterations]);
 
+        totals.put("Time", new int[iterations]);
+        totals.put("Hospitalised", new int[iterations]);
+        totals.put("Infected", new int[iterations]);
+        totals.put("Dead", new int[iterations]);
+
         // set initialInfected nodes to Infected
         List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(underlyingNetwork.getNodes(), initialInfected);
         initialInfectedNodes.forEach(node -> node.state = Node.State.INFECTED);
 
         // Store the initial model state
         saveModelState(0);
+        saveTotals(0, 3, 0, 0);
 
         for (int t = 1; t < iterations; t++) {
             performIteration(t);
@@ -123,6 +131,8 @@ public class StochasticModel {
                 break;
         }
 
+        calculateAndSaveTotals(iterationNumber, nodesToInfect.size(), nodesToHospitalise.size(), nodesToKill.size());
+
         saveModelState(iterationNumber); // Store the model state
     }
 
@@ -151,6 +161,21 @@ public class StochasticModel {
         for (Node.State state : Node.getAllStates()) {
             this.states.get(Node.StateToString(state))[t] = this.underlyingNetwork.getNodesFromState(state).size();
         }
+    }
+
+    void saveTotals (int t, int infected, int hospitalised, int dead) {
+        totals.get("Time")[t] = t;
+        totals.get("Infected")[t] = infected;
+        totals.get("Hospitalised")[t] = hospitalised;
+        totals.get("Dead")[t] = dead;
+    }
+
+    void calculateAndSaveTotals(int t, int newlyInfected, int newlyHospitalised, int newlyDead) {
+        saveTotals(t, 
+            totals.get("Infected")[t - 1] + newlyInfected,
+            totals.get("Hospitalised")[t - 1] + newlyHospitalised,
+            totals.get("Dead")[t - 1] + newlyDead
+        );
     }
 
     /**
