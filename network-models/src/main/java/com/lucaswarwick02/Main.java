@@ -43,7 +43,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationStrategy.NONE, runFolder);
+        stochasticSimulation(NetworkType.SCALE_FREE, VaccinationStrategy.NONE, runFolder);
     }
 
     /**
@@ -52,7 +52,8 @@ public class Main {
     public static void stochasticSimulation(NetworkType networkType, VaccinationStrategy vaccinationStrategy,
             File runFolder) {
 
-        LOGGER.info("Network: " + networkType + ", Vaccination Strategy: " + vaccinationStrategy);
+        NetworkFactory.logNetworkInfo(networkType);
+        LOGGER.info("Vaccination Strategy: " + vaccinationStrategy);
         LOGGER.info("Parameters: ");
         LOGGER.info("... INFECTION_RATE: " + StochasticModel.INFECTION_RATE);
         LOGGER.info("... RECOVERY_RATE: " + StochasticModel.RECOVERY_RATE);
