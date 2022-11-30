@@ -17,7 +17,8 @@ public class HelperFunctions {
 
     static Random r = new Random();
 
-    private HelperFunctions () {}
+    private HelperFunctions() {
+    }
 
     /**
      * Calculate the mean of a lists
@@ -50,10 +51,11 @@ public class HelperFunctions {
 
     /**
      * Aggregate together a list of states
+     * 
      * @param models List of models
      * @return Aggregate states
      */
-    public static Map<String, double[]> aggregateStates (StochasticModel[] models) {
+    public static Map<String, double[]> aggregateStates(StochasticModel[] models) {
         HashMap<String, double[]> states = new HashMap<>();
 
         states.put("Time", new double[Main.ITERATIONS]);
@@ -86,10 +88,11 @@ public class HelperFunctions {
 
     /**
      * Aggregate together a list of totals
+     * 
      * @param models List of models
      * @return Aggregated totals
      */
-    public static Map<String, double[]> aggregateTotals (StochasticModel[] models) {
+    public static Map<String, double[]> aggregateTotals(StochasticModel[] models) {
         HashMap<String, double[]> totals = new HashMap<>();
 
         Set<String> keys = models[0].totals.keySet();
@@ -120,10 +123,11 @@ public class HelperFunctions {
 
     /**
      * Save a mapping table to a file
+     * 
      * @param states Aggregate states
-     * @param file Aggregate totals
+     * @param file   Aggregate totals
      */
-    public static void saveToCSV (Map<String, double[]> states, File file) {
+    public static void saveToCSV(Map<String, double[]> states, File file) {
         String header = String.join(",", states.keySet());
 
         try (PrintWriter writer = new PrintWriter(file, "UTF-8")) {
@@ -153,10 +157,11 @@ public class HelperFunctions {
 
     /**
      * Log the evaluation metrics to the console
+     * 
      * @param states Aggregated states
      * @param totals Aggregated totals
      */
-    public static void evaluateAggregateModel (Map<String, double[]> states, Map<String, double[]> totals) {
+    public static void evaluateAggregateModel(Map<String, double[]> states, Map<String, double[]> totals) {
         int length = states.get("Time").length;
 
         Main.LOGGER.info("Evaluation: ");

@@ -19,10 +19,10 @@ public class StochasticModel {
 
     AbstractNetwork underlyingNetwork; // Network used in the model
 
-    final float rateOfInfection; // Probability of an infected node spreading
-    final float rateOfRecovery; // Probability of an infected node recovering
-    final float hospitalisationRate; // Probabiliy of an infected node being hospitalised
-    final float mortalityRate; // Probability of a hospitalised node 'dying'
+    public static final float INFECTION_RATE = 0.075f; // Probability of an infected node spreading
+    public static final float RECOVERY_RATE = 0.06f; // Probability of an infected node recovering
+    public static final float HOSPITALISATION_RATE = 0.04f;; // Probabiliy of an infected node being hospitalised
+    public static final float MORTALITY_RATE = 0.1f; // Probability of a hospitalised node 'dying'
 
     public Map<String, int[]> states = new HashMap<>();
 
@@ -34,17 +34,9 @@ public class StochasticModel {
      * Setup the Stochastic Model
      * 
      * @param vaccinationStrategy Strategy used in the simulation
-     * @param rateOfInfection     Probability of an infected node spreading
-     * @param rateOfRecovery      Probability of an infected node recovering
-     * @param rateOfVaccination   Probability of a susceptible node being vaccinated
      */
     public StochasticModel(VaccinationStrategy vaccinationStrategy) {
         this.vaccinationStrategy = vaccinationStrategy;
-
-        this.rateOfInfection = 0.075f;
-        this.rateOfRecovery = 0.06f;
-        this.hospitalisationRate = 0.04f;
-        this.mortalityRate = 0.1f;
     }
 
     /**
@@ -66,7 +58,8 @@ public class StochasticModel {
         totals.put("Dead", new int[Main.ITERATIONS]);
 
         // set initialInfected nodes to Infected
-        List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(underlyingNetwork.getNodes(), Main.INITIAL_INFECTED);
+        List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(underlyingNetwork.getNodes(),
+                Main.INITIAL_INFECTED);
         initialInfectedNodes.forEach(node -> node.state = Node.State.INFECTED);
 
         // Store the initial model state
@@ -89,14 +82,14 @@ public class StochasticModel {
         for (Node infectedNode : underlyingNetwork.getNodesFromState(Node.State.INFECTED)) {
             // ... get a list of the Nodes they are going to infect
             infectedNode.neighbours.forEach(neighbour -> {
-                if ((neighbour.state == Node.State.SUSCEPTIBLE) && (r.nextFloat() <= rateOfInfection))
+                if ((neighbour.state == Node.State.SUSCEPTIBLE) && (r.nextFloat() <= INFECTION_RATE))
                     nodesToInfect.add(neighbour);
             });
 
             // ... maybe recover the Node
-            if (r.nextFloat() <= rateOfRecovery) {
+            if (r.nextFloat() <= RECOVERY_RATE) {
                 nodesToRecover.add(infectedNode);
-            } else if (r.nextFloat() <= hospitalisationRate) {
+            } else if (r.nextFloat() <= HOSPITALISATION_RATE) {
                 nodesToHospitalise.add(infectedNode);
             }
         }
@@ -104,9 +97,9 @@ public class StochasticModel {
         // For each hospitalised Node...
         for (Node hospitalisedNode : underlyingNetwork.getNodesFromState(Node.State.HOSPITALISED)) {
             // ... maybe recover the node
-            if (r.nextFloat() <= rateOfRecovery) {
+            if (r.nextFloat() <= RECOVERY_RATE) {
                 nodesToRecover.add(hospitalisedNode);
-            } else if (r.nextFloat() <= mortalityRate) {
+            } else if (r.nextFloat() <= MORTALITY_RATE) {
                 nodesToKill.add(hospitalisedNode);
             }
         }
@@ -138,12 +131,11 @@ public class StochasticModel {
      * Generated from VaccinationStrategy.GLOBAL
      */
     void globalVaccinationStrategy() {
-        // Information used in this strategy:
-        float rateOfVaccination = 0.0075f;
+        float vaccinationRate = 0.0075f;
 
         // With the leftover nodes, vaccinate them
         for (Node susceptibleNode : underlyingNetwork.getNodesFromState(Node.State.SUSCEPTIBLE)) {
-            if (r.nextFloat() <= rateOfVaccination)
+            if (r.nextFloat() <= vaccinationRate)
                 susceptibleNode.state = Node.State.VACCINATED;
         }
     }
@@ -161,7 +153,7 @@ public class StochasticModel {
         }
     }
 
-    void saveTotals (int t, int infected, int hospitalised, int dead) {
+    void saveTotals(int t, int infected, int hospitalised, int dead) {
         totals.get("Time")[t] = t;
         totals.get("Infected")[t] = infected;
         totals.get("Hospitalised")[t] = hospitalised;
@@ -169,11 +161,10 @@ public class StochasticModel {
     }
 
     void calculateAndSaveTotals(int t, int newlyInfected, int newlyHospitalised, int newlyDead) {
-        saveTotals(t, 
-            totals.get("Infected")[t - 1] + newlyInfected,
-            totals.get("Hospitalised")[t - 1] + newlyHospitalised,
-            totals.get("Dead")[t - 1] + newlyDead
-        );
+        saveTotals(t,
+                totals.get("Infected")[t - 1] + newlyInfected,
+                totals.get("Hospitalised")[t - 1] + newlyHospitalised,
+                totals.get("Dead")[t - 1] + newlyDead);
     }
 
     /**

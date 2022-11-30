@@ -24,7 +24,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-4s] %5$s %n");
-        
+
         // Store arguments from command line
         String rootFolder = args[0];
         String run = args[1];
@@ -39,7 +39,9 @@ public class Main {
             FileHandler fileHandler = new FileHandler((new File(runFolder, "output.log")).getAbsolutePath(), true);
             fileHandler.setFormatter(new SimpleFormatter());
             LOGGER.addHandler(fileHandler);
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationStrategy.NONE, runFolder);
     }
@@ -50,8 +52,14 @@ public class Main {
     public static void stochasticSimulation(NetworkType networkType, VaccinationStrategy vaccinationStrategy,
             File runFolder) {
 
-        LOGGER.info(String.format("Network: %1$s, Vaccination Strategy: %2$s", networkType, vaccinationStrategy));
-        LOGGER.info("Running Simulations");
+        LOGGER.info("Network: " + networkType + ", Vaccination Strategy: " + vaccinationStrategy);
+        LOGGER.info("Parameters: ");
+        LOGGER.info("... INFECTION_RATE: " + StochasticModel.INFECTION_RATE);
+        LOGGER.info("... RECOVERY_RATE: " + StochasticModel.RECOVERY_RATE);
+        LOGGER.info("... HOSPITALISATION_RATE: " + StochasticModel.HOSPITALISATION_RATE);
+        LOGGER.info("... MORTALITY_RATE: " + StochasticModel.MORTALITY_RATE);
+
+        LOGGER.info("Running " + SIMULATIONS + " Simulations, with " + ITERATIONS + " Iterations each");
 
         StochasticModel[] models = new StochasticModel[SIMULATIONS];
 
