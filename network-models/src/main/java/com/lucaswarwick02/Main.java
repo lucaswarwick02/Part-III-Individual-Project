@@ -3,6 +3,7 @@ package com.lucaswarwick02;
 import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkType;
+import com.lucaswarwick02.standalone.MathematicalComparison;
 import com.lucaswarwick02.models.HelperFunctions;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.models.VaccinationStrategy;
@@ -43,7 +44,11 @@ public class Main {
             e.printStackTrace();
         }
 
-        stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationStrategy.NONE, runFolder);
+        // stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationStrategy.NONE, runFolder);
+
+        MathematicalComparison mathematicalComparison = new MathematicalComparison();
+        // HelperFunctions.saveToCSV(mathematicalComparison.runMathematicalSimulation(), new File(runFolder, "equations.csv"));
+        HelperFunctions.saveToCSV(mathematicalComparison.runStochasticSimulations(), new File(runFolder, "simulations.csv"));
     }
 
     /**

@@ -21,7 +21,7 @@ public class StochasticModel {
 
     public static final float INFECTION_RATE = 0.075f; // Probability of an infected node spreading
     public static final float RECOVERY_RATE = 0.06f; // Probability of an infected node recovering
-    public static final float HOSPITALISATION_RATE = 0.04f;; // Probabiliy of an infected node being hospitalised
+    public static final float HOSPITALISATION_RATE = 0.04f; // Probabiliy of an infected node being hospitalised
     public static final float MORTALITY_RATE = 0.1f; // Probability of a hospitalised node 'dying'
 
     public Map<String, int[]> states = new HashMap<>();
