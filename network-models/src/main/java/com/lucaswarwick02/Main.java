@@ -44,7 +44,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        stochasticSimulation(NetworkType.FIXED_DEGREE, VaccinationStrategy.NONE, runFolder);
+        stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationStrategy.NONE, runFolder);
     }
 
     /**

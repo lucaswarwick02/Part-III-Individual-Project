@@ -1,0 +1,14 @@
+[2022-12-01 11:24:07] [INFO] BARABASI_ALBERT: m=2 
+[2022-12-01 11:24:07] [INFO] Vaccination Strategy: NONE 
+[2022-12-01 11:24:07] [INFO] Parameters:  
+[2022-12-01 11:24:07] [INFO] ... INFECTION_RATE: 0.075 
+[2022-12-01 11:24:07] [INFO] ... RECOVERY_RATE: 0.06 
+[2022-12-01 11:24:07] [INFO] ... HOSPITALISATION_RATE: 0.04 
+[2022-12-01 11:24:07] [INFO] ... MORTALITY_RATE: 0.1 
+[2022-12-01 11:24:07] [INFO] Running 100 Simulations, with 150 Iterations each 
+[2022-12-01 11:24:10] [INFO] Average Degree <k> = 3.9976 
+[2022-12-01 11:24:10] [INFO] Simulations Complete 
+[2022-12-01 11:24:10] [INFO] Evaluation:  
+[2022-12-01 11:24:10] [INFO] ... Total Infected = 1727.35 
+[2022-12-01 11:24:10] [INFO] ... Total Hospitalised = 656.25 
+[2022-12-01 11:24:10] [INFO] ... Total Dead = 402.07 
