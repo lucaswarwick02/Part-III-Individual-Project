@@ -3,7 +3,6 @@ package com.lucaswarwick02;
 import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkType;
-import com.lucaswarwick02.networks.ScaleFreeNetwork;
 import com.lucaswarwick02.models.HelperFunctions;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.models.VaccinationStrategy;
