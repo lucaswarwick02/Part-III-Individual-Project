@@ -35,8 +35,8 @@ if __name__ == '__main__':
     ROOT_FOLDER = sys.argv[1]
     RUN = sys.argv[2]
 
-    states_df = pd.read_csv(os.path.join(ROOT_FOLDER, 'data', RUN, 'states.csv'), index_col=None)
-    totals_df = pd.read_csv(os.path.join(ROOT_FOLDER, 'data', RUN, 'totals.csv'), index_col=None)
+    states_df = pd.read_csv(os.path.join(ROOT_FOLDER, 'out', RUN, 'states.csv'), index_col=None)
+    totals_df = pd.read_csv(os.path.join(ROOT_FOLDER, 'out', RUN, 'totals.csv'), index_col=None)
     
     fig, axes = plt.subplots(1, 2, figsize=(10, 4))
     
@@ -45,4 +45,4 @@ if __name__ == '__main__':
     
     plt.setp(axes, ylim=(0, 2500))
     
-    plt.savefig(os.path.join(ROOT_FOLDER, 'data', RUN, 'plots.png'), bbox_inches='tight')
+    plt.savefig(os.path.join(ROOT_FOLDER, 'out', RUN, 'plots.png'), bbox_inches='tight')

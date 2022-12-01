@@ -3,6 +3,7 @@ package com.lucaswarwick02;
 import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkType;
+import com.lucaswarwick02.networks.ScaleFreeNetwork;
 import com.lucaswarwick02.models.HelperFunctions;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.models.VaccinationStrategy;
@@ -30,7 +31,7 @@ public class Main {
         String run = args[1];
 
         // Create a new data folder for this current run-through
-        File dataFolder = new File(rootFolder, "data");
+        File dataFolder = new File(rootFolder, "out");
         dataFolder.mkdir();
         File runFolder = new File(dataFolder, run);
         runFolder.mkdir();
@@ -43,7 +44,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        stochasticSimulation(NetworkType.SCALE_FREE, VaccinationStrategy.NONE, runFolder);
+        stochasticSimulation(NetworkType.FIXED_DEGREE, VaccinationStrategy.NONE, runFolder);
     }
 
     /**
@@ -69,6 +70,8 @@ public class Main {
             StochasticModel model = new StochasticModel(vaccinationStrategy);
 
             network.generateNetwork();
+            if (s == SIMULATIONS - 1)
+                LOGGER.info("Average Degree <k> = " + network.getAverageDegree());
 
             model.setUnderlyingNetwork(network);
             model.runSimulation();

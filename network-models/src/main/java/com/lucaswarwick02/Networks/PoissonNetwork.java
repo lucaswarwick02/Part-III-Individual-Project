@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
+import com.lucaswarwick02.models.HelperFunctions;
 
 import java.math.BigDecimal;
 
@@ -52,7 +53,7 @@ public class PoissonNetwork extends AbstractNetwork {
 
         while (numberOfStubs(nodes) > 0) {
             List<Node> nodesWithStubs = nodes.stream().filter(node -> node.stubs > 0).collect(Collectors.toList());
-            List<Node> randomNodes = pickRandomNodes(nodesWithStubs, 2);
+            List<Node> randomNodes = HelperFunctions.pickRandomNodes(nodesWithStubs, 2);
             randomNodes.get(0).neighbours.add(randomNodes.get(1));
             randomNodes.get(0).stubs--;
             randomNodes.get(1).neighbours.add(randomNodes.get(0));
@@ -137,16 +138,5 @@ public class PoissonNetwork extends AbstractNetwork {
      */
     private int numberOfStubs(List<Node> nodes) {
         return nodes.stream().mapToInt(node -> node.stubs).sum();
-    }
-
-    /**
-     * Randomly pick N nodes
-     * 
-     * @param list List of Nodes to pick from
-     * @param n    Number of Nodes to pick
-     * @return List of Nodes of length N
-     */
-    List<Node> pickRandomNodes(List<Node> list, int n) {
-        return r.ints(n, 0, list.size()).mapToObj(list::get).collect(Collectors.toList());
     }
 }
