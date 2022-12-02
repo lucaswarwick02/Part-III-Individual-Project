@@ -47,7 +47,7 @@ public class Main {
         // stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationStrategy.NONE, runFolder);
 
         MathematicalComparison mathematicalComparison = new MathematicalComparison();
-        // HelperFunctions.saveToCSV(mathematicalComparison.runMathematicalSimulation(), new File(runFolder, "equations.csv"));
+        HelperFunctions.saveToCSV(mathematicalComparison.runMathematicalSimulation(), new File(runFolder, "equations.csv"));
         HelperFunctions.saveToCSV(mathematicalComparison.runStochasticSimulations(), new File(runFolder, "simulations.csv"));
     }
 

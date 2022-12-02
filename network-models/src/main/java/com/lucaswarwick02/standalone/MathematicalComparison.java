@@ -47,9 +47,10 @@ public class MathematicalComparison {
             states.get("Time")[i] = i;
 
             double newInfected = states.get("Infected")[i - 1] * states.get("Susceptible")[i - 1] * infectionRate;
-            double newRecovered = states.get("Infected")[i - 1] * recoveryRate;
-            double newHospitalised = states.get("Infected")[i - 1] * hospitalisationRate;
-            double newDead = states.get("Hospitalised")[i - 1] * mortalityRate;
+            double newRecoveredHospitalised = states.get("Hospitalised")[i - 1] * recoveryRate;
+            double newRecovered = (states.get("Infected")[i - 1] * recoveryRate) + newRecoveredHospitalised;
+            double newHospitalised = (states.get("Infected")[i - 1] - newRecovered) * hospitalisationRate;
+            double newDead = (states.get("Hospitalised")[i - 1] - newRecoveredHospitalised) * mortalityRate;
 
             states.get("Susceptible")[i] = states.get("Susceptible")[i - 1] - newInfected;
             states.get("Infected")[i] = states.get("Infected")[i - 1] + newInfected - newRecovered - newHospitalised;
@@ -110,7 +111,13 @@ public class MathematicalComparison {
             // ... maybe recover the Node
             if (r.nextFloat() <= recoveryRate) {
                 nodesToRecover.add(infectedNode);
-            } else if (r.nextFloat() <= hospitalisationRate) {
+            }
+        }
+
+        for (Node infectedNode : getNodesFromState(nodes, Node.State.INFECTED)) {
+            if (nodesToRecover.contains(infectedNode)) continue;
+
+            if (r.nextFloat() <= hospitalisationRate) {
                 nodesToHospitalise.add(infectedNode);
             }
         }
@@ -120,7 +127,14 @@ public class MathematicalComparison {
             // ... maybe recover the node
             if (r.nextFloat() <= recoveryRate) {
                 nodesToRecover.add(hospitalisedNode);
-            } else if (r.nextFloat() <= mortalityRate) {
+            }
+        }
+
+        // For each hospitalised Node...
+        for (Node hospitalisedNode : getNodesFromState(nodes, Node.State.HOSPITALISED)) {
+            if (nodesToRecover.contains(hospitalisedNode)) continue;
+
+            if (r.nextFloat() <= mortalityRate) {
                 nodesToKill.add(hospitalisedNode);
             }
         }
