@@ -12,7 +12,7 @@ import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.models.HelperFunctions;
 
 public class MathematicalComparison {
-    final int numberOfNodes = 2500;
+    final int numberOfNodes = 10000;
     final int initialInfected = 3;
 
     final float infectionRate = 0.000125f;
@@ -37,8 +37,8 @@ public class MathematicalComparison {
         }
 
         states.get("Time")[0] = 0;
-        states.get("Susceptible")[0] = numberOfNodes - (double) initialInfected;
-        states.get("Infected")[0] = initialInfected;
+        states.get("Susceptible")[0] = (numberOfNodes - (double) initialInfected);
+        states.get("Infected")[0] = (initialInfected);
         states.get("Recovered")[0] = 0;
         states.get("Hospitalised")[0] = 0;
         states.get("Dead")[0] = 0;
@@ -57,6 +57,12 @@ public class MathematicalComparison {
             states.get("Recovered")[i] = states.get("Recovered")[i - 1] + newRecovered;
             states.get("Hospitalised")[i] = states.get("Hospitalised")[i - 1] + newHospitalised - newDead;
             states.get("Dead")[i] = states.get("Dead")[i - 1] + newDead;
+
+            // states.get("Susceptible")[i] /= numberOfNodes;
+            // states.get("Infected")[i] /= numberOfNodes;
+            // states.get("Recovered")[i] /= numberOfNodes;
+            // states.get("Hospitalised")[i] /= numberOfNodes;
+            // states.get("Dead")[i] /= numberOfNodes;
         }
 
         return states;
@@ -178,10 +184,11 @@ public class MathematicalComparison {
 
                 for (int m = 0; m < allStates.length; m++) {
                     values[m] = allStates[m].get(key)[i];
+                    if (!key.equals("Time")) values[m] /= numberOfNodes;
                 }
 
                 double mean = HelperFunctions.calculateMean(values);
-                double standardDeviation = HelperFunctions.calculateStandardDeviation(values) / 2;
+                double standardDeviation = HelperFunctions.calculateStandardDeviation(values);
 
                 totals.get(key)[i] = mean;
                 totals.get(key + "_STD")[i] = standardDeviation;

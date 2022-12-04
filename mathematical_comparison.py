@@ -22,5 +22,6 @@ if __name__ == '__main__':
     plt.plot(equations_df['Time'], equations_df['Hospitalised'], color='blue', label='Hospitalised')
     plt.plot(equations_df['Time'], equations_df['Dead'], color='red', label='Dead')
     
+    plt.ylim = (0, 1.05)
     plt.legend(loc='upper right')
     plt.show()

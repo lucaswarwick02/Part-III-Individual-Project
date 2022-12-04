@@ -20,7 +20,7 @@ public class Main {
 
     public static final int ITERATIONS = 150;
     public static final int INITIAL_INFECTED = 3;
-    public static final int NUMBER_OF_NODES = 2500;
+    public static final int NUMBER_OF_NODES = 10000;
     public static final int SIMULATIONS = 100;
 
     public static void main(String[] args) {
@@ -44,7 +44,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        // stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationStrategy.NONE, runFolder);
+        // stochasticSimulation(NetworkType.SCALE_FREE, VaccinationStrategy.NONE, runFolder);
 
         MathematicalComparison mathematicalComparison = new MathematicalComparison();
         HelperFunctions.saveToCSV(mathematicalComparison.runMathematicalSimulation(), new File(runFolder, "equations.csv"));

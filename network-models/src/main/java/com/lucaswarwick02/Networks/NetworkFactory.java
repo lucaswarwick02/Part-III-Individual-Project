@@ -10,19 +10,18 @@ public class NetworkFactory {
 
     static final int FIXED_DEGREE = 4;
 
-    static final float Z = 4;
-    static final int MAX_DEGREE = 20;
+    static final float Z = 8;
+    static final int MAX_DEGREE = 25;
 
-    static final float GAMMA = 1.0625f;
+    static final float GAMMA = 2f;
     static final int KAPPA = 20;
 
-    static final int M = 2;
+    static final int M = 4;
 
     /**
      * Restrict use of the constructor
      */
-    private NetworkFactory() {
-    }
+    private NetworkFactory() {}
 
     /**
      * 
@@ -53,6 +52,7 @@ public class NetworkFactory {
                 break;
             case FIXED_DEGREE:
                 Main.LOGGER.info("FIXED_DEGREE: k=" + FIXED_DEGREE);
+                break;
             case POISSON:
                 Main.LOGGER.info("POISSON: z=" + Z + ", maxDegree=" + MAX_DEGREE);
                 break;

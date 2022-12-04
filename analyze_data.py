@@ -43,6 +43,6 @@ if __name__ == '__main__':
     create_states_plot(states_df, axes[0])
     create_totals_plot(totals_df, axes[1])
     
-    plt.setp(axes, ylim=(0, 2500))
+    plt.setp(axes, ylim=(0, 1.05))
     
     plt.savefig(os.path.join(ROOT_FOLDER, 'out', RUN, 'plots.png'), bbox_inches='tight')

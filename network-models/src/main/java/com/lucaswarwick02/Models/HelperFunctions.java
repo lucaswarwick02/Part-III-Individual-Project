@@ -3,6 +3,7 @@ package com.lucaswarwick02.models;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,7 @@ public class HelperFunctions {
 
                 for (int m = 0; m < models.length; m++) {
                     values[m] = models[m].states.get(stateName)[i];
+                    if (!stateName.equals("Time")) values[m] /= Main.NUMBER_OF_NODES;
                 }
 
                 double mean = calculateMean(values);
@@ -108,6 +110,7 @@ public class HelperFunctions {
 
                 for (int m = 0; m < models.length; m++) {
                     values[m] = models[m].totals.get(key)[i];
+                    if (!key.equals("Time")) values[m] /= Main.NUMBER_OF_NODES;
                 }
 
                 double mean = calculateMean(values);
@@ -165,8 +168,9 @@ public class HelperFunctions {
         int length = states.get("Time").length;
 
         Main.LOGGER.info("Evaluation: ");
-        Main.LOGGER.info("... Total Infected = " + totals.get("Infected")[length - 1]);
-        Main.LOGGER.info("... Total Hospitalised = " + totals.get("Hospitalised")[length - 1]);
-        Main.LOGGER.info("... Total Dead = " + totals.get("Dead")[length - 1]);
+
+        Main.LOGGER.info(String.format("... Total Infected = %.2f%%", (totals.get("Infected")[length - 1] * 100)));
+        Main.LOGGER.info(String.format("... Total Hospitalised = %.2f%%", (totals.get("Hospitalised")[length - 1] * 100)));
+        Main.LOGGER.info(String.format("... Total Dead = %.2f%%", (totals.get("Dead")[length - 1] * 100)));
     }
 }
