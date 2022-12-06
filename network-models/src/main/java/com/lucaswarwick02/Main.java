@@ -43,17 +43,20 @@ public class Main {
             e.printStackTrace();
         }
 
-        // stochasticSimulation(NetworkType.SCALE_FREE, VaccinationStrategy.NONE, runFolder);
+        stochasticSimulation(NetworkFactory.NetworkType.POISSON, VaccinationStrategy.NONE, runFolder);
 
-        MathematicalComparison mathematicalComparison = new MathematicalComparison();
-        HelperFunctions.saveToCSV(mathematicalComparison.runMathematicalSimulation(), new File(runFolder, "equations.csv"));
-        HelperFunctions.saveToCSV(mathematicalComparison.runStochasticSimulations(), new File(runFolder, "simulations.csv"));
+        // MathematicalComparison mathematicalComparison = new MathematicalComparison();
+        // HelperFunctions.saveToCSV(mathematicalComparison.runMathematicalSimulation(),
+        // new File(runFolder, "equations.csv"));
+        // HelperFunctions.saveToCSV(mathematicalComparison.runStochasticSimulations(),
+        // new File(runFolder, "simulations.csv"));
     }
 
     /**
      * Run, aggreggate and save multiple stochastic simulations to the data folder
      */
-    public static void stochasticSimulation(NetworkFactory.NetworkType networkType, VaccinationStrategy vaccinationStrategy,
+    public static void stochasticSimulation(NetworkFactory.NetworkType networkType,
+            VaccinationStrategy vaccinationStrategy,
             File runFolder) {
 
         NetworkFactory.logNetworkInfo(networkType);
@@ -73,6 +76,7 @@ public class Main {
                 LOGGER.info("Average Degree <k> = " + network.getAverageDegree());
                 model.epidemic.logInformation();
             }
+            System.out.println("Simulation #" + s);
 
             model.setUnderlyingNetwork(network);
             model.runSimulation();
