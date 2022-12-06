@@ -1,10 +1,15 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+import sys
 
 
 if __name__ == '__main__':
-    equations_df = pd.read_csv('./records/mathematical_comparison/equations.csv')
-    simulations_df = pd.read_csv('./records/mathematical_comparison/simulations.csv')
+    ROOT_FOLDER = sys.argv[1]
+    RUN = sys.argv[2]
+    
+    equations_df = pd.read_csv(os.path.join(ROOT_FOLDER, 'out', RUN, 'equations.csv'), index_col=None)
+    simulations_df = pd.read_csv(os.path.join(ROOT_FOLDER, 'out', RUN, 'simulations.csv'), index_col=None)
     
     plt.figure(figsize=(8, 5))
     
@@ -24,4 +29,8 @@ if __name__ == '__main__':
     
     plt.ylim = (0, 1.05)
     plt.legend(loc='upper right')
-    plt.show()
+    plt.title('Comparing Mathematical Equations to Stochastic Simulations')
+    plt.xlabel('Time')
+    plt.ylabel('Fraction of Population')
+    
+    plt.savefig(os.path.join(ROOT_FOLDER, 'out', RUN, 'plot.png'), bbox_inches='tight')

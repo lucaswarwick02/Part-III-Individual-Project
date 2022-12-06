@@ -8,4 +8,4 @@ echo on
 call mvn clean compile exec:java -Dexec.args="%rootpath% %run%"
 
 cd ../
-python analyze_data.py %rootpath% %run%
+python python/analyze.py %rootpath% %run%

@@ -1,5 +1,6 @@
 package com.lucaswarwick02.standalone;
 
+import java.rmi.ConnectIOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,23 +13,24 @@ import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.models.HelperFunctions;
 
 public class MathematicalComparison {
-    final int numberOfNodes = 10000;
-    final int initialInfected = 3;
+    static final int numberOfNodes = 2500;
+    static final int initialInfected = 3;
 
-    final float infectionRate = 0.000125f;
-    final float recoveryRate = 0.016f;
-    final float vaccinatedRate = 0.04f;
-    final float hospitalisationRate = 0.015f;
-    final float mortalityRate = 0.025f;
+    static final float infectionRate = 0.00015f;
+    static final float recoveryRate = 0.04f;
+    static final float hospitalisationRate = 0.035f;
+    static final float mortalityRate = 0.05f;
 
-    final int iterations = 150;
-    final int simulations = 100;
+    static final int iterations = 150;
+    static final int simulations = 100;
 
     Random r = new Random();
 
-    public MathematicalComparison () {}
+    public MathematicalComparison() {
+        // No Arguements
+    }
 
-    public Map<String, double[]> runMathematicalSimulation () {
+    public Map<String, double[]> runMathematicalSimulation() {
         Map<String, double[]> states = new HashMap<>();
         states.put("Time", new double[iterations]);
 
@@ -55,24 +57,20 @@ public class MathematicalComparison {
             states.get("Susceptible")[i] = states.get("Susceptible")[i - 1] - newInfected;
             states.get("Infected")[i] = states.get("Infected")[i - 1] + newInfected - newRecovered - newHospitalised;
             states.get("Recovered")[i] = states.get("Recovered")[i - 1] + newRecovered;
-            states.get("Hospitalised")[i] = states.get("Hospitalised")[i - 1] + newHospitalised - newDead;
+            states.get("Hospitalised")[i] = states.get("Hospitalised")[i - 1] + newHospitalised - newDead
+                    - newRecoveredHospitalised;
             states.get("Dead")[i] = states.get("Dead")[i - 1] + newDead;
-
-            // states.get("Susceptible")[i] /= numberOfNodes;
-            // states.get("Infected")[i] /= numberOfNodes;
-            // states.get("Recovered")[i] /= numberOfNodes;
-            // states.get("Hospitalised")[i] /= numberOfNodes;
-            // states.get("Dead")[i] /= numberOfNodes;
         }
 
-        return states;
+        return normalizeResults(states);
     }
 
-    public Map<String, double[]> runStochasticSimulations () {
+    public Map<String, double[]> runStochasticSimulations() {
 
         Map<String, double[]>[] allStates = new HashMap[simulations];
 
         for (int s = 0; s < simulations; s++) {
+            System.out.println("Running Simulation #" + s);
             Map<String, double[]> states = new HashMap<>();
             states.put("Time", new double[iterations]);
 
@@ -95,11 +93,15 @@ public class MathematicalComparison {
 
             allStates[s] = states;
         }
-        
+
+        for (int s = 0; s < allStates.length; s++) {
+            allStates[s] = normalizeResults(allStates[s]);
+        }
+
         return aggregateTotals(allStates);
     }
 
-    void performIteration (Map<String, double[]> states, List<Node> nodes, int iterationNumber) {
+    void performIteration(Map<String, double[]> states, List<Node> nodes, int iterationNumber) {
         // Setup lists to store information from this iteration
         List<Node> nodesToInfect = new ArrayList<>();
         List<Node> nodesToHospitalise = new ArrayList<>();
@@ -121,7 +123,8 @@ public class MathematicalComparison {
         }
 
         for (Node infectedNode : getNodesFromState(nodes, Node.State.INFECTED)) {
-            if (nodesToRecover.contains(infectedNode)) continue;
+            if (nodesToRecover.contains(infectedNode))
+                continue;
 
             if (r.nextFloat() <= hospitalisationRate) {
                 nodesToHospitalise.add(infectedNode);
@@ -138,7 +141,8 @@ public class MathematicalComparison {
 
         // For each hospitalised Node...
         for (Node hospitalisedNode : getNodesFromState(nodes, Node.State.HOSPITALISED)) {
-            if (nodesToRecover.contains(hospitalisedNode)) continue;
+            if (nodesToRecover.contains(hospitalisedNode))
+                continue;
 
             if (r.nextFloat() <= mortalityRate) {
                 nodesToKill.add(hospitalisedNode);
@@ -164,7 +168,7 @@ public class MathematicalComparison {
         }
     }
 
-    List<Node> getNodesFromState (List<Node> nodes, Node.State state) {
+    List<Node> getNodesFromState(List<Node> nodes, Node.State state) {
         return nodes.stream().filter(node -> node.state == state).collect(Collectors.toList());
     }
 
@@ -184,7 +188,6 @@ public class MathematicalComparison {
 
                 for (int m = 0; m < allStates.length; m++) {
                     values[m] = allStates[m].get(key)[i];
-                    if (!key.equals("Time")) values[m] /= numberOfNodes;
                 }
 
                 double mean = HelperFunctions.calculateMean(values);
@@ -196,5 +199,16 @@ public class MathematicalComparison {
         }
 
         return totals;
+    }
+
+    private Map<String, double[]> normalizeResults(Map<String, double[]> results) {
+        for (String key : results.keySet()) {
+            if (key.equals("Time"))
+                continue;
+            for (int i = 0; i < results.get(key).length; i++) {
+                results.get(key)[i] /= numberOfNodes;
+            }
+        }
+        return results;
     }
 }
