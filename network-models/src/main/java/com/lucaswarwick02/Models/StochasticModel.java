@@ -3,6 +3,7 @@ package com.lucaswarwick02.models;
 import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.Main;
+import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.components.Node;
 
 import java.util.ArrayList;
@@ -20,10 +21,7 @@ public class StochasticModel {
 
     AbstractNetwork underlyingNetwork; // Network used in the model
 
-    public static final float INFECTION_RATE = 0.04f; // Probability of an infected node spreading
-    public static final float RECOVERY_RATE = 0.06f; // Probability of an infected node recovering
-    public static final float HOSPITALISATION_RATE = 0.04f; // Probabiliy of an infected node being hospitalised
-    public static final float MORTALITY_RATE = 0.1f; // Probability of a hospitalised node 'dying'
+    public Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
     public Map<String, int[]> states = new HashMap<>();
 
@@ -83,14 +81,14 @@ public class StochasticModel {
         for (Node infectedNode : underlyingNetwork.getNodesFromState(Node.State.INFECTED)) {
             // ... get a list of the Nodes they are going to infect
             infectedNode.neighbours.forEach(neighbour -> {
-                if ((neighbour.state == Node.State.SUSCEPTIBLE) && (r.nextFloat() <= INFECTION_RATE))
+                if ((neighbour.state == Node.State.SUSCEPTIBLE) && (r.nextFloat() <= epidemic.infectionRate))
                     nodesToInfect.add(neighbour);
             });
 
             // ... maybe recover the Node
-            if (r.nextFloat() <= RECOVERY_RATE) {
+            if (r.nextFloat() <= epidemic.recoveryRate) {
                 nodesToRecover.add(infectedNode);
-            } else if (r.nextFloat() <= HOSPITALISATION_RATE) {
+            } else if (r.nextFloat() <= epidemic.hospitalisationRate) {
                 nodesToHospitalise.add(infectedNode);
             }
         }
@@ -98,9 +96,9 @@ public class StochasticModel {
         // For each hospitalised Node...
         for (Node hospitalisedNode : underlyingNetwork.getNodesFromState(Node.State.HOSPITALISED)) {
             // ... maybe recover the node
-            if (r.nextFloat() <= RECOVERY_RATE) {
+            if (r.nextFloat() <= epidemic.recoveryRate) {
                 nodesToRecover.add(hospitalisedNode);
-            } else if (r.nextFloat() <= MORTALITY_RATE) {
+            } else if (r.nextFloat() <= epidemic.mortalityRate) {
                 nodesToKill.add(hospitalisedNode);
             }
         }

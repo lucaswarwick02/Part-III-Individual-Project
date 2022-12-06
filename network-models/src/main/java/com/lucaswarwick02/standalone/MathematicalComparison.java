@@ -1,6 +1,5 @@
 package com.lucaswarwick02.standalone;
 
-import java.rmi.ConnectIOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,16 +9,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.lucaswarwick02.HelperFunctions;
+import com.lucaswarwick02.Main;
+import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.components.Node;
 
 public class MathematicalComparison {
     static final int numberOfNodes = 2500;
     static final int initialInfected = 3;
 
-    static final float infectionRate = 0.00015f;
-    static final float recoveryRate = 0.04f;
-    static final float hospitalisationRate = 0.035f;
-    static final float mortalityRate = 0.05f;
+    Epidemic epidemic = Epidemic.loadFromResources("/mathematical.xml");
 
     static final int iterations = 150;
     static final int simulations = 100;
@@ -27,7 +25,9 @@ public class MathematicalComparison {
     Random r = new Random();
 
     public MathematicalComparison() {
-        // No Arguements
+        Main.LOGGER.info("Number of Nodes: " + numberOfNodes);
+        Main.LOGGER.info("Running " + simulations + " Simulations, with " + iterations + " Iterations each");
+        epidemic.logInformation();
     }
 
     public Map<String, double[]> runMathematicalSimulation() {
@@ -48,32 +48,11 @@ public class MathematicalComparison {
         for (int i = 1; i < iterations; i++) {
             states.get("Time")[i] = i;
 
-            // double newInfected = states.get("Infected")[i - 1] *
-            // states.get("Susceptible")[i - 1] * infectionRate;
-            // double newRecoveredHospitalised = states.get("Hospitalised")[i - 1] *
-            // recoveryRate;
-            // double newRecovered = (states.get("Infected")[i - 1] * recoveryRate) +
-            // newRecoveredHospitalised;
-            // double newHospitalised = (states.get("Infected")[i - 1] - newRecovered) *
-            // hospitalisationRate;
-            // double newDead = (states.get("Hospitalised")[i - 1] -
-            // newRecoveredHospitalised) * mortalityRate;
-
-            // states.get("Susceptible")[i] = states.get("Susceptible")[i - 1] -
-            // newInfected;
-            // states.get("Infected")[i] = states.get("Infected")[i - 1] + newInfected -
-            // newRecovered - newHospitalised;
-            // states.get("Recovered")[i] = states.get("Recovered")[i - 1] + newRecovered;
-            // states.get("Hospitalised")[i] = states.get("Hospitalised")[i - 1] +
-            // newHospitalised - newDead
-            // - newRecoveredHospitalised;
-            // states.get("Dead")[i] = states.get("Dead")[i - 1] + newDead;
-
-            double arg1 = states.get("Infected")[i - 1] * states.get("Susceptible")[i - 1] * infectionRate;
-            double arg2 = states.get("Infected")[i - 1] * recoveryRate;
-            double arg3 = (states.get("Infected")[i - 1] - arg2) * hospitalisationRate;
-            double arg4 = states.get("Hospitalised")[i - 1] * recoveryRate;
-            double arg5 = (states.get("Hospitalised")[i - 1] - arg4) * mortalityRate;
+            double arg1 = states.get("Infected")[i - 1] * states.get("Susceptible")[i - 1] * epidemic.infectionRate;
+            double arg2 = states.get("Infected")[i - 1] * epidemic.recoveryRate;
+            double arg3 = (states.get("Infected")[i - 1] - arg2) * epidemic.hospitalisationRate;
+            double arg4 = states.get("Hospitalised")[i - 1] * epidemic.recoveryRate;
+            double arg5 = (states.get("Hospitalised")[i - 1] - arg4) * epidemic.mortalityRate;
 
             states.get("Susceptible")[i] = states.get("Susceptible")[i - 1] - arg1;
             states.get("Infected")[i] = states.get("Infected")[i - 1] + arg1 - arg2 - arg3;
@@ -132,12 +111,12 @@ public class MathematicalComparison {
         for (Node infectedNode : getNodesFromState(nodes, Node.State.INFECTED)) {
             // ... get a list of the Nodes they are going to infect
             nodes.forEach(neighbour -> {
-                if ((neighbour.state == Node.State.SUSCEPTIBLE) && (r.nextFloat() <= infectionRate))
+                if ((neighbour.state == Node.State.SUSCEPTIBLE) && (r.nextFloat() <= epidemic.infectionRate))
                     nodesToInfect.add(neighbour);
             });
 
             // ... maybe recover the Node
-            if (r.nextFloat() <= recoveryRate) {
+            if (r.nextFloat() <= epidemic.recoveryRate) {
                 nodesToRecover.add(infectedNode);
             }
         }
@@ -146,7 +125,7 @@ public class MathematicalComparison {
             if (nodesToRecover.contains(infectedNode))
                 continue;
 
-            if (r.nextFloat() <= hospitalisationRate) {
+            if (r.nextFloat() <= epidemic.hospitalisationRate) {
                 nodesToHospitalise.add(infectedNode);
             }
         }
@@ -154,7 +133,7 @@ public class MathematicalComparison {
         // For each hospitalised Node...
         for (Node hospitalisedNode : getNodesFromState(nodes, Node.State.HOSPITALISED)) {
             // ... maybe recover the node
-            if (r.nextFloat() <= recoveryRate) {
+            if (r.nextFloat() <= epidemic.recoveryRate) {
                 nodesToRecover.add(hospitalisedNode);
             }
         }
@@ -164,7 +143,7 @@ public class MathematicalComparison {
             if (nodesToRecover.contains(hospitalisedNode))
                 continue;
 
-            if (r.nextFloat() <= mortalityRate) {
+            if (r.nextFloat() <= epidemic.mortalityRate) {
                 nodesToKill.add(hospitalisedNode);
             }
         }

@@ -2,8 +2,8 @@ package com.lucaswarwick02;
 
 import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.networks.NetworkFactory;
-import com.lucaswarwick02.networks.NetworkType;
 import com.lucaswarwick02.standalone.MathematicalComparison;
+import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.models.VaccinationStrategy;
 
@@ -58,13 +58,9 @@ public class Main {
 
         NetworkFactory.logNetworkInfo(networkType);
         LOGGER.info("Vaccination Strategy: " + vaccinationStrategy);
-        LOGGER.info("Parameters: ");
-        LOGGER.info("... INFECTION_RATE: " + StochasticModel.INFECTION_RATE);
-        LOGGER.info("... RECOVERY_RATE: " + StochasticModel.RECOVERY_RATE);
-        LOGGER.info("... HOSPITALISATION_RATE: " + StochasticModel.HOSPITALISATION_RATE);
-        LOGGER.info("... MORTALITY_RATE: " + StochasticModel.MORTALITY_RATE);
 
         LOGGER.info("Running " + SIMULATIONS + " Simulations, with " + ITERATIONS + " Iterations each");
+        LOGGER.info("Number of Nodes = " + NUMBER_OF_NODES);
 
         StochasticModel[] models = new StochasticModel[SIMULATIONS];
 
@@ -73,8 +69,10 @@ public class Main {
             StochasticModel model = new StochasticModel(vaccinationStrategy);
 
             network.generateNetwork();
-            if (s == SIMULATIONS - 1)
+            if (s == SIMULATIONS - 1) {
                 LOGGER.info("Average Degree <k> = " + network.getAverageDegree());
+                model.epidemic.logInformation();
+            }
 
             model.setUnderlyingNetwork(network);
             model.runSimulation();
