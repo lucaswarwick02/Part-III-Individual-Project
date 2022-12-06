@@ -48,18 +48,38 @@ public class MathematicalComparison {
         for (int i = 1; i < iterations; i++) {
             states.get("Time")[i] = i;
 
-            double newInfected = states.get("Infected")[i - 1] * states.get("Susceptible")[i - 1] * infectionRate;
-            double newRecoveredHospitalised = states.get("Hospitalised")[i - 1] * recoveryRate;
-            double newRecovered = (states.get("Infected")[i - 1] * recoveryRate) + newRecoveredHospitalised;
-            double newHospitalised = (states.get("Infected")[i - 1] - newRecovered) * hospitalisationRate;
-            double newDead = (states.get("Hospitalised")[i - 1] - newRecoveredHospitalised) * mortalityRate;
+            // double newInfected = states.get("Infected")[i - 1] *
+            // states.get("Susceptible")[i - 1] * infectionRate;
+            // double newRecoveredHospitalised = states.get("Hospitalised")[i - 1] *
+            // recoveryRate;
+            // double newRecovered = (states.get("Infected")[i - 1] * recoveryRate) +
+            // newRecoveredHospitalised;
+            // double newHospitalised = (states.get("Infected")[i - 1] - newRecovered) *
+            // hospitalisationRate;
+            // double newDead = (states.get("Hospitalised")[i - 1] -
+            // newRecoveredHospitalised) * mortalityRate;
 
-            states.get("Susceptible")[i] = states.get("Susceptible")[i - 1] - newInfected;
-            states.get("Infected")[i] = states.get("Infected")[i - 1] + newInfected - newRecovered - newHospitalised;
-            states.get("Recovered")[i] = states.get("Recovered")[i - 1] + newRecovered;
-            states.get("Hospitalised")[i] = states.get("Hospitalised")[i - 1] + newHospitalised - newDead
-                    - newRecoveredHospitalised;
-            states.get("Dead")[i] = states.get("Dead")[i - 1] + newDead;
+            // states.get("Susceptible")[i] = states.get("Susceptible")[i - 1] -
+            // newInfected;
+            // states.get("Infected")[i] = states.get("Infected")[i - 1] + newInfected -
+            // newRecovered - newHospitalised;
+            // states.get("Recovered")[i] = states.get("Recovered")[i - 1] + newRecovered;
+            // states.get("Hospitalised")[i] = states.get("Hospitalised")[i - 1] +
+            // newHospitalised - newDead
+            // - newRecoveredHospitalised;
+            // states.get("Dead")[i] = states.get("Dead")[i - 1] + newDead;
+
+            double arg1 = states.get("Infected")[i - 1] * states.get("Susceptible")[i - 1] * infectionRate;
+            double arg2 = states.get("Infected")[i - 1] * recoveryRate;
+            double arg3 = (states.get("Infected")[i - 1] - arg2) * hospitalisationRate;
+            double arg4 = states.get("Hospitalised")[i - 1] * recoveryRate;
+            double arg5 = (states.get("Hospitalised")[i - 1] - arg4) * mortalityRate;
+
+            states.get("Susceptible")[i] = states.get("Susceptible")[i - 1] - arg1;
+            states.get("Infected")[i] = states.get("Infected")[i - 1] + arg1 - arg2 - arg3;
+            states.get("Recovered")[i] = states.get("Recovered")[i - 1] + arg2 + arg4;
+            states.get("Hospitalised")[i] = states.get("Hospitalised")[i - 1] + arg3 - arg4 - arg5;
+            states.get("Dead")[i] = states.get("Dead")[i - 1] + arg5;
         }
 
         return normalizeResults(states);
