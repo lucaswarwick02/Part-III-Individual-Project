@@ -1,13 +1,14 @@
-package com.lucaswarwick02.networks;
+package com.lucaswarwick02.archive;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
-import com.lucaswarwick02.models.HelperFunctions;
+import com.lucaswarwick02.networks.AbstractNetwork;
 
 public class FixedDegreeNetwork extends AbstractNetwork {
     Random r = new Random();

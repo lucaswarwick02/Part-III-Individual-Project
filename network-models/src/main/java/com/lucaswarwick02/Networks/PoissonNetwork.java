@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
-import com.lucaswarwick02.models.HelperFunctions;
 
 import java.math.BigDecimal;
 

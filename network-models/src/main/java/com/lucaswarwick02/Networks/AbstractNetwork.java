@@ -10,7 +10,7 @@ public abstract class AbstractNetwork {
     /**
      * Nodes contained in the network
      */
-    List<Node> nodes;
+    public List<Node> nodes;
 
     /**
      * Create an empty underlying network

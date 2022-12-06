@@ -4,7 +4,6 @@ import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkType;
 import com.lucaswarwick02.standalone.MathematicalComparison;
-import com.lucaswarwick02.models.HelperFunctions;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.models.VaccinationStrategy;
 
@@ -54,7 +53,7 @@ public class Main {
     /**
      * Run, aggreggate and save multiple stochastic simulations to the data folder
      */
-    public static void stochasticSimulation(NetworkType networkType, VaccinationStrategy vaccinationStrategy,
+    public static void stochasticSimulation(NetworkFactory.NetworkType networkType, VaccinationStrategy vaccinationStrategy,
             File runFolder) {
 
         NetworkFactory.logNetworkInfo(networkType);

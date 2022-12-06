@@ -1,4 +1,4 @@
-package com.lucaswarwick02.networks;
+package com.lucaswarwick02.archive;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
+import com.lucaswarwick02.networks.AbstractNetwork;
 
 public class ScaleFreeNetwork extends AbstractNetwork {
 

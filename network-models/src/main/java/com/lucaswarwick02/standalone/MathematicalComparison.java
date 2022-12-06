@@ -9,8 +9,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.Node;
-import com.lucaswarwick02.models.HelperFunctions;
 
 public class MathematicalComparison {
     static final int numberOfNodes = 2500;

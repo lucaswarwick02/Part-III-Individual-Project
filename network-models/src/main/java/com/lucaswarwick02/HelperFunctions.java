@@ -1,4 +1,4 @@
-package com.lucaswarwick02.models;
+package com.lucaswarwick02;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -11,8 +11,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
+import com.lucaswarwick02.models.StochasticModel;
 
 public class HelperFunctions {
 
