@@ -72,6 +72,7 @@ public class Main {
             if (s == SIMULATIONS - 1) {
                 LOGGER.info("Average Degree <k> = " + network.getAverageDegree());
                 model.epidemic.logInformation();
+                network.logAgeDistribution();
             }
             
             // System.out.println("Simulation #" + s);

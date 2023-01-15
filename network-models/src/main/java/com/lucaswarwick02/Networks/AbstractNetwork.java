@@ -3,8 +3,10 @@ package com.lucaswarwick02.networks;
 import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class AbstractNetwork {
@@ -72,5 +74,17 @@ public abstract class AbstractNetwork {
         nodesPerDegree.forEach((key, value) -> {
             Main.LOGGER.info(key + ": " + value + " (" + (((float)value / (float)this.nodes.size()) * 100) + "%)");
         });
+    }
+
+    public void logAgeDistribution () {
+        EnumMap<Node.AgeBracket, Integer> ageDistribution = new EnumMap<>(Node.AgeBracket.class);
+
+        for (Node node : this.nodes) {
+            ageDistribution.put(node.ageBracket, ageDistribution.getOrDefault(node.ageBracket, 0) + 1);
+        }
+
+        for (Node.AgeBracket ageBracket : Node.AgeBracket.values()) {
+            Main.LOGGER.info(ageBracket + ": " + ((ageDistribution.get(ageBracket) / (float)this.nodes.size()) * 100) + "%");
+        }
     }
 }
