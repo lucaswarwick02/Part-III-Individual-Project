@@ -1,6 +1,5 @@
 package com.lucaswarwick02;
 
-import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
 import com.lucaswarwick02.threading.ThreadedModel;
@@ -9,10 +8,8 @@ import com.lucaswarwick02.models.VaccinationStrategy;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -58,45 +55,21 @@ public class Main {
             VaccinationStrategy vaccinationStrategy,
             File runFolder) {
 
+        // Log the information for the network and other key attributes
         NetworkFactory.logNetworkInfo(networkType);
         LOGGER.info("Vaccination Strategy: " + vaccinationStrategy);
-
         LOGGER.info("Running " + SIMULATIONS + " Simulations, with " + ITERATIONS + " Iterations each");
         LOGGER.info("Number of Nodes = " + NUMBER_OF_NODES);
 
-        // StochasticModel[] models = new StochasticModel[SIMULATIONS];
-
-        // for (int s = 0; s < SIMULATIONS; s++) {
-        //     AbstractNetwork network = NetworkFactory.getNetwork(networkType);
-        //     StochasticModel model = new StochasticModel(vaccinationStrategy);
-
-        //     network.generateNetwork();
-        //     network.assignAgeBrackets();
-
-        //     // Print out information ONCE about the network + model
-        //     if (s == SIMULATIONS - 1) {
-        //         LOGGER.info("Average Degree <k> = " + network.getAverageDegree());
-        //         model.epidemic.logInformation();
-        //         network.logAgeDistribution();
-        //     }
-            
-        //     System.out.println("Simulation #" + s);
-
-        //     model.setUnderlyingNetwork(network);
-        //     model.runSimulation();
-
-        //     models[s] = model;
-        // }
-
+        // Setup the thread groups for multithreading
         ThreadGroup tg = new ThreadGroup("main");
         int np = Runtime.getRuntime().availableProcessors();
-        int i;
 
         List<ThreadedModel> threadedModels = new ArrayList<>();
 
         long start = System.nanoTime();
 
-        for (i = 0; i < SIMULATIONS; i++) {
+        for (int i = 0; i < SIMULATIONS; i++) {
             threadedModels.add(new ThreadedModel(
                     NetworkFactory.getNetwork(networkType),
                     new StochasticModel(vaccinationStrategy),
@@ -105,7 +78,8 @@ public class Main {
                 );
         }
 
-        i = 0;
+        int i = 0;
+        // Create and start all the simulation threads
         while (i < threadedModels.size()) {
             if (tg.activeCount() < np) {
                 ThreadedModel threadedModel = threadedModels.get(i);
@@ -119,6 +93,7 @@ public class Main {
             }
         }
 
+        // Wait until all the simulation threads are complete
         while (tg.activeCount() > 0) {
             try {
                 Thread.sleep(100);
@@ -126,24 +101,25 @@ public class Main {
         }
 
         LOGGER.info("Simulations Complete");
-        LOGGER.info("Number of Incomplete Simulations = " + threadedModels.stream().filter(tm -> !tm.isComplete).count());
 
+        // Convert the list of simulation threads back into just the models
         StochasticModel[] models = new StochasticModel[SIMULATIONS];
-
         for (i = 0; i < SIMULATIONS; i++) {
             models[i] = threadedModels.get(i).getModel();
         }
 
+        // Aggregate together all of the simulations
         Map<String, double[]> aggregateStates = HelperFunctions.aggregateStates(models);
         Map<String, double[]> aggregateTotals = HelperFunctions.aggregateTotals(models);
 
+        // Log key information on the simulations statistics
         HelperFunctions.evaluateAggregateModel(aggregateStates, aggregateTotals);
 
+        // Save both the states and totals to the out folder
         HelperFunctions.saveToCSV(aggregateStates, new File(runFolder, "states.csv"));
         HelperFunctions.saveToCSV(aggregateTotals, new File(runFolder, "totals.csv"));
 
         long end = System.nanoTime();
-
-        LOGGER.info(SIMULATIONS + " simulations took " + ((double)(end - start) / 1e9) + "s");
+        LOGGER.info(SIMULATIONS + " simulations took " + ((end - start) / 1e9) + "s");
     }
 }

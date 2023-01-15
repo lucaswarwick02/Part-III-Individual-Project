@@ -64,6 +64,7 @@ public class MathematicalComparison {
         return normalizeResults(states);
     }
 
+    @SuppressWarnings("unchecked")
     public Map<String, double[]> runStochasticSimulations() {
 
         Map<String, double[]>[] allStates = new HashMap[SIMULATIONS];
