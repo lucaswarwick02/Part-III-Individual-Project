@@ -14,38 +14,38 @@ import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.components.Node;
 
 public class MathematicalComparison {
-    static final int numberOfNodes = 2500;
-    static final int initialInfected = 3;
+    static final int NUMBER_OF_NODES = 2500;
+    static final int INITIAL_INFECTED = 3;
 
     Epidemic epidemic = Epidemic.loadFromResources("/mathematical.xml");
 
-    static final int iterations = 150;
-    static final int simulations = 100;
+    static final int ITERATIONS = 150;
+    static final int SIMULATIONS = 100;
 
     Random r = new Random();
 
     public MathematicalComparison() {
-        Main.LOGGER.info("Number of Nodes: " + numberOfNodes);
-        Main.LOGGER.info("Running " + simulations + " Simulations, with " + iterations + " Iterations each");
+        Main.LOGGER.info("Number of Nodes: " + NUMBER_OF_NODES);
+        Main.LOGGER.info("Running " + SIMULATIONS + " Simulations, with " + ITERATIONS + " Iterations each");
         epidemic.logInformation();
     }
 
     public Map<String, double[]> runMathematicalSimulation() {
         Map<String, double[]> states = new HashMap<>();
-        states.put("Time", new double[iterations]);
+        states.put("Time", new double[ITERATIONS]);
 
         for (Node.State state : Node.getAllStates()) {
-            states.put(Node.stateToString(state), new double[iterations]);
+            states.put(Node.stateToString(state), new double[ITERATIONS]);
         }
 
         states.get("Time")[0] = 0;
-        states.get("Susceptible")[0] = (numberOfNodes - (double) initialInfected);
-        states.get("Infected")[0] = (initialInfected);
+        states.get("Susceptible")[0] = (NUMBER_OF_NODES - (double) INITIAL_INFECTED);
+        states.get("Infected")[0] = (INITIAL_INFECTED);
         states.get("Recovered")[0] = 0;
         states.get("Hospitalised")[0] = 0;
         states.get("Dead")[0] = 0;
 
-        for (int i = 1; i < iterations; i++) {
+        for (int i = 1; i < ITERATIONS; i++) {
             states.get("Time")[i] = i;
 
             double arg1 = states.get("Infected")[i - 1] * states.get("Susceptible")[i - 1] * epidemic.infectionRate;
@@ -66,27 +66,27 @@ public class MathematicalComparison {
 
     public Map<String, double[]> runStochasticSimulations() {
 
-        Map<String, double[]>[] allStates = new HashMap[simulations];
+        Map<String, double[]>[] allStates = new HashMap[SIMULATIONS];
 
-        for (int s = 0; s < simulations; s++) {
+        for (int s = 0; s < SIMULATIONS; s++) {
             System.out.println("Running Simulation #" + s);
             Map<String, double[]> states = new HashMap<>();
-            states.put("Time", new double[iterations]);
+            states.put("Time", new double[ITERATIONS]);
 
             for (Node.State state : Node.getAllStates()) {
-                states.put(Node.stateToString(state), new double[iterations]);
+                states.put(Node.stateToString(state), new double[ITERATIONS]);
             }
 
             List<Node> nodes = new ArrayList<>();
-            for (int i = 0; i < numberOfNodes; i++) {
+            for (int i = 0; i < NUMBER_OF_NODES; i++) {
                 nodes.add(new Node(i));
             }
 
-            List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(nodes, initialInfected);
+            List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(nodes, INITIAL_INFECTED);
             initialInfectedNodes.forEach(node -> node.state = Node.State.INFECTED);
             saveState(states, nodes, 0);
 
-            for (int i = 1; i < iterations; i++) {
+            for (int i = 1; i < ITERATIONS; i++) {
                 performIteration(states, nodes, i);
             }
 
@@ -176,11 +176,11 @@ public class MathematicalComparison {
 
         Set<String> keys = allStates[0].keySet();
         for (String key : keys) {
-            totals.put(key, new double[iterations]);
-            totals.put(key + "_STD", new double[iterations]);
+            totals.put(key, new double[ITERATIONS]);
+            totals.put(key + "_STD", new double[ITERATIONS]);
         }
 
-        for (int i = 0; i < iterations; i++) {
+        for (int i = 0; i < ITERATIONS; i++) {
             totals.get("Time")[i] = i;
             for (String key : keys) {
                 double[] values = new double[allStates.length];
@@ -205,7 +205,7 @@ public class MathematicalComparison {
             if (key.equals("Time"))
                 continue;
             for (int i = 0; i < results.get(key).length; i++) {
-                results.get(key)[i] /= numberOfNodes;
+                results.get(key)[i] /= NUMBER_OF_NODES;
             }
         }
         return results;

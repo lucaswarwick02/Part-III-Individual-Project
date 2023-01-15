@@ -1,7 +1,9 @@
 package com.lucaswarwick02.networks;
 
+import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,12 @@ public abstract class AbstractNetwork {
      * @param numberOfNodes Number of Nodes in the network
      */
     public abstract void generateNetwork ();
+
+    public void assignAgeBrackets () {
+        for (Node node : this.nodes) {
+            node.assignAgeBracket();
+        }
+    }
 
     /**
      * Set a subsection of the nodes within the network which match the state
@@ -48,5 +56,21 @@ public abstract class AbstractNetwork {
      */
     public double getAverageDegree () {
         return this.nodes.stream().mapToDouble(Node::getDegree).average().orElse(Double.NaN);
+    }
+
+    public void logDegreeDistribution () {
+        HashMap<Integer, Integer> nodesPerDegree = new HashMap<>();
+        for (Node node : this.nodes) {
+            if (nodesPerDegree.containsKey(node.getDegree())) {
+                nodesPerDegree.put(node.getDegree(), nodesPerDegree.get(node.getDegree()) + 1);
+            }
+            else {
+                nodesPerDegree.put(node.getDegree(), 1);
+            }
+        }
+        Main.LOGGER.info("Degree Distribution: ");
+        nodesPerDegree.forEach((key, value) -> {
+            Main.LOGGER.info(key + ": " + value + " (" + (((float)value / (float)this.nodes.size()) * 100) + "%)");
+        });
     }
 }

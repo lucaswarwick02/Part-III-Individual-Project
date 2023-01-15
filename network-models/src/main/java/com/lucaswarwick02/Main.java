@@ -3,8 +3,6 @@ package com.lucaswarwick02;
 import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
-import com.lucaswarwick02.standalone.MathematicalComparison;
-import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.models.VaccinationStrategy;
 
@@ -36,6 +34,7 @@ public class Main {
         File runFolder = new File(dataFolder, run);
         runFolder.mkdir();
 
+        // Setup the Logger to output all logs to a file
         try {
             FileHandler fileHandler = new FileHandler((new File(runFolder, "output.log")).getAbsolutePath(), true);
             fileHandler.setFormatter(new SimpleFormatter());
@@ -45,10 +44,6 @@ public class Main {
         }
 
         stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationStrategy.NONE, runFolder);
-
-        // MathematicalComparison mathematicalComparison = new MathematicalComparison();
-        // HelperFunctions.saveToCSV(mathematicalComparison.runMathematicalSimulation(), new File(runFolder, "equations.csv"));
-        // HelperFunctions.saveToCSV(mathematicalComparison.runStochasticSimulations(), new File(runFolder, "simulations.csv"));
     }
 
     /**
@@ -71,26 +66,30 @@ public class Main {
             StochasticModel model = new StochasticModel(vaccinationStrategy);
 
             network.generateNetwork();
+            network.assignAgeBrackets();
+
+            // Print out information ONCE about the network + model
             if (s == SIMULATIONS - 1) {
                 LOGGER.info("Average Degree <k> = " + network.getAverageDegree());
                 model.epidemic.logInformation();
             }
-            System.out.println("Simulation #" + s);
+            
+            // System.out.println("Simulation #" + s);
 
-            model.setUnderlyingNetwork(network);
-            model.runSimulation();
+            // model.setUnderlyingNetwork(network);
+            // model.runSimulation();
 
             models[s] = model;
         }
 
-        LOGGER.info("Simulations Complete");
+        // LOGGER.info("Simulations Complete");
 
-        Map<String, double[]> aggregateStates = HelperFunctions.aggregateStates(models);
-        Map<String, double[]> aggregateTotals = HelperFunctions.aggregateTotals(models);
+        // Map<String, double[]> aggregateStates = HelperFunctions.aggregateStates(models);
+        // Map<String, double[]> aggregateTotals = HelperFunctions.aggregateTotals(models);
 
-        HelperFunctions.evaluateAggregateModel(aggregateStates, aggregateTotals);
+        // HelperFunctions.evaluateAggregateModel(aggregateStates, aggregateTotals);
 
-        HelperFunctions.saveToCSV(aggregateStates, new File(runFolder, "states.csv"));
-        HelperFunctions.saveToCSV(aggregateTotals, new File(runFolder, "totals.csv"));
+        // HelperFunctions.saveToCSV(aggregateStates, new File(runFolder, "states.csv"));
+        // HelperFunctions.saveToCSV(aggregateTotals, new File(runFolder, "totals.csv"));
     }
 }

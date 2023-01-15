@@ -2,11 +2,14 @@ package com.lucaswarwick02.components;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Information on an individual in a network
  */
 public class Node {
+
+    Random random = new Random();
 
     /**
      * Compartmental model states
@@ -19,10 +22,21 @@ public class Node {
         VACCINATED,
         DEAD
     }
-
     public State state; // Compartmental model state
-    public final int ID; // Unique identifier
 
+    public enum AgeBracket {
+        BELOW_NINE, // 0 - 9
+        TEN_TO_NINETEEN, // 10 - 19
+        TWENTY_TO_THIRTYFOUR, // 20 - 34
+        THIRTYFIVE_TO_FOURTYNINE, // 35 - 49
+        FIFTY_TO_SIXTYFOUR, // 50 - 64
+        SIXTYFIVE_TO_SEVENTYNINE, // 65 - 79
+        ABOVE_EIGHTY // 80+
+    }
+    public AgeBracket ageBracket;
+
+    public final int ID; // Unique identifier
+    
     public List<Node> neighbours; // List of the connected Nodes
 
     public int stubs; // Used for generating the network using the Configuration Model
@@ -78,5 +92,59 @@ public class Node {
     public static Node.State[] getAllStates() {
         return new Node.State[] { Node.State.SUSCEPTIBLE, Node.State.INFECTED, Node.State.RECOVERED,
                 Node.State.VACCINATED, Node.State.HOSPITALISED, Node.State.DEAD };
+    }
+
+    public void assignAgeBracket () {
+        float r = random.nextFloat();
+
+        switch (this.getDegree()) {
+            case 4:
+                if (r <= 0.1483) {
+                    ageBracket = AgeBracket.ABOVE_EIGHTY;
+                }
+                else if (r <= 0.4864) {
+                    ageBracket = AgeBracket.BELOW_NINE;
+                }
+                else if (r <= 0.8915) {
+                    ageBracket = AgeBracket.SIXTYFIVE_TO_SEVENTYNINE;
+                }
+                else {
+                    ageBracket = AgeBracket.FIFTY_TO_SIXTYFOUR;
+                }
+                break;
+            case 5:
+                if (r <= 0.8517) {
+                    ageBracket = AgeBracket.FIFTY_TO_SIXTYFOUR;
+                }
+                else {
+                    ageBracket = AgeBracket.TEN_TO_NINETEEN;
+                }
+                break;
+            case 6:
+                if (r <= 0.7383) {
+                    ageBracket = AgeBracket.TEN_TO_NINETEEN;
+                }
+                else {
+                    ageBracket = AgeBracket.THIRTYFIVE_TO_FOURTYNINE;
+                }
+                break;
+            case 7:
+                ageBracket = AgeBracket.THIRTYFIVE_TO_FOURTYNINE;
+                break;
+            case 8:
+                ageBracket = AgeBracket.THIRTYFIVE_TO_FOURTYNINE;
+                break;
+            case 9:
+                if (r <= 0.6925) {
+                    ageBracket = AgeBracket.THIRTYFIVE_TO_FOURTYNINE;
+                }
+                else {
+                    ageBracket = AgeBracket.TWENTY_TO_THIRTYFOUR;
+                }
+                break;
+            default:
+                ageBracket = AgeBracket.TWENTY_TO_THIRTYFOUR;
+                break;
+        }
     }
 }
