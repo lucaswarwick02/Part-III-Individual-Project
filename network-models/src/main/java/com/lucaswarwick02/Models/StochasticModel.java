@@ -27,7 +27,6 @@ public class StochasticModel implements Runnable {
     Epidemic epidemic;
 
     public Map<String, int[]> states = new HashMap<>();
-
     public Map<String, int[]> totals = new HashMap<>();
 
     VaccinationStrategy vaccinationStrategy; // Strategy used in the simulation
@@ -103,7 +102,7 @@ public class StochasticModel implements Runnable {
             // ... maybe recover the Node
             if (r.nextFloat() <= epidemic.recoveryRate) {
                 nodesToRecover.add(infectedNode);
-            } else if (r.nextFloat() <= epidemic.hospitalisationRate) {
+            } else if (r.nextFloat() <= epidemic.hospitalisationRate * infectedNode.hospitalisationMultiplier()) {
                 nodesToHospitalise.add(infectedNode);
             }
         }
@@ -113,7 +112,7 @@ public class StochasticModel implements Runnable {
             // ... maybe recover the node
             if (r.nextFloat() <= epidemic.recoveryRate) {
                 nodesToRecover.add(hospitalisedNode);
-            } else if (r.nextFloat() <= epidemic.mortalityRate) {
+            } else if (r.nextFloat() <= epidemic.mortalityRate * hospitalisedNode.mortalityMultiplier()) {
                 nodesToKill.add(hospitalisedNode);
             }
         }
