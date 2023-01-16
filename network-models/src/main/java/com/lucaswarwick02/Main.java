@@ -11,6 +11,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -63,7 +65,6 @@ public class Main {
         LOGGER.info("Number of Nodes = " + NUMBER_OF_NODES);
 
         // Setup the thread groups for multithreading
-        ThreadGroup tg = new ThreadGroup("main");
         int np = Runtime.getRuntime().availableProcessors();
 
         List<ThreadedModel> threadedModels = new ArrayList<>();
@@ -72,44 +73,24 @@ public class Main {
 
         Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
+        ExecutorService executor = Executors.newFixedThreadPool(np);
         for (int i = 0; i < SIMULATIONS; i++) {
-            threadedModels.add(new ThreadedModel(
-                    NetworkFactory.getNetwork(networkType),
-                    new StochasticModel(vaccinationStrategy, epidemic),
-                    "Simulation #" + i,
-                    tg));
-        }
+            ThreadedModel threadedModel = new ThreadedModel(NetworkFactory.getNetwork(networkType),
+                    new StochasticModel(vaccinationStrategy, epidemic));
 
-        int i = 0;
-        // Create and start all the simulation threads
-        while (i < threadedModels.size()) {
-            if (tg.activeCount() < np) {
-                ThreadedModel threadedModel = threadedModels.get(i);
-                threadedModel.start();
-                i++;
-            } else {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+            threadedModels.add(threadedModel);
+            executor.execute(threadedModel);
         }
-
-        // Wait until all the simulation threads are complete
-        while (tg.activeCount() > 0) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            // Wait until the executor has finished the simulations
         }
 
         LOGGER.info("Simulations Complete");
 
         // Convert the list of simulation threads back into just the models
         StochasticModel[] models = new StochasticModel[SIMULATIONS];
-        for (i = 0; i < SIMULATIONS; i++) {
+        for (int i = 0; i < SIMULATIONS; i++) {
             models[i] = threadedModels.get(i).getModel();
         }
 
