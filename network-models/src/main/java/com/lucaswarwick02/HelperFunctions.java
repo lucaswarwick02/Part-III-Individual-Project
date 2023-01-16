@@ -166,8 +166,6 @@ public class HelperFunctions {
     public static void evaluateAggregateModel(Map<String, double[]> states, Map<String, double[]> totals) {
         int length = states.get("Time").length;
 
-        Main.LOGGER.info("Evaluation: ");
-
         Main.LOGGER.info(String.format("... Total Infected = %.2f%%", (totals.get("Infected")[length - 1] * 100)));
         Main.LOGGER.info(String.format("... Total Hospitalised = %.2f%%", (totals.get("Hospitalised")[length - 1] * 100)));
         Main.LOGGER.info(String.format("... Total Dead = %.2f%%", (totals.get("Dead")[length - 1] * 100)));

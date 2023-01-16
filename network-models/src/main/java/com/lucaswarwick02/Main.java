@@ -7,8 +7,6 @@ import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.models.VaccinationStrategy;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -59,20 +57,22 @@ public class Main {
 
         // Log the information for the network and other key attributes
         NetworkFactory.logNetworkInfo(networkType);
-        LOGGER.info("Vaccination Strategy: " + vaccinationStrategy);
-        LOGGER.info("Running " + SIMULATIONS + " Simulations, with " + ITERATIONS + " Iterations each");
-        LOGGER.info("Number of Nodes = " + NUMBER_OF_NODES);
 
-        // Setup the thread groups for multithreading
-        int np = Runtime.getRuntime().availableProcessors();
+        LOGGER.info("### Simulation Parameters ###");
+        LOGGER.info("... Vaccination Strategy: " + vaccinationStrategy);
+        LOGGER.info("... Running " + SIMULATIONS + " Simulations, with " + ITERATIONS + " Iterations each");
+        LOGGER.info("... Number of Nodes = " + NUMBER_OF_NODES);
 
+        LOGGER.info("### Running Simulations ###");
         StochasticModel[] models = new StochasticModel[SIMULATIONS];
+        Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
         long start = System.nanoTime();
 
-        Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
-
+        // Setup the thread groups for multithreading
+        int np = Runtime.getRuntime().availableProcessors();
         ExecutorService executor = Executors.newFixedThreadPool(np);
+
         for (int i = 0; i < SIMULATIONS; i++) {
             models[i] = new StochasticModel(vaccinationStrategy, epidemic, networkType);
             executor.execute(models[i]);
@@ -81,8 +81,11 @@ public class Main {
         while (!executor.isTerminated()) {
             // Wait until the executor has finished the simulations
         }
+        long end = System.nanoTime();
+        LOGGER.info("... Completed (" + ((end - start) / 1e9) + "s)");
 
-        LOGGER.info("Simulations Complete");
+        LOGGER.info("### Aggregating/Saving Results ###");
+        start = System.nanoTime();
 
         // Aggregate together all of the simulations
         Map<String, double[]> aggregateStates = HelperFunctions.aggregateStates(models);
@@ -95,7 +98,7 @@ public class Main {
         HelperFunctions.saveToCSV(aggregateStates, new File(runFolder, "states.csv"));
         HelperFunctions.saveToCSV(aggregateTotals, new File(runFolder, "totals.csv"));
 
-        long end = System.nanoTime();
-        LOGGER.info(SIMULATIONS + " simulations took " + ((end - start) / 1e9) + "s");
+        end = System.nanoTime();
+        LOGGER.info("... Completed (" + ((end - start) / 1e9) + "s)");
     }
 }

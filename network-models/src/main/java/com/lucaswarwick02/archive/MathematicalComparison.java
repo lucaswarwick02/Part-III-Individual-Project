@@ -1,4 +1,4 @@
-package com.lucaswarwick02.standalone;
+package com.lucaswarwick02.archive;
 
 import java.util.ArrayList;
 import java.util.HashMap;
