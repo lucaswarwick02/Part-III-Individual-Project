@@ -2,7 +2,7 @@ package com.lucaswarwick02;
 
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
-import com.lucaswarwick02.vaccination.VaccinationStrategy;
+import com.lucaswarwick02.vaccination.VaccinationFactory.VaccinationType;
 import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.models.StochasticModel;
 
@@ -45,14 +45,14 @@ public class Main {
             e.printStackTrace();
         }
 
-        stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationStrategy.NONE, runFolder);
+        stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationType.GLOBAL, runFolder);
     }
 
     /**
      * Run, aggreggate and save multiple stochastic simulations to the data folder
      */
     public static void stochasticSimulation(NetworkFactory.NetworkType networkType,
-            VaccinationStrategy vaccinationStrategy,
+        VaccinationType vaccinationStrategy,
             File runFolder) {
 
         // Log the information for the network and other key attributes

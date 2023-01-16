@@ -3,7 +3,9 @@ package com.lucaswarwick02.models;
 import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
-import com.lucaswarwick02.vaccination.VaccinationStrategy;
+import com.lucaswarwick02.vaccination.AbstractStrategy;
+import com.lucaswarwick02.vaccination.VaccinationFactory;
+import com.lucaswarwick02.vaccination.VaccinationFactory.VaccinationType;
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Epidemic;
@@ -30,15 +32,16 @@ public class StochasticModel implements Runnable {
     public Map<String, int[]> states = new HashMap<>();
     public Map<String, int[]> totals = new HashMap<>();
 
-    VaccinationStrategy vaccinationStrategy; // Strategy used in the simulation
+    VaccinationType vaccinationType; // Strategy used in the simulation
+    AbstractStrategy vaccinationStrategy;
 
     /**
      * Setup the Stochastic Model
      * 
      * @param vaccinationStrategy Strategy used in the simulation
      */
-    public StochasticModel(VaccinationStrategy vaccinationStrategy, Epidemic epidemic, NetworkType networkType) {
-        this.vaccinationStrategy = vaccinationStrategy;
+    public StochasticModel(VaccinationType vaccinationType, Epidemic epidemic, NetworkType networkType) {
+        this.vaccinationType = vaccinationType;
         this.epidemic = epidemic;
         this.networkType = networkType;
     }
@@ -49,6 +52,8 @@ public class StochasticModel implements Runnable {
 
         underlyingNetwork.generateNetwork();
         underlyingNetwork.assignAgeBrackets();
+
+        vaccinationStrategy = VaccinationFactory.getVaccinationStrategy(vaccinationType);
         
         runSimulation();
     }
@@ -127,31 +132,11 @@ public class StochasticModel implements Runnable {
         // Kill nodes
         nodesToKill.forEach(node -> node.state = Node.State.DEAD);
 
-        // Run vacciantion strategy
-        switch (vaccinationStrategy) {
-            case GLOBAL:
-                globalVaccinationStrategy();
-                break;
-            default:
-                break;
-        }
+        vaccinationStrategy.performVaccination(this);
 
         calculateAndSaveTotals(iterationNumber, nodesToInfect.size(), nodesToHospitalise.size(), nodesToKill.size());
 
         saveModelState(iterationNumber); // Store the model state
-    }
-
-    /**
-     * Generated from VaccinationStrategy.GLOBAL
-     */
-    void globalVaccinationStrategy() {
-        float vaccinationRate = 0.0075f;
-
-        // With the leftover nodes, vaccinate them
-        for (Node susceptibleNode : underlyingNetwork.getNodesFromState(Node.State.SUSCEPTIBLE)) {
-            if (r.nextFloat() <= vaccinationRate)
-                susceptibleNode.state = Node.State.VACCINATED;
-        }
     }
 
     /**
@@ -179,5 +164,13 @@ public class StochasticModel implements Runnable {
                 totals.get("Infected")[t - 1] + newlyInfected,
                 totals.get("Hospitalised")[t - 1] + newlyHospitalised,
                 totals.get("Dead")[t - 1] + newlyDead);
+    }
+
+    public AbstractNetwork getUnderlyingNetwork () {
+        return this.underlyingNetwork;
+    }
+
+    public Random getRandom () {
+        return this.r;
     }
 }
