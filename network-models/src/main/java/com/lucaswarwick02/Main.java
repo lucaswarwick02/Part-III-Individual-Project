@@ -2,7 +2,6 @@ package com.lucaswarwick02;
 
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
-import com.lucaswarwick02.threading.ThreadedModel;
 import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.models.VaccinationStrategy;
@@ -67,7 +66,7 @@ public class Main {
         // Setup the thread groups for multithreading
         int np = Runtime.getRuntime().availableProcessors();
 
-        List<ThreadedModel> threadedModels = new ArrayList<>();
+        StochasticModel[] models = new StochasticModel[SIMULATIONS];
 
         long start = System.nanoTime();
 
@@ -75,11 +74,8 @@ public class Main {
 
         ExecutorService executor = Executors.newFixedThreadPool(np);
         for (int i = 0; i < SIMULATIONS; i++) {
-            ThreadedModel threadedModel = new ThreadedModel(NetworkFactory.getNetwork(networkType),
-                    new StochasticModel(vaccinationStrategy, epidemic));
-
-            threadedModels.add(threadedModel);
-            executor.execute(threadedModel);
+            models[i] = new StochasticModel(vaccinationStrategy, epidemic, networkType);
+            executor.execute(models[i]);
         }
         executor.shutdown();
         while (!executor.isTerminated()) {
@@ -87,12 +83,6 @@ public class Main {
         }
 
         LOGGER.info("Simulations Complete");
-
-        // Convert the list of simulation threads back into just the models
-        StochasticModel[] models = new StochasticModel[SIMULATIONS];
-        for (int i = 0; i < SIMULATIONS; i++) {
-            models[i] = threadedModels.get(i).getModel();
-        }
 
         // Aggregate together all of the simulations
         Map<String, double[]> aggregateStates = HelperFunctions.aggregateStates(models);

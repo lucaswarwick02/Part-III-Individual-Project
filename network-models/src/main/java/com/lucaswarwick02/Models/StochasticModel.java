@@ -1,6 +1,8 @@
 package com.lucaswarwick02.models;
 
 import com.lucaswarwick02.networks.AbstractNetwork;
+import com.lucaswarwick02.networks.NetworkFactory;
+import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Epidemic;
@@ -15,10 +17,11 @@ import java.util.Random;
 /**
  * Each iteration, use probability instead of ODEs
  */
-public class StochasticModel {
+public class StochasticModel implements Runnable {
 
     Random r = new Random(); // Used for getting random numbers
 
+    NetworkType networkType;
     AbstractNetwork underlyingNetwork; // Network used in the model
 
     Epidemic epidemic;
@@ -34,9 +37,20 @@ public class StochasticModel {
      * 
      * @param vaccinationStrategy Strategy used in the simulation
      */
-    public StochasticModel(VaccinationStrategy vaccinationStrategy, Epidemic epidemic) {
+    public StochasticModel(VaccinationStrategy vaccinationStrategy, Epidemic epidemic, NetworkType networkType) {
         this.vaccinationStrategy = vaccinationStrategy;
         this.epidemic = epidemic;
+        this.networkType = networkType;
+    }
+
+    @Override
+    public void run () {
+        underlyingNetwork = NetworkFactory.getNetwork(networkType);
+
+        underlyingNetwork.generateNetwork();
+        underlyingNetwork.assignAgeBrackets();
+        
+        runSimulation();
     }
 
     /**
@@ -165,14 +179,5 @@ public class StochasticModel {
                 totals.get("Infected")[t - 1] + newlyInfected,
                 totals.get("Hospitalised")[t - 1] + newlyHospitalised,
                 totals.get("Dead")[t - 1] + newlyDead);
-    }
-
-    /**
-     * Set the underlying network
-     * 
-     * @param underlyingNetwork Network used in the model
-     */
-    public void setUnderlyingNetwork(AbstractNetwork underlyingNetwork) {
-        this.underlyingNetwork = underlyingNetwork;
     }
 }
