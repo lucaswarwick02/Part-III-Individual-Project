@@ -1,4 +1,4 @@
-package com.lucaswarwick02.standalone;
+package com.lucaswarwick02.archive;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,6 +64,7 @@ public class MathematicalComparison {
         return normalizeResults(states);
     }
 
+    @SuppressWarnings("unchecked")
     public Map<String, double[]> runStochasticSimulations() {
 
         Map<String, double[]>[] allStates = new HashMap[SIMULATIONS];

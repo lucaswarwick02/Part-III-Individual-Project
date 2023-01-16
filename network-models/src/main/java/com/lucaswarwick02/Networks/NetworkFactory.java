@@ -60,21 +60,22 @@ public class NetworkFactory {
     }
 
     public static void logNetworkInfo(NetworkType networkType) {
+        Main.LOGGER.info("### Network Parameters ###");
         switch (networkType) {
             case FULLY_MIXED:
-                Main.LOGGER.info("FULLY_MIXED: No Parameters");
+                Main.LOGGER.info("... FULLY_MIXED: No Parameters");
                 break;
             case FIXED_DEGREE:
-                Main.LOGGER.info("FIXED_DEGREE: k=" + FIXED_DEGREE);
+                Main.LOGGER.info("... FIXED_DEGREE: k=" + FIXED_DEGREE);
                 break;
             case POISSON:
-                Main.LOGGER.info("POISSON: z=" + Z + ", maxDegree=" + MAX_DEGREE);
+                Main.LOGGER.info("... POISSON: z=" + Z + ", maxDegree=" + MAX_DEGREE);
                 break;
             case SCALE_FREE:
-                Main.LOGGER.info("SCALE_FREE: gamma=" + GAMMA + ", kappa=" + KAPPA);
+                Main.LOGGER.info("... SCALE_FREE: gamma=" + GAMMA + ", kappa=" + KAPPA);
                 break;
             case BARABASI_ALBERT:
-                Main.LOGGER.info("BARABASI_ALBERT: m=" + M);
+                Main.LOGGER.info("... BARABASI_ALBERT: m=" + M);
                 break;
             default:
                 break;

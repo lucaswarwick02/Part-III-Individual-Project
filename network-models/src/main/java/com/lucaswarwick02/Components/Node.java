@@ -147,4 +147,46 @@ public class Node {
                 break;
         }
     }
+
+    public float hospitalisationMultiplier () {
+        switch (this.ageBracket) {
+            case BELOW_NINE:
+                return 0.6f;
+            case TEN_TO_NINETEEN:
+                return 0.2f;
+            case TWENTY_TO_THIRTYFOUR:
+                return 1;
+            case THIRTYFIVE_TO_FOURTYNINE:
+                return 1.7f;
+            case FIFTY_TO_SIXTYFOUR:
+                return 3.5f;
+            case SIXTYFIVE_TO_SEVENTYNINE:
+                return 6f;
+            case ABOVE_EIGHTY:
+                return 15f;
+            default:
+                return 1;
+        }
+    }
+
+    public float mortalityMultiplier () {
+        switch (this.ageBracket) {
+            case BELOW_NINE:
+                return 0.2f;
+            case TEN_TO_NINETEEN:
+                return 0.1f;
+            case TWENTY_TO_THIRTYFOUR:
+                return 1;
+            case THIRTYFIVE_TO_FOURTYNINE:
+                return 3f;
+            case FIFTY_TO_SIXTYFOUR:
+                return 30f;
+            case SIXTYFIVE_TO_SEVENTYNINE:
+                return 75f;
+            case ABOVE_EIGHTY:
+                return 350f;
+            default:
+                return 1;
+        }
+    }
 }
