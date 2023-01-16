@@ -3,6 +3,7 @@ package com.lucaswarwick02;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
 import com.lucaswarwick02.threading.ThreadedModel;
+import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.models.VaccinationStrategy;
 
@@ -69,13 +70,14 @@ public class Main {
 
         long start = System.nanoTime();
 
+        Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
+
         for (int i = 0; i < SIMULATIONS; i++) {
             threadedModels.add(new ThreadedModel(
                     NetworkFactory.getNetwork(networkType),
-                    new StochasticModel(vaccinationStrategy),
+                    new StochasticModel(vaccinationStrategy, epidemic),
                     "Simulation #" + i,
-                    tg)
-                );
+                    tg));
         }
 
         int i = 0;
@@ -85,11 +87,12 @@ public class Main {
                 ThreadedModel threadedModel = threadedModels.get(i);
                 threadedModel.start();
                 i++;
-            }
-            else {
+            } else {
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException e) { e.printStackTrace(); }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -97,7 +100,9 @@ public class Main {
         while (tg.activeCount() > 0) {
             try {
                 Thread.sleep(100);
-            } catch (InterruptedException e) { e.printStackTrace(); }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         LOGGER.info("Simulations Complete");

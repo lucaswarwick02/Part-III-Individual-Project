@@ -21,7 +21,7 @@ public class StochasticModel {
 
     AbstractNetwork underlyingNetwork; // Network used in the model
 
-    public Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
+    Epidemic epidemic;
 
     public Map<String, int[]> states = new HashMap<>();
 
@@ -34,8 +34,9 @@ public class StochasticModel {
      * 
      * @param vaccinationStrategy Strategy used in the simulation
      */
-    public StochasticModel(VaccinationStrategy vaccinationStrategy) {
+    public StochasticModel(VaccinationStrategy vaccinationStrategy, Epidemic epidemic) {
         this.vaccinationStrategy = vaccinationStrategy;
+        this.epidemic = epidemic;
     }
 
     /**
