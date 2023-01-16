@@ -2,9 +2,9 @@ package com.lucaswarwick02;
 
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
+import com.lucaswarwick02.vaccination.VaccinationStrategy;
 import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.models.StochasticModel;
-import com.lucaswarwick02.models.VaccinationStrategy;
 
 import java.io.File;
 import java.util.Map;

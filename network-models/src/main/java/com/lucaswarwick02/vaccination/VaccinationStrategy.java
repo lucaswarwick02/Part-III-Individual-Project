@@ -1,4 +1,4 @@
-package com.lucaswarwick02.models;
+package com.lucaswarwick02.vaccination;
 
 /**
  * Used in creating the epidemic model
