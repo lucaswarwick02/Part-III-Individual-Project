@@ -52,7 +52,7 @@ public class Main {
      * Run, aggreggate and save multiple stochastic simulations to the data folder
      */
     public static void stochasticSimulation(NetworkFactory.NetworkType networkType,
-        VaccinationType vaccinationStrategy,
+            VaccinationType vaccinationStrategy,
             File runFolder) {
 
         // Log the information for the network and other key attributes
@@ -100,5 +100,9 @@ public class Main {
 
         end = System.nanoTime();
         LOGGER.info("... Completed (" + ((end - start) / 1e9) + "s)");
+    }
+
+    public static void gridSearchSimulations(NetworkFactory.NetworkType networkType) {
+        //
     }
 }
