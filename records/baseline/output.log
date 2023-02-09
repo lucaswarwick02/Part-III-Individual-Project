@@ -1,0 +1,13 @@
+[2023-02-09 11:02:57] [INFO] ### Network Parameters ### 
+[2023-02-09 11:02:57] [INFO] ... BARABASI_ALBERT: m=4 
+[2023-02-09 11:02:57] [INFO] ### Simulation Parameters ### 
+[2023-02-09 11:02:57] [INFO] ... Vaccination Strategy: GLOBAL 
+[2023-02-09 11:02:57] [INFO] ... Running 100 Simulations, with 150 Iterations each 
+[2023-02-09 11:02:57] [INFO] ... Number of Nodes = 10000 
+[2023-02-09 11:02:57] [INFO] ### Running Simulations ### 
+[2023-02-09 11:04:01] [INFO] ... Completed (64.0733012s) 
+[2023-02-09 11:04:01] [INFO] ### Aggregating/Saving Results ### 
+[2023-02-09 11:04:01] [INFO] ... Total Infected = 53.03% 
+[2023-02-09 11:04:01] [INFO] ... Total Hospitalised = 25.52% 
+[2023-02-09 11:04:01] [INFO] ... Total Dead = 20.25% 
+[2023-02-09 11:04:01] [INFO] ... Completed (0.0852041s) 

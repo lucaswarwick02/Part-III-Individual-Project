@@ -47,14 +47,14 @@ public class StochasticModel implements Runnable {
     }
 
     @Override
-    public void run () {
+    public void run() {
         underlyingNetwork = NetworkFactory.getNetwork(networkType);
 
         underlyingNetwork.generateNetwork();
         underlyingNetwork.assignAgeBrackets();
 
         vaccinationStrategy = VaccinationFactory.getVaccinationStrategy(vaccinationType);
-        
+
         runSimulation();
     }
 
@@ -166,11 +166,11 @@ public class StochasticModel implements Runnable {
                 totals.get("Dead")[t - 1] + newlyDead);
     }
 
-    public AbstractNetwork getUnderlyingNetwork () {
+    public AbstractNetwork getUnderlyingNetwork() {
         return this.underlyingNetwork;
     }
 
-    public Random getRandom () {
+    public Random getRandom() {
         return this.r;
     }
 }
