@@ -1,6 +1,6 @@
 package com.lucaswarwick02.networks;
 
-import com.lucaswarwick02.Main;
+import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.archive.FixedDegreeNetwork;
 import com.lucaswarwick02.archive.FullyMixedNetwork;
 import com.lucaswarwick02.archive.ScaleFreeNetwork;
@@ -35,7 +35,8 @@ public class NetworkFactory {
     /**
      * Restrict use of the constructor
      */
-    private NetworkFactory() {}
+    private NetworkFactory() {
+    }
 
     /**
      * 
@@ -60,22 +61,22 @@ public class NetworkFactory {
     }
 
     public static void logNetworkInfo(NetworkType networkType) {
-        Main.LOGGER.info("### Network Parameters ###");
+        HelperFunctions.LOGGER.info("### Network Parameters ###");
         switch (networkType) {
             case FULLY_MIXED:
-                Main.LOGGER.info("... FULLY_MIXED: No Parameters");
+                HelperFunctions.LOGGER.info("... FULLY_MIXED: No Parameters");
                 break;
             case FIXED_DEGREE:
-                Main.LOGGER.info("... FIXED_DEGREE: k=" + FIXED_DEGREE);
+                HelperFunctions.LOGGER.info("... FIXED_DEGREE: k=" + FIXED_DEGREE);
                 break;
             case POISSON:
-                Main.LOGGER.info("... POISSON: z=" + Z + ", maxDegree=" + MAX_DEGREE);
+                HelperFunctions.LOGGER.info("... POISSON: z=" + Z + ", maxDegree=" + MAX_DEGREE);
                 break;
             case SCALE_FREE:
-                Main.LOGGER.info("... SCALE_FREE: gamma=" + GAMMA + ", kappa=" + KAPPA);
+                HelperFunctions.LOGGER.info("... SCALE_FREE: gamma=" + GAMMA + ", kappa=" + KAPPA);
                 break;
             case BARABASI_ALBERT:
-                Main.LOGGER.info("... BARABASI_ALBERT: m=" + M);
+                HelperFunctions.LOGGER.info("... BARABASI_ALBERT: m=" + M);
                 break;
             default:
                 break;

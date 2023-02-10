@@ -6,8 +6,8 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.lucaswarwick02.HelperFunctions;
-import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
+import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.AbstractNetwork;
 
 public class FixedDegreeNetwork extends AbstractNetwork {
@@ -22,7 +22,7 @@ public class FixedDegreeNetwork extends AbstractNetwork {
     @Override
     public void generateNetwork() {
         this.nodes = new ArrayList<>();
-        for (int n = 0; n < Main.NUMBER_OF_NODES; n++) {
+        for (int n = 0; n < StochasticModel.NUMBER_OF_NODES; n++) {
             Node newNode = new Node(n);
             newNode.stubs = this.degree;
             this.nodes.add(newNode);

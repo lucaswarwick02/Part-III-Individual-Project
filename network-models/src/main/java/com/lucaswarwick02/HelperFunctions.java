@@ -8,12 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.models.StochasticModel;
 
 public class HelperFunctions {
+
+    public static final Logger LOGGER = Logger.getLogger(HelperFunctions.class.getName());
 
     static Random r = new Random();
 
@@ -58,14 +61,14 @@ public class HelperFunctions {
     public static Map<String, double[]> aggregateStates(StochasticModel[] models) {
         HashMap<String, double[]> states = new HashMap<>();
 
-        states.put("Time", new double[Main.ITERATIONS]);
+        states.put("Time", new double[StochasticModel.ITERATIONS]);
         for (Node.State state : Node.getAllStates()) {
             String stateName = Node.stateToString(state);
-            states.put(stateName, new double[Main.ITERATIONS]);
-            states.put(stateName + "_STD", new double[Main.ITERATIONS]);
+            states.put(stateName, new double[StochasticModel.ITERATIONS]);
+            states.put(stateName + "_STD", new double[StochasticModel.ITERATIONS]);
         }
 
-        for (int i = 0; i < Main.ITERATIONS; i++) {
+        for (int i = 0; i < StochasticModel.ITERATIONS; i++) {
             states.get("Time")[i] = i;
             for (Node.State state : Node.getAllStates()) {
                 double[] values = new double[models.length];
@@ -73,7 +76,8 @@ public class HelperFunctions {
 
                 for (int m = 0; m < models.length; m++) {
                     values[m] = models[m].states.get(stateName)[i];
-                    if (!stateName.equals("Time")) values[m] /= Main.NUMBER_OF_NODES;
+                    if (!stateName.equals("Time"))
+                        values[m] /= StochasticModel.NUMBER_OF_NODES;
                 }
 
                 double mean = calculateMean(values);
@@ -98,18 +102,19 @@ public class HelperFunctions {
 
         Set<String> keys = models[0].totals.keySet();
         for (String key : keys) {
-            totals.put(key, new double[Main.ITERATIONS]);
-            totals.put(key + "_STD", new double[Main.ITERATIONS]);
+            totals.put(key, new double[StochasticModel.ITERATIONS]);
+            totals.put(key + "_STD", new double[StochasticModel.ITERATIONS]);
         }
 
-        for (int i = 0; i < Main.ITERATIONS; i++) {
+        for (int i = 0; i < StochasticModel.ITERATIONS; i++) {
             totals.get("Time")[i] = i;
             for (String key : keys) {
                 double[] values = new double[models.length];
 
                 for (int m = 0; m < models.length; m++) {
                     values[m] = models[m].totals.get(key)[i];
-                    if (!key.equals("Time")) values[m] /= Main.NUMBER_OF_NODES;
+                    if (!key.equals("Time"))
+                        values[m] /= StochasticModel.NUMBER_OF_NODES;
                 }
 
                 double mean = calculateMean(values);
@@ -134,7 +139,7 @@ public class HelperFunctions {
 
         try (PrintWriter writer = new PrintWriter(file, "UTF-8")) {
             writer.write(header + "\n");
-            for (int i = 0; i < Main.ITERATIONS; i++) {
+            for (int i = 0; i < StochasticModel.ITERATIONS; i++) {
                 List<String> row = new ArrayList<>();
                 for (String string : states.keySet()) {
                     row.add(Double.toString(states.get(string)[i]));
@@ -166,8 +171,10 @@ public class HelperFunctions {
     public static void evaluateAggregateModel(Map<String, double[]> states, Map<String, double[]> totals) {
         int length = states.get("Time").length;
 
-        Main.LOGGER.info(String.format("... Total Infected = %.2f%%", (totals.get("Infected")[length - 1] * 100)));
-        Main.LOGGER.info(String.format("... Total Hospitalised = %.2f%%", (totals.get("Hospitalised")[length - 1] * 100)));
-        Main.LOGGER.info(String.format("... Total Dead = %.2f%%", (totals.get("Dead")[length - 1] * 100)));
+        HelperFunctions.LOGGER
+                .info(String.format("... Total Infected = %.2f%%", (totals.get("Infected")[length - 1] * 100)));
+        HelperFunctions.LOGGER
+                .info(String.format("... Total Hospitalised = %.2f%%", (totals.get("Hospitalised")[length - 1] * 100)));
+        HelperFunctions.LOGGER.info(String.format("... Total Dead = %.2f%%", (totals.get("Dead")[length - 1] * 100)));
     }
 }

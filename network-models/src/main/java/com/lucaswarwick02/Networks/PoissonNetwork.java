@@ -9,8 +9,9 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.lucaswarwick02.HelperFunctions;
-import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
+import com.lucaswarwick02.mains.StochasticMain;
+import com.lucaswarwick02.models.StochasticModel;
 
 import java.math.BigDecimal;
 
@@ -67,10 +68,10 @@ public class PoissonNetwork extends AbstractNetwork {
         int[] nodesPerDegree = new int[maxDegree - 1];
         for (int k = 1; k < maxDegree; k++) {
             probabilities[k - 1] = poissonDegreeProbability(k, z);
-            nodesPerDegree[k - 1] = (int) Math.ceil(probabilities[k - 1] * Main.NUMBER_OF_NODES);
+            nodesPerDegree[k - 1] = (int) Math.ceil(probabilities[k - 1] * StochasticModel.NUMBER_OF_NODES);
         }
 
-        int nodesLeft = Main.NUMBER_OF_NODES - Arrays.stream(nodesPerDegree).sum();
+        int nodesLeft = StochasticModel.NUMBER_OF_NODES - Arrays.stream(nodesPerDegree).sum();
 
         while (nodesLeft > 0) {
             if (nodesLeft == 1) {

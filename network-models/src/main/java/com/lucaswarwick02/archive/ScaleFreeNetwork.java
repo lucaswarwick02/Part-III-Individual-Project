@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Node;
+import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.AbstractNetwork;
 
 public class ScaleFreeNetwork extends AbstractNetwork {
@@ -62,14 +62,15 @@ public class ScaleFreeNetwork extends AbstractNetwork {
     public int[] generateDegreeSequence() {
         double[] probabilities = new double[kappa - 1]; // Ignore case: degree = 0
         int[] nodesPerDegree = new int[kappa - 1];
-        double polylogarithmValue = polylogarithm(gamma, Math.exp(-1d / kappa), 100); // ? Might need to cast kappa to double
+        double polylogarithmValue = polylogarithm(gamma, Math.exp(-1d / kappa), 100); // ? Might need to cast kappa to
+                                                                                      // double
 
         for (int k = 1; k < kappa; k++) {
             probabilities[k - 1] = powerLawDegreeProbability(k, gamma, kappa, polylogarithmValue);
-            nodesPerDegree[k - 1] = (int) Math.ceil(probabilities[k - 1] * Main.NUMBER_OF_NODES);
+            nodesPerDegree[k - 1] = (int) Math.ceil(probabilities[k - 1] * StochasticModel.NUMBER_OF_NODES);
         }
 
-        int nodesLeft = Main.NUMBER_OF_NODES - Arrays.stream(nodesPerDegree).sum();
+        int nodesLeft = StochasticModel.NUMBER_OF_NODES - Arrays.stream(nodesPerDegree).sum();
 
         float averageDegree = 0f;
         for (int k = 1; k < kappa; k++) {
@@ -94,6 +95,7 @@ public class ScaleFreeNetwork extends AbstractNetwork {
 
     /**
      * Generate the probability of a node having a degree of k
+     * 
      * @param k
      * @param gamma
      * @param kappa
@@ -110,9 +112,11 @@ public class ScaleFreeNetwork extends AbstractNetwork {
 
     /**
      * Calculate the polylogarithm using a power series in z
+     * 
      * @param s
      * @param z
-     * @param precision Number of times the series is applied, greater = more accurate
+     * @param precision Number of times the series is applied, greater = more
+     *                  accurate
      * @return Polylogarithm using s and z
      */
     private double polylogarithm(float s, double z, int precision) {
@@ -149,12 +153,13 @@ public class ScaleFreeNetwork extends AbstractNetwork {
 
     /**
      * Randomly pick N nodes
+     * 
      * @param list List of Nodes to pick from
-     * @param n Number of Nodes to pick
+     * @param n    Number of Nodes to pick
      * @return List of Nodes of length N
      */
-    List<Node> pickRandomNodes( List<Node> list, int n ) {
-        return r.ints(n, 0, list.size()).mapToObj(list::get).collect( Collectors.toList());
+    List<Node> pickRandomNodes(List<Node> list, int n) {
+        return r.ints(n, 0, list.size()).mapToObj(list::get).collect(Collectors.toList());
     }
 
 }

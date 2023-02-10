@@ -1,27 +1,20 @@
-package com.lucaswarwick02;
-
-import com.lucaswarwick02.networks.NetworkFactory;
-import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
-import com.lucaswarwick02.vaccination.VaccinationFactory.VaccinationType;
-import com.lucaswarwick02.components.Epidemic;
-import com.lucaswarwick02.models.StochasticModel;
+package com.lucaswarwick02.mains;
 
 import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.FileHandler;
-import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-public class Main {
+import com.lucaswarwick02.HelperFunctions;
+import com.lucaswarwick02.components.Epidemic;
+import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.networks.NetworkFactory;
+import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
+import com.lucaswarwick02.vaccination.VaccinationFactory.VaccinationType;
 
-    public static final Logger LOGGER = Logger.getLogger(Main.class.getName());
-
-    public static final int ITERATIONS = 150;
-    public static final int INITIAL_INFECTED = 3;
-    public static final int NUMBER_OF_NODES = 10000;
-    public static final int SIMULATIONS = 100;
+public class StochasticMain {
 
     public static void main(String[] args) {
         System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-4s] %5$s %n");
@@ -40,7 +33,7 @@ public class Main {
         try {
             FileHandler fileHandler = new FileHandler((new File(runFolder, "output.log")).getAbsolutePath(), true);
             fileHandler.setFormatter(new SimpleFormatter());
-            LOGGER.addHandler(fileHandler);
+            HelperFunctions.LOGGER.addHandler(fileHandler);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,13 +51,15 @@ public class Main {
         // Log the information for the network and other key attributes
         NetworkFactory.logNetworkInfo(networkType);
 
-        LOGGER.info("### Simulation Parameters ###");
-        LOGGER.info("... Vaccination Strategy: " + vaccinationStrategy);
-        LOGGER.info("... Running " + SIMULATIONS + " Simulations, with " + ITERATIONS + " Iterations each");
-        LOGGER.info("... Number of Nodes = " + NUMBER_OF_NODES);
+        HelperFunctions.LOGGER.info("### Simulation Parameters ###");
+        HelperFunctions.LOGGER.info("... Vaccination Strategy: " + vaccinationStrategy);
+        HelperFunctions.LOGGER.info(
+                "... Running " + StochasticModel.SIMULATIONS + " Simulations, with " + StochasticModel.ITERATIONS
+                        + " Iterations each");
+        HelperFunctions.LOGGER.info("... Number of Nodes = " + StochasticModel.NUMBER_OF_NODES);
 
-        LOGGER.info("### Running Simulations ###");
-        StochasticModel[] models = new StochasticModel[SIMULATIONS];
+        HelperFunctions.LOGGER.info("### Running Simulations ###");
+        StochasticModel[] models = new StochasticModel[StochasticModel.SIMULATIONS];
         Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
         long start = System.nanoTime();
@@ -73,7 +68,7 @@ public class Main {
         int np = Runtime.getRuntime().availableProcessors();
         ExecutorService executor = Executors.newFixedThreadPool(np);
 
-        for (int i = 0; i < SIMULATIONS; i++) {
+        for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
             models[i] = new StochasticModel(vaccinationStrategy, epidemic, networkType);
             executor.execute(models[i]);
         }
@@ -82,9 +77,9 @@ public class Main {
             // Wait until the executor has finished the simulations
         }
         long end = System.nanoTime();
-        LOGGER.info("... Completed (" + ((end - start) / 1e9) + "s)");
+        HelperFunctions.LOGGER.info("... Completed (" + ((end - start) / 1e9) + "s)");
 
-        LOGGER.info("### Aggregating/Saving Results ###");
+        HelperFunctions.LOGGER.info("### Aggregating/Saving Results ###");
         start = System.nanoTime();
 
         // Aggregate together all of the simulations
@@ -99,10 +94,6 @@ public class Main {
         HelperFunctions.saveToCSV(aggregateTotals, new File(runFolder, "totals.csv"));
 
         end = System.nanoTime();
-        LOGGER.info("... Completed (" + ((end - start) / 1e9) + "s)");
-    }
-
-    public static void gridSearchSimulations(NetworkFactory.NetworkType networkType) {
-        //
+        HelperFunctions.LOGGER.info("... Completed (" + ((end - start) / 1e9) + "s)");
     }
 }

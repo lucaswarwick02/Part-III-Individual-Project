@@ -3,7 +3,7 @@ package com.lucaswarwick02.components;
 import java.io.File;
 import java.net.URL;
 
-import com.lucaswarwick02.Main;
+import com.lucaswarwick02.HelperFunctions;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
@@ -35,12 +35,12 @@ public class Epidemic {
                 + hospitalisationRate + ", mortalityRate=" + mortalityRate + "]";
     }
 
-    public void logInformation () {
-        Main.LOGGER.info("Epidemic Parameters: ");
-        Main.LOGGER.info("... infectionRate: " + infectionRate);
-        Main.LOGGER.info("... recoveryRate: " + recoveryRate);
-        Main.LOGGER.info("... hospitalisationRate: " + hospitalisationRate);
-        Main.LOGGER.info("... mortalityRate: " + mortalityRate);
+    public void logInformation() {
+        HelperFunctions.LOGGER.info("Epidemic Parameters: ");
+        HelperFunctions.LOGGER.info("... infectionRate: " + infectionRate);
+        HelperFunctions.LOGGER.info("... recoveryRate: " + recoveryRate);
+        HelperFunctions.LOGGER.info("... hospitalisationRate: " + hospitalisationRate);
+        HelperFunctions.LOGGER.info("... mortalityRate: " + mortalityRate);
     }
 
     public static void saveExample(File file) {
@@ -67,12 +67,14 @@ public class Epidemic {
             jaxbContext = JAXBContext.newInstance(Epidemic.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-            URL url = Main.class.getResource(fileName);
+            URL url = HelperFunctions.class.getResource(fileName);
             File file = new File(url.toURI());
 
             epidemic = (Epidemic) jaxbUnmarshaller.unmarshal(file);
 
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return epidemic;
     }

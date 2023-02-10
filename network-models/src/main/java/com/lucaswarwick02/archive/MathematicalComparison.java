@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.lucaswarwick02.HelperFunctions;
-import com.lucaswarwick02.Main;
 import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.components.Node;
 
@@ -25,8 +24,8 @@ public class MathematicalComparison {
     Random r = new Random();
 
     public MathematicalComparison() {
-        Main.LOGGER.info("Number of Nodes: " + NUMBER_OF_NODES);
-        Main.LOGGER.info("Running " + SIMULATIONS + " Simulations, with " + ITERATIONS + " Iterations each");
+        HelperFunctions.LOGGER.info("Number of Nodes: " + NUMBER_OF_NODES);
+        HelperFunctions.LOGGER.info("Running " + SIMULATIONS + " Simulations, with " + ITERATIONS + " Iterations each");
         epidemic.logInformation();
     }
 
