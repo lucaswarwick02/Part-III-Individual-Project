@@ -1,8 +1,8 @@
+echo off
+
 rem This requires main.java to run a single stochasticSimulation function once, 
 rem All of the values are hardcoded for it and therefore is used for testing/validating
 rem as well as having a unique datetime folder format.
-
-echo off
 
 rem Generate a folder name for this run using datetime
 set FOLDER=%time:~0,2%%time:~3,2%%time:~6,2%_%date:~-10,2%%date:~-7,2%%date:~-4,4%
