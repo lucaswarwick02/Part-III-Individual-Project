@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.Node;
-import com.lucaswarwick02.mains.StochasticMain;
 import com.lucaswarwick02.models.StochasticModel;
 
 import java.math.BigDecimal;

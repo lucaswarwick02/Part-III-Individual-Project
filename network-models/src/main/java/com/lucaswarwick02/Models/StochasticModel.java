@@ -22,7 +22,7 @@ public class StochasticModel implements Runnable {
     public static final int ITERATIONS = 150;
     public static final int INITIAL_INFECTED = 3;
     public static final int NUMBER_OF_NODES = 10000;
-    public static final int SIMULATIONS = 100;
+    public static final int SIMULATIONS = 250;
 
     Random r = new Random(); // Used for getting random numbers
 
@@ -84,6 +84,8 @@ public class StochasticModel implements Runnable {
         // Store the initial model state
         saveModelState(0);
         saveTotals(0, 3, 0, 0);
+
+        abstractStrategy.performStrategy(this);
 
         for (int t = 1; t < StochasticModel.ITERATIONS; t++) {
             performIteration(t);

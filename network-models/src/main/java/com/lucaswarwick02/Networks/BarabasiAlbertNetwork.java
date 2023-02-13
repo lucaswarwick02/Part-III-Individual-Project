@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lucaswarwick02.components.Node;
-import com.lucaswarwick02.mains.StochasticMain;
 import com.lucaswarwick02.models.StochasticModel;
 
 public class BarabasiAlbertNetwork extends AbstractNetwork {

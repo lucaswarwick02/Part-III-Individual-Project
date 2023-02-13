@@ -9,9 +9,9 @@ import java.util.logging.SimpleFormatter;
 
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.Epidemic;
-import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.NetworkFactory;
+import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
 import com.lucaswarwick02.vaccination.AbstractStrategy;
 import com.lucaswarwick02.vaccination.OneOffStrategy;
 
@@ -40,7 +40,7 @@ public class GridSearchMain {
 
         // * OneOff-Strategy
         int[] timeDelays = { 0, 25, 50, 75, 100 };
-        float[] percentagesOfPopulation = { 0.25f };
+        float[] percentagesOfPopulation = { 0.5f };
 
         for (int timeDelay : timeDelays) {
             for (float percentageOfPopulation : percentagesOfPopulation) {
@@ -49,6 +49,8 @@ public class GridSearchMain {
 
                 File strategyFolder = new File(runFolder, strategy.toString());
                 strategyFolder.mkdir();
+
+                stochasticSimulation(NetworkType.BARABASI_ALBERT, strategy, strategyFolder);
             }
         }
     }
@@ -61,9 +63,6 @@ public class GridSearchMain {
      */
     public static void stochasticSimulation(NetworkFactory.NetworkType networkType, AbstractStrategy abstractStrategy,
             File runFolder) {
-
-        // Log the information for the network and other key attributes
-        NetworkFactory.logNetworkInfo(networkType);
 
         StochasticModel[] models = new StochasticModel[StochasticModel.SIMULATIONS];
         Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
