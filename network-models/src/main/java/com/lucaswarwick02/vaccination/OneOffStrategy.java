@@ -34,4 +34,9 @@ public class OneOffStrategy implements AbstractStrategy {
         }
     }
 
+    @Override
+    public String toString() {
+        return "oneoff_(" + this.timeDelay + ", " + this.percentageOfPopulation + ")";
+    }
+
 }

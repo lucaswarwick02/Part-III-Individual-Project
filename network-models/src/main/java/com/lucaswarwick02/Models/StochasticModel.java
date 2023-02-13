@@ -3,6 +3,7 @@ package com.lucaswarwick02.models;
 import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
+import com.lucaswarwick02.vaccination.AbstractStrategy;
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.components.Node;
@@ -29,6 +30,7 @@ public class StochasticModel implements Runnable {
     AbstractNetwork underlyingNetwork; // Network used in the model
 
     Epidemic epidemic;
+    AbstractStrategy abstractStrategy;
 
     int currentTime = 0;
 
@@ -40,9 +42,10 @@ public class StochasticModel implements Runnable {
      * 
      * @param vaccinationStrategy Strategy used in the simulation
      */
-    public StochasticModel(Epidemic epidemic, NetworkType networkType) {
+    public StochasticModel(Epidemic epidemic, NetworkType networkType, AbstractStrategy abstractStrategy) {
         this.epidemic = epidemic;
         this.networkType = networkType;
+        this.abstractStrategy = abstractStrategy;
     }
 
     @Override
@@ -131,6 +134,9 @@ public class StochasticModel implements Runnable {
         nodesToHospitalise.forEach(node -> node.state = Node.State.HOSPITALISED);
         // Kill nodes
         nodesToKill.forEach(node -> node.state = Node.State.DEAD);
+
+        // Perform vaccination strategy at the end of the iteration (time step)
+        abstractStrategy.performStrategy(this);
 
         calculateAndSaveTotals(iterationNumber, nodesToInfect.size(), nodesToHospitalise.size(), nodesToKill.size());
 
