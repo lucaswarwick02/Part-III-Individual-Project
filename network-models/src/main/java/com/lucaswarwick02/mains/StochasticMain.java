@@ -12,7 +12,6 @@ import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
-import com.lucaswarwick02.vaccination.VaccinationFactory.VaccinationType;
 
 public class StochasticMain {
 
@@ -38,21 +37,20 @@ public class StochasticMain {
             e.printStackTrace();
         }
 
-        stochasticSimulation(NetworkType.BARABASI_ALBERT, VaccinationType.GLOBAL, runFolder);
+        stochasticSimulation(NetworkType.BARABASI_ALBERT, runFolder);
     }
 
     /**
      * Run, aggreggate and save multiple stochastic simulations to the data folder
      */
     public static void stochasticSimulation(NetworkFactory.NetworkType networkType,
-            VaccinationType vaccinationStrategy,
             File runFolder) {
 
         // Log the information for the network and other key attributes
         NetworkFactory.logNetworkInfo(networkType);
 
         HelperFunctions.LOGGER.info("### Simulation Parameters ###");
-        HelperFunctions.LOGGER.info("... Vaccination Strategy: " + vaccinationStrategy);
+
         HelperFunctions.LOGGER.info(
                 "... Running " + StochasticModel.SIMULATIONS + " Simulations, with " + StochasticModel.ITERATIONS
                         + " Iterations each");
@@ -69,7 +67,7 @@ public class StochasticMain {
         ExecutorService executor = Executors.newFixedThreadPool(np);
 
         for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
-            models[i] = new StochasticModel(vaccinationStrategy, epidemic, networkType);
+            models[i] = new StochasticModel(epidemic, networkType);
             executor.execute(models[i]);
         }
         executor.shutdown();

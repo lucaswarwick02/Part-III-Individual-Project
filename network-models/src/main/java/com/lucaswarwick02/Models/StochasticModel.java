@@ -3,9 +3,6 @@ package com.lucaswarwick02.models;
 import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
-import com.lucaswarwick02.vaccination.AbstractStrategy;
-import com.lucaswarwick02.vaccination.VaccinationFactory;
-import com.lucaswarwick02.vaccination.VaccinationFactory.VaccinationType;
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.components.Node;
@@ -33,19 +30,17 @@ public class StochasticModel implements Runnable {
 
     Epidemic epidemic;
 
+    int currentTime = 0;
+
     public Map<String, int[]> states = new HashMap<>();
     public Map<String, int[]> totals = new HashMap<>();
-
-    VaccinationType vaccinationType; // Strategy used in the simulation
-    AbstractStrategy vaccinationStrategy;
 
     /**
      * Setup the Stochastic Model
      * 
      * @param vaccinationStrategy Strategy used in the simulation
      */
-    public StochasticModel(VaccinationType vaccinationType, Epidemic epidemic, NetworkType networkType) {
-        this.vaccinationType = vaccinationType;
+    public StochasticModel(Epidemic epidemic, NetworkType networkType) {
         this.epidemic = epidemic;
         this.networkType = networkType;
     }
@@ -56,8 +51,6 @@ public class StochasticModel implements Runnable {
 
         underlyingNetwork.generateNetwork();
         underlyingNetwork.assignAgeBrackets();
-
-        vaccinationStrategy = VaccinationFactory.getVaccinationStrategy(vaccinationType);
 
         runSimulation();
     }
@@ -95,6 +88,9 @@ public class StochasticModel implements Runnable {
     }
 
     void performIteration(int iterationNumber) {
+        // Update the internal currentTime
+        this.currentTime = iterationNumber;
+
         // Setup lists to store information from this iteration
         List<Node> nodesToInfect = new ArrayList<>();
         List<Node> nodesToHospitalise = new ArrayList<>();
@@ -136,8 +132,6 @@ public class StochasticModel implements Runnable {
         // Kill nodes
         nodesToKill.forEach(node -> node.state = Node.State.DEAD);
 
-        vaccinationStrategy.performVaccination(this);
-
         calculateAndSaveTotals(iterationNumber, nodesToInfect.size(), nodesToHospitalise.size(), nodesToKill.size());
 
         saveModelState(iterationNumber); // Store the model state
@@ -172,6 +166,10 @@ public class StochasticModel implements Runnable {
 
     public AbstractNetwork getUnderlyingNetwork() {
         return this.underlyingNetwork;
+    }
+
+    public int getCurrentTime() {
+        return this.currentTime;
     }
 
     public Random getRandom() {
