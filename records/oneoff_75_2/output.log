@@ -1,0 +1,80 @@
+[2023-02-16 20:36:09] [INFO] Running: oneoff_(0, 0.75) 
+[2023-02-16 20:36:33] [INFO] ... Total Infected = 10.55% 
+[2023-02-16 20:36:33] [INFO] ... Total Hospitalised = 5.05% 
+[2023-02-16 20:36:33] [INFO] ... Total Dead = 3.94% 
+[2023-02-16 20:36:33] [INFO] ... Completed 
+[2023-02-16 20:36:33] [INFO] Running: oneoff_(5, 0.75) 
+[2023-02-16 20:36:57] [INFO] ... Total Infected = 14.12% 
+[2023-02-16 20:36:57] [INFO] ... Total Hospitalised = 6.75% 
+[2023-02-16 20:36:57] [INFO] ... Total Dead = 5.26% 
+[2023-02-16 20:36:57] [INFO] ... Completed 
+[2023-02-16 20:36:57] [INFO] Running: oneoff_(10, 0.75) 
+[2023-02-16 20:37:20] [INFO] ... Total Infected = 17.98% 
+[2023-02-16 20:37:20] [INFO] ... Total Hospitalised = 8.58% 
+[2023-02-16 20:37:20] [INFO] ... Total Dead = 6.70% 
+[2023-02-16 20:37:20] [INFO] ... Completed 
+[2023-02-16 20:37:20] [INFO] Running: oneoff_(15, 0.75) 
+[2023-02-16 20:37:43] [INFO] ... Total Infected = 24.29% 
+[2023-02-16 20:37:43] [INFO] ... Total Hospitalised = 11.57% 
+[2023-02-16 20:37:43] [INFO] ... Total Dead = 9.03% 
+[2023-02-16 20:37:43] [INFO] ... Completed 
+[2023-02-16 20:37:43] [INFO] Running: oneoff_(20, 0.75) 
+[2023-02-16 20:38:06] [INFO] ... Total Infected = 35.74% 
+[2023-02-16 20:38:06] [INFO] ... Total Hospitalised = 16.95% 
+[2023-02-16 20:38:06] [INFO] ... Total Dead = 13.29% 
+[2023-02-16 20:38:06] [INFO] ... Completed 
+[2023-02-16 20:38:06] [INFO] Running: oneoff_(25, 0.75) 
+[2023-02-16 20:38:29] [INFO] ... Total Infected = 45.75% 
+[2023-02-16 20:38:29] [INFO] ... Total Hospitalised = 21.75% 
+[2023-02-16 20:38:29] [INFO] ... Total Dead = 17.14% 
+[2023-02-16 20:38:29] [INFO] ... Completed 
+[2023-02-16 20:38:29] [INFO] Running: oneoff_(30, 0.75) 
+[2023-02-16 20:38:52] [INFO] ... Total Infected = 57.35% 
+[2023-02-16 20:38:52] [INFO] ... Total Hospitalised = 27.36% 
+[2023-02-16 20:38:52] [INFO] ... Total Dead = 21.61% 
+[2023-02-16 20:38:52] [INFO] ... Completed 
+[2023-02-16 20:38:52] [INFO] Running: oneoff_(35, 0.75) 
+[2023-02-16 20:39:15] [INFO] ... Total Infected = 61.57% 
+[2023-02-16 20:39:15] [INFO] ... Total Hospitalised = 29.46% 
+[2023-02-16 20:39:15] [INFO] ... Total Dead = 23.31% 
+[2023-02-16 20:39:15] [INFO] ... Completed 
+[2023-02-16 20:39:15] [INFO] Running: oneoff_(40, 0.75) 
+[2023-02-16 20:39:39] [INFO] ... Total Infected = 68.92% 
+[2023-02-16 20:39:39] [INFO] ... Total Hospitalised = 33.10% 
+[2023-02-16 20:39:39] [INFO] ... Total Dead = 26.27% 
+[2023-02-16 20:39:39] [INFO] ... Completed 
+[2023-02-16 20:39:39] [INFO] Running: oneoff_(45, 0.75) 
+[2023-02-16 20:40:02] [INFO] ... Total Infected = 68.59% 
+[2023-02-16 20:40:02] [INFO] ... Total Hospitalised = 33.01% 
+[2023-02-16 20:40:02] [INFO] ... Total Dead = 26.23% 
+[2023-02-16 20:40:02] [INFO] ... Completed 
+[2023-02-16 20:40:02] [INFO] Running: oneoff_(50, 0.75) 
+[2023-02-16 20:40:25] [INFO] ... Total Infected = 72.70% 
+[2023-02-16 20:40:25] [INFO] ... Total Hospitalised = 35.02% 
+[2023-02-16 20:40:25] [INFO] ... Total Dead = 27.85% 
+[2023-02-16 20:40:25] [INFO] ... Completed 
+[2023-02-16 20:40:25] [INFO] Running: oneoff_(55, 0.75) 
+[2023-02-16 20:40:50] [INFO] ... Total Infected = 71.70% 
+[2023-02-16 20:40:50] [INFO] ... Total Hospitalised = 34.59% 
+[2023-02-16 20:40:50] [INFO] ... Total Dead = 27.53% 
+[2023-02-16 20:40:50] [INFO] ... Completed 
+[2023-02-16 20:40:50] [INFO] Running: oneoff_(60, 0.75) 
+[2023-02-16 20:41:13] [INFO] ... Total Infected = 72.84% 
+[2023-02-16 20:41:13] [INFO] ... Total Hospitalised = 35.18% 
+[2023-02-16 20:41:13] [INFO] ... Total Dead = 28.00% 
+[2023-02-16 20:41:13] [INFO] ... Completed 
+[2023-02-16 20:41:13] [INFO] Running: oneoff_(65, 0.75) 
+[2023-02-16 20:41:37] [INFO] ... Total Infected = 73.68% 
+[2023-02-16 20:41:37] [INFO] ... Total Hospitalised = 35.55% 
+[2023-02-16 20:41:37] [INFO] ... Total Dead = 28.30% 
+[2023-02-16 20:41:37] [INFO] ... Completed 
+[2023-02-16 20:41:37] [INFO] Running: oneoff_(70, 0.75) 
+[2023-02-16 20:42:01] [INFO] ... Total Infected = 74.78% 
+[2023-02-16 20:42:01] [INFO] ... Total Hospitalised = 36.08% 
+[2023-02-16 20:42:01] [INFO] ... Total Dead = 28.73% 
+[2023-02-16 20:42:01] [INFO] ... Completed 
+[2023-02-16 20:42:01] [INFO] Running: oneoff_(75, 0.75) 
+[2023-02-16 20:42:24] [INFO] ... Total Infected = 71.37% 
+[2023-02-16 20:42:24] [INFO] ... Total Hospitalised = 34.47% 
+[2023-02-16 20:42:24] [INFO] ... Total Dead = 27.44% 
+[2023-02-16 20:42:24] [INFO] ... Completed 
