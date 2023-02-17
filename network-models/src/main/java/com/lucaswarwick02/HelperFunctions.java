@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.models.StochasticModel;
@@ -176,5 +177,9 @@ public class HelperFunctions {
         HelperFunctions.LOGGER
                 .info(String.format("... Total Hospitalised = %.2f%%", (totals.get("Hospitalised")[length - 1] * 100)));
         HelperFunctions.LOGGER.info(String.format("... Total Dead = %.2f%%", (totals.get("Dead")[length - 1] * 100)));
+    }
+
+    public static void logPeakInfected(Map<String, double[]> states) {
+        IntStream.range(0, states.get("Time").length).reduce((a, b) -> states.get("Infected")[a] < states.get("Infected")[b] ? b : a).ifPresent(ix -> HelperFunctions.LOGGER.info("Peak Infected = " + states.get("Time")[ix]));
     }
 }

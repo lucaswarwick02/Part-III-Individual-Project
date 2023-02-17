@@ -63,17 +63,17 @@ public class StochasticMain {
 
         long start = System.nanoTime();
 
-        // Setup the thread groups for multithreading
         int np = Runtime.getRuntime().availableProcessors();
-        ExecutorService executor = Executors.newFixedThreadPool(np);
 
-        for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
-            models[i] = new StochasticModel(epidemic, networkType, new OneOffStrategy(0, 0));
-            executor.execute(models[i]);
-        }
-        executor.shutdown();
-        while (!executor.isTerminated()) {
-            // Wait until the executor has finished the simulations
+        try (ExecutorService executor = Executors.newFixedThreadPool(np)) {
+            for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
+                models[i] = new StochasticModel(epidemic, networkType, new OneOffStrategy(0, 0));
+                executor.execute(models[i]);
+            }
+            executor.shutdown();
+            while (!executor.isTerminated()) {
+                // Wait until the executor has finished the simulations
+            }
         }
         long end = System.nanoTime();
         HelperFunctions.LOGGER.info("... Completed (" + ((end - start) / 1e9) + "s)");
@@ -87,6 +87,7 @@ public class StochasticMain {
 
         // Log key information on the simulations statistics
         HelperFunctions.evaluateAggregateModel(aggregateStates, aggregateTotals);
+        HelperFunctions.logPeakInfected(aggregateStates);
 
         // Save both the states and totals to the out folder
         HelperFunctions.saveToCSV(aggregateStates, new File(runFolder, "states.csv"));
