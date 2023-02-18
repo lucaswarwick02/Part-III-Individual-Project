@@ -7,6 +7,7 @@ import com.lucaswarwick02.vaccination.AbstractStrategy;
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.components.Node;
+import com.lucaswarwick02.components.Node.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,16 +77,16 @@ public class StochasticModel implements Runnable {
         totals.put("Infected", new int[StochasticModel.ITERATIONS]);
         totals.put("Dead", new int[StochasticModel.ITERATIONS]);
 
+        abstractStrategy.performStrategy(this);
+
         // set initialInfected nodes to Infected
-        List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(underlyingNetwork.getNodes(),
+        List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(underlyingNetwork.getNodesFromState(State.SUSCEPTIBLE),
                 StochasticModel.INITIAL_INFECTED);
-        initialInfectedNodes.forEach(node -> node.state = Node.State.INFECTED);
+        initialInfectedNodes.forEach(node -> node.setState(Node.State.INFECTED));
 
         // Store the initial model state
         saveModelState(0);
-        saveTotals(0, 3, 0, 0);
-
-        abstractStrategy.performStrategy(this);
+        saveTotals(0, initialInfectedNodes.size(), 0, 0);
 
         for (int t = 1; t < StochasticModel.ITERATIONS; t++) {
             performIteration(t);
@@ -106,7 +107,7 @@ public class StochasticModel implements Runnable {
         for (Node infectedNode : underlyingNetwork.getNodesFromState(Node.State.INFECTED)) {
             // ... get a list of the Nodes they are going to infect
             infectedNode.neighbours.forEach(neighbour -> {
-                if ((neighbour.state == Node.State.SUSCEPTIBLE) && (r.nextFloat() <= epidemic.infectionRate))
+                if ((neighbour.getState() == Node.State.SUSCEPTIBLE) && (r.nextFloat() <= epidemic.infectionRate))
                     nodesToInfect.add(neighbour);
             });
 
@@ -129,13 +130,13 @@ public class StochasticModel implements Runnable {
         }
 
         // Infect nodes
-        nodesToInfect.forEach(node -> node.state = Node.State.INFECTED);
+        nodesToInfect.forEach(node -> node.setState(Node.State.INFECTED));
         // Recover nodes
-        nodesToRecover.forEach(node -> node.state = Node.State.RECOVERED);
+        nodesToRecover.forEach(node -> node.setState(Node.State.RECOVERED));
         // Hospitalise nodes
-        nodesToHospitalise.forEach(node -> node.state = Node.State.HOSPITALISED);
+        nodesToHospitalise.forEach(node -> node.setState(Node.State.HOSPITALISED));
         // Kill nodes
-        nodesToKill.forEach(node -> node.state = Node.State.DEAD);
+        nodesToKill.forEach(node -> node.setState(Node.State.DEAD));
 
         // Perform vaccination strategy at the end of the iteration (time step)
         abstractStrategy.performStrategy(this);

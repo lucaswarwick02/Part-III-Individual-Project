@@ -42,7 +42,7 @@ public abstract class AbstractNetwork {
      * @return Subset of the networks nodes
      */
     public List<Node> getNodesFromState(Node.State state) {
-        return this.getNodes().stream().filter(node -> node.state == state).collect(Collectors.toList());
+        return this.getNodes().stream().filter(node -> node.getState() == state).collect(Collectors.toList());
     }
 
     /**
@@ -89,6 +89,20 @@ public abstract class AbstractNetwork {
         for (Node.AgeBracket ageBracket : Node.AgeBracket.values()) {
             HelperFunctions.LOGGER.info(
                     ageBracket + ": " + ((ageDistribution.get(ageBracket) / (float) this.nodes.size()) * 100) + "%");
+        }
+    }
+
+    public void logStateDistribution () {
+        EnumMap<Node.State, Integer> stateDistribution = new EnumMap<>(Node.State.class);
+
+        for (Node node : this.nodes) {
+            stateDistribution.put(node.getState(), stateDistribution.getOrDefault(node.getState(), 0) + 1);
+        }
+
+        for (Node.State nodeState : Node.State.values()) {
+            HelperFunctions.LOGGER.info(
+                nodeState + ": " + stateDistribution.get(nodeState)
+            );
         }
     }
 }

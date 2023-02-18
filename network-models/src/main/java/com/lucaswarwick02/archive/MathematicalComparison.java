@@ -83,7 +83,7 @@ public class MathematicalComparison {
             }
 
             List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(nodes, INITIAL_INFECTED);
-            initialInfectedNodes.forEach(node -> node.state = Node.State.INFECTED);
+            initialInfectedNodes.forEach(node -> node.setState(Node.State.INFECTED));
             saveState(states, nodes, 0);
 
             for (int i = 1; i < ITERATIONS; i++) {
@@ -111,7 +111,7 @@ public class MathematicalComparison {
         for (Node infectedNode : getNodesFromState(nodes, Node.State.INFECTED)) {
             // ... get a list of the Nodes they are going to infect
             nodes.forEach(neighbour -> {
-                if ((neighbour.state == Node.State.SUSCEPTIBLE) && (r.nextFloat() <= epidemic.infectionRate))
+                if ((neighbour.getState() == Node.State.SUSCEPTIBLE) && (r.nextFloat() <= epidemic.infectionRate))
                     nodesToInfect.add(neighbour);
             });
 
@@ -149,13 +149,13 @@ public class MathematicalComparison {
         }
 
         // Infect nodes
-        nodesToInfect.forEach(node -> node.state = Node.State.INFECTED);
+        nodesToInfect.forEach(node -> node.setState(Node.State.INFECTED));
         // Recover nodes
-        nodesToRecover.forEach(node -> node.state = Node.State.RECOVERED);
+        nodesToRecover.forEach(node -> node.setState(Node.State.RECOVERED));
         // Hospitalise nodes
-        nodesToHospitalise.forEach(node -> node.state = Node.State.HOSPITALISED);
+        nodesToHospitalise.forEach(node -> node.setState(Node.State.HOSPITALISED));
         // Kill nodes
-        nodesToKill.forEach(node -> node.state = Node.State.DEAD);
+        nodesToKill.forEach(node -> node.setState(Node.State.DEAD));
 
         saveState(states, nodes, iterationNumber);
     }
@@ -168,7 +168,7 @@ public class MathematicalComparison {
     }
 
     List<Node> getNodesFromState(List<Node> nodes, Node.State state) {
-        return nodes.stream().filter(node -> node.state == state).collect(Collectors.toList());
+        return nodes.stream().filter(node -> node.getState() == state).collect(Collectors.toList());
     }
 
     Map<String, double[]> aggregateTotals(Map<String, double[]>[] allStates) {

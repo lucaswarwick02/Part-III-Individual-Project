@@ -22,7 +22,7 @@ public class Node {
         VACCINATED,
         DEAD
     }
-    public State state; // Compartmental model state
+    private State state; // Compartmental model state
 
     public enum AgeBracket {
         BELOW_NINE, // 0 - 9
@@ -40,6 +40,14 @@ public class Node {
     public List<Node> neighbours; // List of the connected Nodes
 
     public int stubs; // Used for generating the network using the Configuration Model
+
+    public State getState () {
+        return this.state;
+    }
+
+    public void setState (State state) {
+        this.state = state;
+    }
 
     /**
      * Create a Susceptible Node

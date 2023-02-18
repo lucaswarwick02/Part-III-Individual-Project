@@ -9,14 +9,14 @@ import com.lucaswarwick02.models.StochasticModel;
 
 public class OneOffStrategy implements AbstractStrategy {
 
-    public OneOffStrategy(int timeDelay, float percentageOfPopulation) {
+    public OneOffStrategy(int timeDelay, double percentageOfPopulation) {
         this.timeDelay = timeDelay;
         this.percentageOfPopulation = percentageOfPopulation;
     }
 
     private int timeDelay;
 
-    private float percentageOfPopulation;
+    private double percentageOfPopulation;
 
     @Override
     public void performStrategy(StochasticModel model) {
@@ -29,7 +29,7 @@ public class OneOffStrategy implements AbstractStrategy {
                     numberOfNodes);
 
             for (Node nodeToVaccinate : nodesToVaccinate) {
-                nodeToVaccinate.state = State.VACCINATED;
+                nodeToVaccinate.setState(State.VACCINATED);
             }
         }
     }

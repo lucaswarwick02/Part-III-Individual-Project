@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.lucaswarwick02.components.Node;
@@ -160,7 +159,21 @@ public class HelperFunctions {
      * @return List of length N
      */
     public static <T> List<T> pickRandomNodes(List<T> list, int n) {
-        return r.ints(n, 0, list.size()).mapToObj(list::get).collect(Collectors.toList());
+        // return r.ints(n, 0, list.size()).mapToObj(list::get).collect(Collectors.toList());
+
+        if (list.size() < n) {
+            return new ArrayList<>();
+        }
+
+        List<T> picked = new ArrayList<>();
+        while (picked.size() < n) {
+            int randomIndex = r.nextInt(list.size());
+            if (!picked.contains(list.get(randomIndex))) {
+                picked.add(list.get(randomIndex));
+            }
+        }
+
+        return picked;
     }
 
     /**
@@ -181,5 +194,16 @@ public class HelperFunctions {
 
     public static void logPeakInfected(Map<String, double[]> states) {
         IntStream.range(0, states.get("Time").length).reduce((a, b) -> states.get("Infected")[a] < states.get("Infected")[b] ? b : a).ifPresent(ix -> HelperFunctions.LOGGER.info("Peak Infected = " + states.get("Time")[ix]));
+    }
+
+    public static double[] createIntervals (double min, double max, double step) {
+        int size = (int)Math.ceil((max - min) / step) + 1;
+        double[] intervals = new double[size];
+
+        for (int i = 0; i < size; i++) {
+            intervals[i] = min + (i * step);
+        }
+
+        return intervals;
     }
 }
