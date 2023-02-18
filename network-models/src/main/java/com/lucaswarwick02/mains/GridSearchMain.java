@@ -69,16 +69,16 @@ public class GridSearchMain {
 
         // Setup the thread groups for multithreading
         int np = Runtime.getRuntime().availableProcessors();
-        
-        try (ExecutorService executor = Executors.newFixedThreadPool(np)) {
-            for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
-                models[i] = new StochasticModel(epidemic, networkType, abstractStrategy);
-                executor.execute(models[i]);
-            }
-            executor.shutdown();
-            while (!executor.isTerminated()) {
-                // Wait until the executor has finished the simulations
-            }
+
+        ExecutorService executor = Executors.newFixedThreadPool(np);
+
+        for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
+            models[i] = new StochasticModel(epidemic, networkType, abstractStrategy);
+            executor.execute(models[i]);
+        }
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            // Wait until the executor has finished the simulations
         }
 
         // Aggregate together all of the simulations
