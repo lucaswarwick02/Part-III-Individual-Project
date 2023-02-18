@@ -1,7 +1,0 @@
-[2022-12-06 18:10:58] [INFO] Number of Nodes: 2500 
-[2022-12-06 18:10:58] [INFO] Running 100 Simulations, with 150 Iterations each 
-[2022-12-06 18:10:58] [INFO] Epidemic Parameters:  
-[2022-12-06 18:10:58] [INFO] ... infectionRate: 1.5E-4 
-[2022-12-06 18:10:58] [INFO] ... recoveryRate: 0.04 
-[2022-12-06 18:10:58] [INFO] ... hospitalisationRate: 0.035 
-[2022-12-06 18:10:58] [INFO] ... mortalityRate: 0.05 
