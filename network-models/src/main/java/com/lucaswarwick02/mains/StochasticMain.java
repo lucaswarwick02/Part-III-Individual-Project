@@ -65,16 +65,17 @@ public class StochasticMain {
 
         int np = Runtime.getRuntime().availableProcessors();
 
-        try (ExecutorService executor = Executors.newFixedThreadPool(np)) {
-            for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
-                models[i] = new StochasticModel(epidemic, networkType, new OneOffStrategy(0, 0));
-                executor.execute(models[i]);
-            }
-            executor.shutdown();
-            while (!executor.isTerminated()) {
-                // Wait until the executor has finished the simulations
-            }
+        ExecutorService executor = Executors.newFixedThreadPool(np);
+
+        for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
+            models[i] = new StochasticModel(epidemic, networkType, new OneOffStrategy(0, 0));
+            executor.execute(models[i]);
         }
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            // Wait until the executor has finished the simulations
+        }
+
         long end = System.nanoTime();
         HelperFunctions.LOGGER.info("... Completed (" + ((end - start) / 1e9) + "s)");
 
