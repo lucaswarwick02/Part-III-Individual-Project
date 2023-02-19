@@ -92,7 +92,7 @@ public abstract class AbstractNetwork {
         }
     }
 
-    public void logStateDistribution () {
+    public void logStateDistribution() {
         EnumMap<Node.State, Integer> stateDistribution = new EnumMap<>(Node.State.class);
 
         for (Node node : this.nodes) {
@@ -101,8 +101,36 @@ public abstract class AbstractNetwork {
 
         for (Node.State nodeState : Node.State.values()) {
             HelperFunctions.LOGGER.info(
-                nodeState + ": " + stateDistribution.get(nodeState)
-            );
+                    nodeState + ": " + stateDistribution.get(nodeState));
         }
+    }
+
+    public int calculateNumberOfComponents() {
+        List<Node> nodesToVisit = new ArrayList<>(this.nodes);
+        List<List<Node>> components = new ArrayList<>();
+
+        while (nodesToVisit.size() > 0) {
+            List<Node> component = new ArrayList<>();
+
+            visitNode(nodesToVisit.get(0), component, nodesToVisit);
+
+            components.add(component);
+        }
+
+        return components.size();
+    }
+
+    private void visitNode(Node node, List<Node> component, List<Node> nodesToVisit) {
+        if (!nodesToVisit.contains(node))
+            return;
+
+        nodesToVisit.remove(node);
+
+        component.add(node);
+
+        for (Node neighbour : node.neighbours) {
+            visitNode(neighbour, component, nodesToVisit);
+        }
+
     }
 }

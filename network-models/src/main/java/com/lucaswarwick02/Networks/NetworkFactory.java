@@ -20,6 +20,7 @@ public class NetworkFactory {
         POISSON, // Degree sequence generated from a Poisson Distribution
         SCALE_FREE, // Degree sequence generated from a Power-Law Distribution
         BARABASI_ALBERT, // Scale-Free, generated from the Barabasi-Albert Model
+        ERDOS_REYNI, // Random graph, all edges are equally as likely
     }
 
     static final int FIXED_DEGREE = 4;
@@ -29,8 +30,9 @@ public class NetworkFactory {
 
     static final float GAMMA = 2f;
     static final int KAPPA = 20;
+    static final int M = 5;
 
-    static final int M = 4;
+    static final float P = 0.001f;
 
     /**
      * Restrict use of the constructor
@@ -55,6 +57,8 @@ public class NetworkFactory {
                 return new ScaleFreeNetwork(GAMMA, KAPPA);
             case BARABASI_ALBERT:
                 return new BarabasiAlbertNetwork(M);
+            case ERDOS_REYNI:
+                return new ErdosRenyiNetwork(P);
             default:
                 return new FullyMixedNetwork();
         }
@@ -77,6 +81,9 @@ public class NetworkFactory {
                 break;
             case BARABASI_ALBERT:
                 HelperFunctions.LOGGER.info("... BARABASI_ALBERT: m=" + M);
+                break;
+            case ERDOS_REYNI:
+                HelperFunctions.LOGGER.info("... ERDOS_REYNI: p=" + P);
                 break;
             default:
                 break;
