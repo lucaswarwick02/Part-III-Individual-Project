@@ -1,0 +1,147 @@
+[2023-02-21 13:19:01] [INFO] Running: oneoff_(0, 0.0) 
+[2023-02-21 13:19:01] [INFO] ### Network Parameters ### 
+[2023-02-21 13:19:01] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:19:31] [INFO] ... Total Infected = 102.45% 
+[2023-02-21 13:19:31] [INFO] ... Total Hospitalised = 40.80% 
+[2023-02-21 13:19:31] [INFO] ... Total Dead = 28.73% 
+[2023-02-21 13:19:31] [INFO] ... Completed 
+[2023-02-21 13:19:31] [INFO] Running: oneoff_(0, 0.05) 
+[2023-02-21 13:19:31] [INFO] ### Network Parameters ### 
+[2023-02-21 13:19:31] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:19:59] [INFO] ... Total Infected = 96.09% 
+[2023-02-21 13:19:59] [INFO] ... Total Hospitalised = 38.44% 
+[2023-02-21 13:19:59] [INFO] ... Total Dead = 27.07% 
+[2023-02-21 13:19:59] [INFO] ... Completed 
+[2023-02-21 13:19:59] [INFO] Running: oneoff_(0, 0.1) 
+[2023-02-21 13:19:59] [INFO] ### Network Parameters ### 
+[2023-02-21 13:19:59] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:20:29] [INFO] ... Total Infected = 89.39% 
+[2023-02-21 13:20:29] [INFO] ... Total Hospitalised = 35.98% 
+[2023-02-21 13:20:29] [INFO] ... Total Dead = 25.28% 
+[2023-02-21 13:20:29] [INFO] ... Completed 
+[2023-02-21 13:20:29] [INFO] Running: oneoff_(0, 0.15000000000000002) 
+[2023-02-21 13:20:29] [INFO] ### Network Parameters ### 
+[2023-02-21 13:20:29] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:20:54] [INFO] ... Total Infected = 83.44% 
+[2023-02-21 13:20:54] [INFO] ... Total Hospitalised = 33.69% 
+[2023-02-21 13:20:54] [INFO] ... Total Dead = 23.68% 
+[2023-02-21 13:20:54] [INFO] ... Completed 
+[2023-02-21 13:20:54] [INFO] Running: oneoff_(0, 0.2) 
+[2023-02-21 13:20:54] [INFO] ### Network Parameters ### 
+[2023-02-21 13:20:54] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:21:23] [INFO] ... Total Infected = 77.03% 
+[2023-02-21 13:21:23] [INFO] ... Total Hospitalised = 31.29% 
+[2023-02-21 13:21:23] [INFO] ... Total Dead = 21.98% 
+[2023-02-21 13:21:23] [INFO] ... Completed 
+[2023-02-21 13:21:23] [INFO] Running: oneoff_(0, 0.25) 
+[2023-02-21 13:21:23] [INFO] ### Network Parameters ### 
+[2023-02-21 13:21:23] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:21:52] [INFO] ... Total Infected = 68.63% 
+[2023-02-21 13:21:52] [INFO] ... Total Hospitalised = 28.04% 
+[2023-02-21 13:21:52] [INFO] ... Total Dead = 19.66% 
+[2023-02-21 13:21:52] [INFO] ... Completed 
+[2023-02-21 13:21:52] [INFO] Running: oneoff_(0, 0.30000000000000004) 
+[2023-02-21 13:21:52] [INFO] ### Network Parameters ### 
+[2023-02-21 13:21:52] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:22:20] [INFO] ... Total Infected = 63.41% 
+[2023-02-21 13:22:20] [INFO] ... Total Hospitalised = 25.99% 
+[2023-02-21 13:22:20] [INFO] ... Total Dead = 18.20% 
+[2023-02-21 13:22:20] [INFO] ... Completed 
+[2023-02-21 13:22:20] [INFO] Running: oneoff_(0, 0.35000000000000003) 
+[2023-02-21 13:22:20] [INFO] ### Network Parameters ### 
+[2023-02-21 13:22:20] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:22:47] [INFO] ... Total Infected = 56.40% 
+[2023-02-21 13:22:47] [INFO] ... Total Hospitalised = 23.23% 
+[2023-02-21 13:22:47] [INFO] ... Total Dead = 16.24% 
+[2023-02-21 13:22:47] [INFO] ... Completed 
+[2023-02-21 13:22:47] [INFO] Running: oneoff_(0, 0.4) 
+[2023-02-21 13:22:47] [INFO] ### Network Parameters ### 
+[2023-02-21 13:22:47] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:23:16] [INFO] ... Total Infected = 49.18% 
+[2023-02-21 13:23:16] [INFO] ... Total Hospitalised = 20.33% 
+[2023-02-21 13:23:16] [INFO] ... Total Dead = 14.19% 
+[2023-02-21 13:23:16] [INFO] ... Completed 
+[2023-02-21 13:23:16] [INFO] Running: oneoff_(0, 0.45) 
+[2023-02-21 13:23:16] [INFO] ### Network Parameters ### 
+[2023-02-21 13:23:16] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:23:41] [INFO] ... Total Infected = 41.46% 
+[2023-02-21 13:23:41] [INFO] ... Total Hospitalised = 17.18% 
+[2023-02-21 13:23:41] [INFO] ... Total Dead = 11.95% 
+[2023-02-21 13:23:41] [INFO] ... Completed 
+[2023-02-21 13:23:41] [INFO] Running: oneoff_(0, 0.5) 
+[2023-02-21 13:23:41] [INFO] ### Network Parameters ### 
+[2023-02-21 13:23:41] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:24:11] [INFO] ... Total Infected = 33.85% 
+[2023-02-21 13:24:11] [INFO] ... Total Hospitalised = 14.01% 
+[2023-02-21 13:24:11] [INFO] ... Total Dead = 9.73% 
+[2023-02-21 13:24:11] [INFO] ... Completed 
+[2023-02-21 13:24:11] [INFO] Running: oneoff_(0, 0.55) 
+[2023-02-21 13:24:11] [INFO] ### Network Parameters ### 
+[2023-02-21 13:24:11] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:24:38] [INFO] ... Total Infected = 25.75% 
+[2023-02-21 13:24:38] [INFO] ... Total Hospitalised = 10.65% 
+[2023-02-21 13:24:38] [INFO] ... Total Dead = 7.36% 
+[2023-02-21 13:24:38] [INFO] ... Completed 
+[2023-02-21 13:24:38] [INFO] Running: oneoff_(0, 0.6000000000000001) 
+[2023-02-21 13:24:38] [INFO] ### Network Parameters ### 
+[2023-02-21 13:24:38] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:25:07] [INFO] ... Total Infected = 16.49% 
+[2023-02-21 13:25:07] [INFO] ... Total Hospitalised = 6.63% 
+[2023-02-21 13:25:07] [INFO] ... Total Dead = 4.49% 
+[2023-02-21 13:25:07] [INFO] ... Completed 
+[2023-02-21 13:25:07] [INFO] Running: oneoff_(0, 0.65) 
+[2023-02-21 13:25:07] [INFO] ### Network Parameters ### 
+[2023-02-21 13:25:07] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:25:35] [INFO] ... Total Infected = 6.21% 
+[2023-02-21 13:25:35] [INFO] ... Total Hospitalised = 2.39% 
+[2023-02-21 13:25:35] [INFO] ... Total Dead = 1.57% 
+[2023-02-21 13:25:35] [INFO] ... Completed 
+[2023-02-21 13:25:35] [INFO] Running: oneoff_(0, 0.7000000000000001) 
+[2023-02-21 13:25:35] [INFO] ### Network Parameters ### 
+[2023-02-21 13:25:35] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:26:03] [INFO] ... Total Infected = 1.55% 
+[2023-02-21 13:26:03] [INFO] ... Total Hospitalised = 0.60% 
+[2023-02-21 13:26:03] [INFO] ... Total Dead = 0.40% 
+[2023-02-21 13:26:03] [INFO] ... Completed 
+[2023-02-21 13:26:03] [INFO] Running: oneoff_(0, 0.75) 
+[2023-02-21 13:26:03] [INFO] ### Network Parameters ### 
+[2023-02-21 13:26:03] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:26:33] [INFO] ... Total Infected = 0.24% 
+[2023-02-21 13:26:33] [INFO] ... Total Hospitalised = 0.10% 
+[2023-02-21 13:26:33] [INFO] ... Total Dead = 0.07% 
+[2023-02-21 13:26:33] [INFO] ... Completed 
+[2023-02-21 13:26:33] [INFO] Running: oneoff_(0, 0.8) 
+[2023-02-21 13:26:33] [INFO] ### Network Parameters ### 
+[2023-02-21 13:26:33] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:27:02] [INFO] ... Total Infected = 0.12% 
+[2023-02-21 13:27:02] [INFO] ... Total Hospitalised = 0.05% 
+[2023-02-21 13:27:02] [INFO] ... Total Dead = 0.03% 
+[2023-02-21 13:27:02] [INFO] ... Completed 
+[2023-02-21 13:27:02] [INFO] Running: oneoff_(0, 0.8500000000000001) 
+[2023-02-21 13:27:02] [INFO] ### Network Parameters ### 
+[2023-02-21 13:27:02] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:27:35] [INFO] ... Total Infected = 0.07% 
+[2023-02-21 13:27:35] [INFO] ... Total Hospitalised = 0.03% 
+[2023-02-21 13:27:35] [INFO] ... Total Dead = 0.02% 
+[2023-02-21 13:27:35] [INFO] ... Completed 
+[2023-02-21 13:27:35] [INFO] Running: oneoff_(0, 0.9) 
+[2023-02-21 13:27:35] [INFO] ### Network Parameters ### 
+[2023-02-21 13:27:35] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:28:06] [INFO] ... Total Infected = 0.05% 
+[2023-02-21 13:28:06] [INFO] ... Total Hospitalised = 0.02% 
+[2023-02-21 13:28:06] [INFO] ... Total Dead = 0.01% 
+[2023-02-21 13:28:06] [INFO] ... Completed 
+[2023-02-21 13:28:06] [INFO] Running: oneoff_(0, 0.9500000000000001) 
+[2023-02-21 13:28:06] [INFO] ### Network Parameters ### 
+[2023-02-21 13:28:06] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:28:40] [INFO] ... Total Infected = 0.04% 
+[2023-02-21 13:28:40] [INFO] ... Total Hospitalised = 0.02% 
+[2023-02-21 13:28:40] [INFO] ... Total Dead = 0.01% 
+[2023-02-21 13:28:40] [INFO] ... Completed 
+[2023-02-21 13:28:40] [INFO] Running: oneoff_(0, 1.0) 
+[2023-02-21 13:28:40] [INFO] ### Network Parameters ### 
+[2023-02-21 13:28:40] [INFO] ... ERDOS_REYNI: p=0.001 
+[2023-02-21 13:29:40] [INFO] ... Total Infected = 0.00% 
+[2023-02-21 13:29:40] [INFO] ... Total Hospitalised = 0.00% 
+[2023-02-21 13:29:40] [INFO] ... Total Dead = 0.00% 
+[2023-02-21 13:29:40] [INFO] ... Completed 

@@ -50,7 +50,7 @@ public class GridSearchMain {
                 File strategyFolder = new File(runFolder, strategy.toString());
                 strategyFolder.mkdir();
 
-                stochasticSimulation(NetworkType.BARABASI_ALBERT, strategy, strategyFolder);
+                stochasticSimulation(NetworkType.ERDOS_REYNI, strategy, strategyFolder);
             }
         }
     }
@@ -66,6 +66,8 @@ public class GridSearchMain {
 
         StochasticModel[] models = new StochasticModel[StochasticModel.SIMULATIONS];
         Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
+
+        NetworkFactory.logNetworkInfo(networkType);
 
         // Setup the thread groups for multithreading
         int np = Runtime.getRuntime().availableProcessors();
