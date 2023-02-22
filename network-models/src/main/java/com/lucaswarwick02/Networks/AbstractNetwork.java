@@ -3,6 +3,7 @@ package com.lucaswarwick02.networks;
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.Node;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -132,5 +133,22 @@ public abstract class AbstractNetwork {
             visitNode(neighbour, component, nodesToVisit);
         }
 
+    }
+
+    public List<Node> getHighestDegreeNodes (int n) {
+        List<Node> allNodes = new ArrayList<>(this.getNodes());
+        
+        Collections.sort(allNodes);
+
+        return allNodes.stream().limit(n).collect(Collectors.toList());
+    }
+
+    public List<Node> getLowestDegreeNodes (int n) {
+        List<Node> allNodes = new ArrayList<>(this.getNodes());
+        
+        Collections.sort(allNodes);
+        Collections.reverse(allNodes);
+
+        return allNodes.stream().limit(n).collect(Collectors.toList());
     }
 }

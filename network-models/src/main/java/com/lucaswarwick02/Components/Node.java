@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * Information on an individual in a network
  */
-public class Node {
+public class Node implements Comparable<Node> {
 
     Random random = new Random();
 
@@ -195,6 +195,18 @@ public class Node {
                 return 350f;
             default:
                 return 1;
+        }
+    }
+
+    @Override
+    public int compareTo(Node o) {
+        if (this.getDegree() == o.getDegree()) return 0;
+
+        if (this.getDegree() < o.getDegree()) {
+            return -1;
+        }
+        else {
+            return 1;
         }
     }
 }
