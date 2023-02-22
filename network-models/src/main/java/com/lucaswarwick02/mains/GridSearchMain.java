@@ -40,7 +40,7 @@ public class GridSearchMain {
 
         // * OneOff-Strategy
         int[] timeDelays = { 0 };
-        double[] percentagesOfPopulation = HelperFunctions.createIntervals(0, 1, 0.05d);
+        double[] percentagesOfPopulation = HelperFunctions.createIntervals(0, 1, 0.025d);
 
         for (int timeDelay : timeDelays) {
             for (double percentageOfPopulation : percentagesOfPopulation) {

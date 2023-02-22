@@ -36,7 +36,7 @@ public class OneOffStrategy implements AbstractStrategy {
 
     @Override
     public String toString() {
-        return String.format("oneoff_(%d, %.02f)", this.timeDelay, this.percentageOfPopulation);
+        return String.format("oneoff_(%d, %.03f)", this.timeDelay, this.percentageOfPopulation);
     }
 
 }
