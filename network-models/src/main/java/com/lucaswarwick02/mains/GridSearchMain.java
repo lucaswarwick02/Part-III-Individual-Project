@@ -13,7 +13,7 @@ import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
 import com.lucaswarwick02.vaccination.AbstractStrategy;
-import com.lucaswarwick02.vaccination.OneOffStrategy;
+import com.lucaswarwick02.vaccination.RandomOneOff;
 
 public class GridSearchMain {
     public static void main(String[] args) {
@@ -40,11 +40,11 @@ public class GridSearchMain {
 
         // * OneOff-Strategy
         int[] timeDelays = { 0 };
-        double[] percentagesOfPopulation = HelperFunctions.createIntervals(0, 1, 0.025d);
+        float[] rhos = HelperFunctions.createIntervals(0, 1, 0.05f);
 
         for (int timeDelay : timeDelays) {
-            for (double percentageOfPopulation : percentagesOfPopulation) {
-                OneOffStrategy strategy = new OneOffStrategy(timeDelay, percentageOfPopulation);
+            for (float rho : rhos) {
+                RandomOneOff strategy = new RandomOneOff(timeDelay, rho);
                 HelperFunctions.LOGGER.info("Running: " + strategy.toString());
 
                 File strategyFolder = new File(runFolder, strategy.toString());

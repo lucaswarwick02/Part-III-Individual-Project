@@ -7,23 +7,22 @@ import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
 
-public class OneOffStrategy implements AbstractStrategy {
-
-    public OneOffStrategy(int timeDelay, double percentageOfPopulation) {
-        this.timeDelay = timeDelay;
-        this.percentageOfPopulation = percentageOfPopulation;
-    }
+public class RandomOneOff implements AbstractStrategy {
 
     private int timeDelay;
+    private float rho;
 
-    private double percentageOfPopulation;
+    public RandomOneOff(int timeDelay, float rho) {
+        this.timeDelay = timeDelay;
+        this.rho = rho;
+    }
 
     @Override
     public void performStrategy(StochasticModel model) {
         // Check if the current time is at the time delay
         if (model.getCurrentTime() == timeDelay) {
             // ... Vaccinate a percentage of the population instantly
-            int numberOfNodes = (int) Math.floor(model.getUnderlyingNetwork().nodes.size() * percentageOfPopulation);
+            int numberOfNodes = (int) Math.floor(model.getUnderlyingNetwork().getNodes().size() * rho);
             List<Node> nodesToVaccinate = HelperFunctions.pickRandomNodes(
                     model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE),
                     numberOfNodes);
@@ -36,7 +35,7 @@ public class OneOffStrategy implements AbstractStrategy {
 
     @Override
     public String toString() {
-        return String.format("oneoff_(%d, %.03f)", this.timeDelay, this.percentageOfPopulation);
+        return String.format("RandomOneOff(%d, %.03f)", this.timeDelay, this.rho);
     }
 
 }

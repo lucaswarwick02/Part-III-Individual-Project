@@ -196,9 +196,9 @@ public class HelperFunctions {
         IntStream.range(0, states.get("Time").length).reduce((a, b) -> states.get("Infected")[a] < states.get("Infected")[b] ? b : a).ifPresent(ix -> HelperFunctions.LOGGER.info("Peak Infected = " + states.get("Time")[ix]));
     }
 
-    public static double[] createIntervals (double min, double max, double step) {
+    public static float[] createIntervals (float min, float max, float step) {
         int size = (int)Math.ceil((max - min) / step) + 1;
-        double[] intervals = new double[size];
+        float[] intervals = new float[size];
 
         for (int i = 0; i < size; i++) {
             intervals[i] = min + (i * step);

@@ -12,7 +12,7 @@ import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
-import com.lucaswarwick02.vaccination.OneOffStrategy;
+import com.lucaswarwick02.vaccination.RandomOneOff;
 
 public class StochasticMain {
 
@@ -68,7 +68,7 @@ public class StochasticMain {
         ExecutorService executor = Executors.newFixedThreadPool(np);
 
         for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
-            models[i] = new StochasticModel(epidemic, networkType, new OneOffStrategy(0, 0));
+            models[i] = new StochasticModel(epidemic, networkType, new RandomOneOff(0, 0));
             executor.execute(models[i]);
         }
         executor.shutdown();
