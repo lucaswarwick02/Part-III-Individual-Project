@@ -30,6 +30,7 @@ public class NetworkFactory {
 
     static final float GAMMA = 2f;
     static final int KAPPA = 20;
+
     static final int M = 5;
 
     static final float P = 0.001f;
@@ -56,7 +57,7 @@ public class NetworkFactory {
             case SCALE_FREE:
                 return new ScaleFreeNetwork(GAMMA, KAPPA);
             case BARABASI_ALBERT:
-                return new BarabasiAlbertNetwork(M);
+                return new BarabasiAlbertNetwork(M, MAX_DEGREE);
             case ERDOS_REYNI:
                 return new ErdosRenyiNetwork(P);
             default:

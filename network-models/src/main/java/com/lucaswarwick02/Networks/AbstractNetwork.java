@@ -139,6 +139,7 @@ public abstract class AbstractNetwork {
         List<Node> allNodes = new ArrayList<>(this.getNodes());
         
         Collections.sort(allNodes);
+        Collections.reverse(allNodes);
 
         return allNodes.stream().limit(n).collect(Collectors.toList());
     }
@@ -147,7 +148,6 @@ public abstract class AbstractNetwork {
         List<Node> allNodes = new ArrayList<>(this.getNodes());
         
         Collections.sort(allNodes);
-        Collections.reverse(allNodes);
 
         return allNodes.stream().limit(n).collect(Collectors.toList());
     }

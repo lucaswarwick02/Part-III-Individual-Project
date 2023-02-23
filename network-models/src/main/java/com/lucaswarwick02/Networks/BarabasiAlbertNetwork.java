@@ -9,10 +9,12 @@ import com.lucaswarwick02.models.StochasticModel;
 public class BarabasiAlbertNetwork extends AbstractNetwork {
 
     int m;
+    int maxDegree;
 
-    public BarabasiAlbertNetwork(int m) {
+    public BarabasiAlbertNetwork(int m, int maxDegree) {
         super();
         this.m = m;
+        this.maxDegree = maxDegree;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class BarabasiAlbertNetwork extends AbstractNetwork {
                 Node node = null;
                 do {
                     node = getWeightedNode(sumOfDegrees);
-                } while (nodesToJoin.contains(node));
+                } while (nodesToJoin.contains(node) || node.getDegree() >= this.maxDegree);
                 nodesToJoin.add(node);
             }
 

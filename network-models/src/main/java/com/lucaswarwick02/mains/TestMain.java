@@ -7,17 +7,38 @@ import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
 
 public class TestMain {
     public static void main(String[] args) {
-        AbstractNetwork ba = NetworkFactory.getNetwork(NetworkType.BARABASI_ALBERT);
-        ba.generateNetwork();
+        AbstractNetwork network;
+
+
+        network = NetworkFactory.getNetwork(NetworkType.ERDOS_REYNI);
+        network.generateNetwork();
 
         System.out.println("Top N: ");
-        for (Node node : ba.getHighestDegreeNodes(10)) {
+        for (Node node : network.getHighestDegreeNodes(5)) {
             System.out.printf("... Node %d: <k> = %d%n", node.ID, node.getDegree());
         }
 
         System.out.println("Bottom N: ");
-        for (Node node : ba.getLowestDegreeNodes(10)) {
+        for (Node node : network.getLowestDegreeNodes(5)) {
             System.out.printf("... Node %d: <k> = %d%n", node.ID, node.getDegree());
         }
+
+        System.out.println("Average Degree <k> = " + network.getAverageDegree());
+
+
+        network = NetworkFactory.getNetwork(NetworkType.BARABASI_ALBERT);
+        network.generateNetwork();
+
+        System.out.println("Top N: ");
+        for (Node node : network.getHighestDegreeNodes(5)) {
+            System.out.printf("... Node %d: <k> = %d%n", node.ID, node.getDegree());
+        }
+
+        System.out.println("Bottom N: ");
+        for (Node node : network.getLowestDegreeNodes(5)) {
+            System.out.printf("... Node %d: <k> = %d%n", node.ID, node.getDegree());
+        }
+
+        System.out.println("Average Degree <k> = " + network.getAverageDegree());
     }
 }

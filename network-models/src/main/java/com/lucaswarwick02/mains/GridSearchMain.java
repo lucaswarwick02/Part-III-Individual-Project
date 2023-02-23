@@ -13,6 +13,8 @@ import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
 import com.lucaswarwick02.vaccination.AbstractStrategy;
+import com.lucaswarwick02.vaccination.HighestOneOff;
+import com.lucaswarwick02.vaccination.LowestOneOff;
 import com.lucaswarwick02.vaccination.RandomOneOff;
 
 public class GridSearchMain {
@@ -44,13 +46,13 @@ public class GridSearchMain {
 
         for (int timeDelay : timeDelays) {
             for (float rho : rhos) {
-                RandomOneOff strategy = new RandomOneOff(timeDelay, rho);
+                AbstractStrategy strategy = new HighestOneOff(timeDelay, rho);
                 HelperFunctions.LOGGER.info("Running: " + strategy.toString());
 
                 File strategyFolder = new File(runFolder, strategy.toString());
                 strategyFolder.mkdir();
 
-                stochasticSimulation(NetworkType.ERDOS_REYNI, strategy, strategyFolder);
+                stochasticSimulation(NetworkType.BARABASI_ALBERT, strategy, strategyFolder);
             }
         }
     }
