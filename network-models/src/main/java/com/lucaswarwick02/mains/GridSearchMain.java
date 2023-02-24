@@ -1,21 +1,13 @@
 package com.lucaswarwick02.mains;
 
 import java.io.File;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.FileHandler;
 import java.util.logging.SimpleFormatter;
 
 import com.lucaswarwick02.HelperFunctions;
-import com.lucaswarwick02.components.Epidemic;
-import com.lucaswarwick02.models.StochasticModel;
-import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
 import com.lucaswarwick02.vaccination.AbstractStrategy;
-import com.lucaswarwick02.vaccination.HighestOneOff;
 import com.lucaswarwick02.vaccination.LowestOneOff;
-import com.lucaswarwick02.vaccination.RandomOneOff;
 
 public class GridSearchMain {
     public static void main(String[] args) {
@@ -46,56 +38,14 @@ public class GridSearchMain {
 
         for (int timeDelay : timeDelays) {
             for (float rho : rhos) {
-                AbstractStrategy strategy = new HighestOneOff(timeDelay, rho);
+                AbstractStrategy strategy = new LowestOneOff(timeDelay, rho);
                 HelperFunctions.LOGGER.info("Running: " + strategy.toString());
 
                 File strategyFolder = new File(runFolder, strategy.toString());
                 strategyFolder.mkdir();
 
-                stochasticSimulation(NetworkType.BARABASI_ALBERT, strategy, strategyFolder);
+                HelperFunctions.stochasticSimulationReduced(NetworkType.BARABASI_ALBERT, strategy, strategyFolder);
             }
         }
-    }
-
-    /**
-     * Variation of the same function in StochasticMain, but with minimal logging
-     * 
-     * @param networkType
-     * @param runFolder
-     */
-    public static void stochasticSimulation(NetworkFactory.NetworkType networkType, AbstractStrategy abstractStrategy,
-            File runFolder) {
-
-        StochasticModel[] models = new StochasticModel[StochasticModel.SIMULATIONS];
-        Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
-
-        NetworkFactory.logNetworkInfo(networkType);
-
-        // Setup the thread groups for multithreading
-        int np = Runtime.getRuntime().availableProcessors();
-
-        ExecutorService executor = Executors.newFixedThreadPool(np);
-
-        for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
-            models[i] = new StochasticModel(epidemic, networkType, abstractStrategy);
-            executor.execute(models[i]);
-        }
-        executor.shutdown();
-        while (!executor.isTerminated()) {
-            // Wait until the executor has finished the simulations
-        }
-
-        // Aggregate together all of the simulations
-        Map<String, double[]> aggregateStates = HelperFunctions.aggregateStates(models);
-        Map<String, double[]> aggregateTotals = HelperFunctions.aggregateTotals(models);
-
-        // Log key information on the simulations statistics
-        HelperFunctions.evaluateAggregateModel(aggregateStates, aggregateTotals);
-
-        // Save both the states and totals to the out folder
-        HelperFunctions.saveToCSV(aggregateStates, new File(runFolder, "states.csv"));
-        HelperFunctions.saveToCSV(aggregateTotals, new File(runFolder, "totals.csv"));
-
-        HelperFunctions.LOGGER.info("... Completed");
     }
 }

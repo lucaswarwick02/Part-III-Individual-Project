@@ -8,11 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
+import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.networks.NetworkFactory;
+import com.lucaswarwick02.vaccination.AbstractStrategy;
 
 public class HelperFunctions {
 
@@ -205,5 +210,45 @@ public class HelperFunctions {
         }
 
         return intervals;
+    }
+
+    /**
+     * Variation of the same function in StochasticMain, but with minimal logging
+     * 
+     * @param networkType
+     * @param runFolder
+     */
+    public static void stochasticSimulationReduced(NetworkFactory.NetworkType networkType, AbstractStrategy abstractStrategy,
+            File runFolder) {
+
+        StochasticModel[] models = new StochasticModel[StochasticModel.SIMULATIONS];
+        Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
+
+        // Setup the thread groups for multithreading
+        int np = Runtime.getRuntime().availableProcessors();
+
+        ExecutorService executor = Executors.newFixedThreadPool(np);
+
+        for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
+            models[i] = new StochasticModel(epidemic, networkType, abstractStrategy);
+            executor.execute(models[i]);
+        }
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            // Wait until the executor has finished the simulations
+        }
+
+        // Aggregate together all of the simulations
+        Map<String, double[]> aggregateStates = HelperFunctions.aggregateStates(models);
+        Map<String, double[]> aggregateTotals = HelperFunctions.aggregateTotals(models);
+
+        // Log key information on the simulations statistics
+        HelperFunctions.evaluateAggregateModel(aggregateStates, aggregateTotals);
+
+        // Save both the states and totals to the out folder
+        HelperFunctions.saveToCSV(aggregateStates, new File(runFolder, "states.csv"));
+        HelperFunctions.saveToCSV(aggregateTotals, new File(runFolder, "totals.csv"));
+
+        HelperFunctions.LOGGER.info("... Completed");
     }
 }
