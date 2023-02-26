@@ -9,36 +9,36 @@ public class TestMain {
     public static void main(String[] args) {
         AbstractNetwork network;
 
-
         network = NetworkFactory.getNetwork(NetworkType.ERDOS_REYNI);
         network.generateNetwork();
+        network.assignAgeBrackets();
 
         System.out.println("Top N: ");
-        for (Node node : network.getHighestDegreeNodes(5)) {
-            System.out.printf("... Node %d: <k> = %d%n", node.ID, node.getDegree());
+        for (Node node : network.getOldestNodes(5)) {
+            System.out.printf("... Node %d: ageBracket = %d%n", node.ID, node.ageBracket.ageOrder);
         }
 
         System.out.println("Bottom N: ");
-        for (Node node : network.getLowestDegreeNodes(5)) {
-            System.out.printf("... Node %d: <k> = %d%n", node.ID, node.getDegree());
+        for (Node node : network.getYoungestNodes(5)) {
+            System.out.printf("... Node %d: ageBracket = %d%n", node.ID, node.ageBracket.ageOrder);
         }
 
-        System.out.println("Average Degree <k> = " + network.getAverageDegree());
-
+        network.logAgeDistribution();
 
         network = NetworkFactory.getNetwork(NetworkType.BARABASI_ALBERT);
         network.generateNetwork();
+        network.assignAgeBrackets();
 
         System.out.println("Top N: ");
-        for (Node node : network.getHighestDegreeNodes(5)) {
-            System.out.printf("... Node %d: <k> = %d%n", node.ID, node.getDegree());
+        for (Node node : network.getOldestNodes(5)) {
+            System.out.printf("... Node %d: ageBracket = %d%n", node.ID, node.ageBracket.ageOrder);
         }
 
         System.out.println("Bottom N: ");
-        for (Node node : network.getLowestDegreeNodes(5)) {
-            System.out.printf("... Node %d: <k> = %d%n", node.ID, node.getDegree());
+        for (Node node : network.getYoungestNodes(5)) {
+            System.out.printf("... Node %d: ageBracket = %d%n", node.ID, node.ageBracket.ageOrder);
         }
 
-        System.out.println("Average Degree <k> = " + network.getAverageDegree());
+        network.logAgeDistribution();
     }
 }

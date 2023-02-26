@@ -1,15 +1,22 @@
 package com.lucaswarwick02.networks;
 
 import com.lucaswarwick02.HelperFunctions;
+import com.lucaswarwick02.components.AgeBracket;
 import com.lucaswarwick02.components.Node;
+import com.lucaswarwick02.models.StochasticModel;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public abstract class AbstractNetwork {
+
+    private Random random = new Random();
 
     /**
      * Nodes contained in the network
@@ -31,8 +38,30 @@ public abstract class AbstractNetwork {
     public abstract void generateNetwork();
 
     public void assignAgeBrackets() {
-        for (Node node : this.nodes) {
-            node.assignAgeBracket();
+        List<Node> allNodes = new ArrayList<>(this.getNodes());
+
+        // Order nodes from lowest degree -> highest degree
+        Collections.sort(allNodes, degreeComparator);
+
+        // For each node...
+        for (AgeBracket ageBracket : AgeBracket.degreeOrder) {
+            // Calculate the total number of nodes for this age bracket
+            int numberOfNodes = (int) Math.floor(ageBracket.percentageOfPopulation * StochasticModel.NUMBER_OF_NODES);
+
+            // Get a list of the first N nodes
+            List<Node> nodesForAgeBracket = allNodes.stream().limit(numberOfNodes).collect(Collectors.toList());
+
+            // Assign each of those nodes this age bracket
+            nodesForAgeBracket.forEach(node -> node.ageBracket = ageBracket);
+
+            // Remove them from the list of nodes
+            allNodes.removeAll(nodesForAgeBracket);
+        }
+
+        // For the remaining few nodes without an age bracket (due to Math.floor)
+        for (Node node : allNodes) {
+            // Assign them a random age bracket to avoid a bias
+            node.ageBracket = AgeBracket.degreeOrder[random.nextInt(AgeBracket.degreeOrder.length)];
         }
     }
 
@@ -81,13 +110,13 @@ public abstract class AbstractNetwork {
     }
 
     public void logAgeDistribution() {
-        EnumMap<Node.AgeBracket, Integer> ageDistribution = new EnumMap<>(Node.AgeBracket.class);
+        EnumMap<AgeBracket, Integer> ageDistribution = new EnumMap<>(AgeBracket.class);
 
         for (Node node : this.nodes) {
             ageDistribution.put(node.ageBracket, ageDistribution.getOrDefault(node.ageBracket, 0) + 1);
         }
 
-        for (Node.AgeBracket ageBracket : Node.AgeBracket.values()) {
+        for (AgeBracket ageBracket : AgeBracket.values()) {
             HelperFunctions.LOGGER.info(
                     ageBracket + ": " + ((ageDistribution.get(ageBracket) / (float) this.nodes.size()) * 100) + "%");
         }
@@ -135,19 +164,56 @@ public abstract class AbstractNetwork {
 
     }
 
-    public List<Node> getHighestDegreeNodes (int n) {
+    private Comparator<Node> degreeComparator = (Node n1, Node n2) -> {
+        if (n1.getDegree() == n2.getDegree()) {
+            return 0;
+        } else if (n1.getDegree() < n2.getDegree()) {
+            return -1;
+        } else {
+            return 1;
+        }
+    };
+
+    public List<Node> getHighestDegreeNodes(int n) {
         List<Node> allNodes = new ArrayList<>(this.getNodes());
-        
-        Collections.sort(allNodes);
+
+        Collections.sort(allNodes, degreeComparator);
         Collections.reverse(allNodes);
 
         return allNodes.stream().limit(n).collect(Collectors.toList());
     }
 
-    public List<Node> getLowestDegreeNodes (int n) {
+    public List<Node> getLowestDegreeNodes(int n) {
         List<Node> allNodes = new ArrayList<>(this.getNodes());
-        
-        Collections.sort(allNodes);
+
+        Collections.sort(allNodes, degreeComparator);
+
+        return allNodes.stream().limit(n).collect(Collectors.toList());
+    }
+
+    private Comparator<Node> ageComparator = (Node n1, Node n2) -> {
+        if (n1.ageBracket.ageOrder == n2.ageBracket.ageOrder) {
+            return 0;
+        } else if (n1.ageBracket.ageOrder < n2.ageBracket.ageOrder) {
+            return -1;
+        } else {
+            return 1;
+        }
+    };
+
+    public List<Node> getOldestNodes(int n) {
+        List<Node> allNodes = new ArrayList<>(this.getNodes());
+
+        Collections.sort(allNodes, ageComparator);
+        Collections.reverse(allNodes);
+
+        return allNodes.stream().limit(n).collect(Collectors.toList());
+    }
+
+    public List<Node> getYoungestNodes(int n) {
+        List<Node> allNodes = new ArrayList<>(this.getNodes());
+
+        Collections.sort(allNodes, ageComparator);
 
         return allNodes.stream().limit(n).collect(Collectors.toList());
     }
