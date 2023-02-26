@@ -227,7 +227,7 @@ public class HelperFunctions {
         // Setup the thread groups for multithreading
         int np = Runtime.getRuntime().availableProcessors();
 
-        ExecutorService executor = Executors.newFixedThreadPool(np);
+        ExecutorService executor = Executors.newFixedThreadPool(np * 2);
 
         for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
             models[i] = new StochasticModel(epidemic, networkType, abstractStrategy);
