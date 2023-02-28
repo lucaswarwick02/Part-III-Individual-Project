@@ -3,8 +3,8 @@ package com.lucaswarwick02.networks;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
-import com.lucaswarwick02.models.StochasticModel;
 
 public class ErdosRenyiNetwork extends AbstractNetwork {
 
@@ -21,7 +21,7 @@ public class ErdosRenyiNetwork extends AbstractNetwork {
     public void generateNetwork() {
         this.nodes = new ArrayList<>();
 
-        for (int n = 0; n < StochasticModel.NUMBER_OF_NODES; n++) {
+        for (int n = 0; n < ModelParameters.NUMBER_OF_NODES; n++) {
             Node newNode = new Node(n);
             for (Node existingNode : this.nodes) {
                 if (r.nextFloat() < this.p) {

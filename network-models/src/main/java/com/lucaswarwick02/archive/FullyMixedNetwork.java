@@ -1,7 +1,7 @@
 package com.lucaswarwick02.archive;
 
+import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
-import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.AbstractNetwork;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class FullyMixedNetwork extends AbstractNetwork {
     public void generateNetwork() {
         this.nodes = new ArrayList<>();
 
-        for (int n = 0; n < StochasticModel.NUMBER_OF_NODES; n++) {
+        for (int n = 0; n < ModelParameters.NUMBER_OF_NODES; n++) {
             // Create the Node
             Node newNode = new Node(n);
 

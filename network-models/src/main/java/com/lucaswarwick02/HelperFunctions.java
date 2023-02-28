@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 import com.lucaswarwick02.components.Epidemic;
+import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.NetworkFactory;
@@ -66,14 +67,14 @@ public class HelperFunctions {
     public static Map<String, double[]> aggregateStates(StochasticModel[] models) {
         HashMap<String, double[]> states = new HashMap<>();
 
-        states.put("Time", new double[StochasticModel.ITERATIONS]);
+        states.put("Time", new double[ModelParameters.ITERATIONS]);
         for (Node.State state : Node.getAllStates()) {
             String stateName = Node.stateToString(state);
-            states.put(stateName, new double[StochasticModel.ITERATIONS]);
-            states.put(stateName + "_STD", new double[StochasticModel.ITERATIONS]);
+            states.put(stateName, new double[ModelParameters.ITERATIONS]);
+            states.put(stateName + "_STD", new double[ModelParameters.ITERATIONS]);
         }
 
-        for (int i = 0; i < StochasticModel.ITERATIONS; i++) {
+        for (int i = 0; i < ModelParameters.ITERATIONS; i++) {
             states.get("Time")[i] = i;
             for (Node.State state : Node.getAllStates()) {
                 double[] values = new double[models.length];
@@ -82,7 +83,7 @@ public class HelperFunctions {
                 for (int m = 0; m < models.length; m++) {
                     values[m] = models[m].states.get(stateName)[i];
                     if (!stateName.equals("Time"))
-                        values[m] /= StochasticModel.NUMBER_OF_NODES;
+                        values[m] /= ModelParameters.NUMBER_OF_NODES;
                 }
 
                 double mean = calculateMean(values);
@@ -107,11 +108,11 @@ public class HelperFunctions {
 
         Set<String> keys = models[0].totals.keySet();
         for (String key : keys) {
-            totals.put(key, new double[StochasticModel.ITERATIONS]);
-            totals.put(key + "_STD", new double[StochasticModel.ITERATIONS]);
+            totals.put(key, new double[ModelParameters.ITERATIONS]);
+            totals.put(key + "_STD", new double[ModelParameters.ITERATIONS]);
         }
 
-        for (int i = 0; i < StochasticModel.ITERATIONS; i++) {
+        for (int i = 0; i < ModelParameters.ITERATIONS; i++) {
             totals.get("Time")[i] = i;
             for (String key : keys) {
                 double[] values = new double[models.length];
@@ -119,7 +120,7 @@ public class HelperFunctions {
                 for (int m = 0; m < models.length; m++) {
                     values[m] = models[m].totals.get(key)[i];
                     if (!key.equals("Time"))
-                        values[m] /= StochasticModel.NUMBER_OF_NODES;
+                        values[m] /= ModelParameters.NUMBER_OF_NODES;
                 }
 
                 double mean = calculateMean(values);
@@ -144,7 +145,7 @@ public class HelperFunctions {
 
         try (PrintWriter writer = new PrintWriter(file, "UTF-8")) {
             writer.write(header + "\n");
-            for (int i = 0; i < StochasticModel.ITERATIONS; i++) {
+            for (int i = 0; i < ModelParameters.ITERATIONS; i++) {
                 List<String> row = new ArrayList<>();
                 for (String string : states.keySet()) {
                     row.add(Double.toString(states.get(string)[i]));
@@ -221,14 +222,14 @@ public class HelperFunctions {
     public static void stochasticSimulationReduced(NetworkFactory.NetworkType networkType, AbstractStrategy abstractStrategy,
             File runFolder, Epidemic epidemic) {
 
-        StochasticModel[] models = new StochasticModel[StochasticModel.SIMULATIONS];
+        StochasticModel[] models = new StochasticModel[ModelParameters.SIMULATIONS];
 
         // Setup the thread groups for multithreading
         int np = Runtime.getRuntime().availableProcessors();
 
         ExecutorService executor = Executors.newFixedThreadPool(np);
 
-        for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
+        for (int i = 0; i < ModelParameters.SIMULATIONS; i++) {
             models[i] = new StochasticModel(epidemic, networkType, abstractStrategy);
             executor.execute(models[i]);
         }

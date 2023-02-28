@@ -2,8 +2,8 @@ package com.lucaswarwick02.networks;
 
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.AgeBracket;
+import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
-import com.lucaswarwick02.models.StochasticModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +46,7 @@ public abstract class AbstractNetwork {
         // For each node...
         for (AgeBracket ageBracket : AgeBracket.degreeOrder) {
             // Calculate the total number of nodes for this age bracket
-            int numberOfNodes = (int) Math.floor(ageBracket.percentageOfPopulation * StochasticModel.NUMBER_OF_NODES);
+            int numberOfNodes = (int) Math.floor(ageBracket.percentageOfPopulation * ModelParameters.NUMBER_OF_NODES);
 
             // Get a list of the first N nodes
             List<Node> nodesForAgeBracket = allNodes.stream().limit(numberOfNodes).collect(Collectors.toList());

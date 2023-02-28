@@ -9,6 +9,7 @@ import java.util.logging.SimpleFormatter;
 
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.Epidemic;
+import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
@@ -53,12 +54,12 @@ public class StochasticMain {
         HelperFunctions.LOGGER.info("### Simulation Parameters ###");
 
         HelperFunctions.LOGGER.info(
-                "... Running " + StochasticModel.SIMULATIONS + " Simulations, with " + StochasticModel.ITERATIONS
+                "... Running " + ModelParameters.SIMULATIONS + " Simulations, with " + ModelParameters.ITERATIONS
                         + " Iterations each");
-        HelperFunctions.LOGGER.info("... Number of Nodes = " + StochasticModel.NUMBER_OF_NODES);
+        HelperFunctions.LOGGER.info("... Number of Nodes = " + ModelParameters.NUMBER_OF_NODES);
 
         HelperFunctions.LOGGER.info("### Running Simulations ###");
-        StochasticModel[] models = new StochasticModel[StochasticModel.SIMULATIONS];
+        StochasticModel[] models = new StochasticModel[ModelParameters.SIMULATIONS];
         Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
         long start = System.nanoTime();
@@ -67,7 +68,7 @@ public class StochasticMain {
 
         ExecutorService executor = Executors.newFixedThreadPool(np);
 
-        for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
+        for (int i = 0; i < ModelParameters.SIMULATIONS; i++) {
             models[i] = new StochasticModel(epidemic, networkType, new RandomOneOff(0, 0));
             executor.execute(models[i]);
         }

@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
-import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.AbstractNetwork;
 
 public class ScaleFreeNetwork extends AbstractNetwork {
@@ -67,10 +67,10 @@ public class ScaleFreeNetwork extends AbstractNetwork {
 
         for (int k = 1; k < kappa; k++) {
             probabilities[k - 1] = powerLawDegreeProbability(k, gamma, kappa, polylogarithmValue);
-            nodesPerDegree[k - 1] = (int) Math.ceil(probabilities[k - 1] * StochasticModel.NUMBER_OF_NODES);
+            nodesPerDegree[k - 1] = (int) Math.ceil(probabilities[k - 1] * ModelParameters.NUMBER_OF_NODES);
         }
 
-        int nodesLeft = StochasticModel.NUMBER_OF_NODES - Arrays.stream(nodesPerDegree).sum();
+        int nodesLeft = ModelParameters.NUMBER_OF_NODES - Arrays.stream(nodesPerDegree).sum();
 
         float averageDegree = 0f;
         for (int k = 1; k < kappa; k++) {
