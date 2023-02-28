@@ -251,4 +251,31 @@ public class HelperFunctions {
 
         HelperFunctions.LOGGER.info("... Completed");
     }
+
+    /**
+     * Variation of the same function in StochasticMain, but with minimal logging
+     * 
+     * @param networkType
+     * @param runFolder
+     */
+    public static Map<String, double[]> stochasticSimulationTotals(NetworkFactory.NetworkType networkType, AbstractStrategy abstractStrategy, Epidemic epidemic) {
+
+        StochasticModel[] models = new StochasticModel[ModelParameters.SIMULATIONS];
+
+        // Setup the thread groups for multithreading
+        int np = Runtime.getRuntime().availableProcessors();
+
+        ExecutorService executor = Executors.newFixedThreadPool(np);
+
+        for (int i = 0; i < ModelParameters.SIMULATIONS; i++) {
+            models[i] = new StochasticModel(epidemic, networkType, abstractStrategy);
+            executor.execute(models[i]);
+        }
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            // Wait until the executor has finished the simulations
+        }
+
+        return HelperFunctions.aggregateTotals(models);
+    }
 }

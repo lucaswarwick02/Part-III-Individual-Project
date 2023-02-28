@@ -1,6 +1,9 @@
 package com.lucaswarwick02.mains;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.SimpleFormatter;
 
@@ -34,7 +37,13 @@ public class CriticalMain {
             e.printStackTrace();
         }
 
-        determineCriticalPoint(runFolder, NetworkType.BARABASI_ALBERT, StrategyType.RANDOM_ONEOFF, 0, 0.6f);
+        float[] rhos = new float[]{0f, 0.15f, 0.30f, 0.45f};
+        NetworkType networkType = NetworkType.BARABASI_ALBERT;
+        StrategyType strategyType = StrategyType.RANDOM_ONEOFF;
+
+        for (float rho : rhos) {
+            determineCriticalPoint(runFolder, networkType, strategyType, 0, rho);
+        }
     }
 
     private static void determineCriticalPoint (File runFolder, NetworkType networkType, StrategyType strategyType, int timeDelay, float rho) {
@@ -46,6 +55,10 @@ public class CriticalMain {
         float hospitalisationRate = 0.04f;
         float mortalityRate = 0.1f;
 
+        Map<Float, Double> results = new HashMap<>();
+
+        HelperFunctions.LOGGER.info(String.format("Running: %s, %s, %d, %.03f", networkType.toString(), strategyType.toString(), timeDelay, rho));
+
         for (float infectionRate : HelperFunctions.createIntervals(infectionRateLowerBount, infectionRateUpperBound, infectionStepSize)) {
             AbstractStrategy strategy = StrategyFactory.getStrategy(strategyType, timeDelay, rho);
 
@@ -55,14 +68,24 @@ public class CriticalMain {
             epidemic.hospitalisationRate = hospitalisationRate;
             epidemic.mortalityRate = mortalityRate;
 
-            String runName = String.format("RandomOneOff(%d, %.03f, %.04f)", timeDelay, rho, infectionRate);
+            HelperFunctions.LOGGER.info(String.format("... Infection Rate: %.04f", infectionRate));
 
-            HelperFunctions.LOGGER.info("Running: " + runName);
+            Map<String, double[]> totals = HelperFunctions.stochasticSimulationTotals(networkType, strategy, epidemic);
+        
+            double totalInfected = totals.get("Infected")[totals.get("Infected").length - 1];
 
-            File specificRunFolder = new File(runFolder, runName);
-            specificRunFolder.mkdir();
+            results.put(infectionRate, totalInfected);
+        }
 
-            HelperFunctions.stochasticSimulationReduced(networkType, strategy, specificRunFolder, epidemic);
+        HelperFunctions.LOGGER.info("... Done");
+
+        // Save results to a file within runFolder
+        String header = "InfectionRate,TotalInfected";
+        try (PrintWriter writer = new PrintWriter(new File(runFolder, String.format("%s_%s_%d_%.03f.csv", networkType.toString(), strategyType.toString(), timeDelay, rho)), "UTF-8")) {
+            writer.write(header + "\n");
+            results.forEach((infectionRate, totalInfected) -> writer.write(String.format("%.04f,%f%n", infectionRate, totalInfected)));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

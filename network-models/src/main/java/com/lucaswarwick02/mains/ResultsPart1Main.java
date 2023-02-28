@@ -21,19 +21,19 @@ public class ResultsPart1Main {
         float[] rhos = HelperFunctions.createIntervals(0, 1, 0.05f);
 
         // * Section 1a
-        // runSection(rootFolder, "section_1a", NetworkType.ERDOS_REYNI, StrategyType.RANDOM_ONEOFF, 0, rhos);
+        runSection(rootFolder, "section_1a", NetworkType.ERDOS_REYNI, StrategyType.RANDOM_ONEOFF, 0, rhos);
 
         // * Section 1b
-        // runSection(rootFolder, "section_1b", NetworkType.BARABASI_ALBERT, StrategyType.RANDOM_ONEOFF, 0, rhos);
+        runSection(rootFolder, "section_1b", NetworkType.BARABASI_ALBERT, StrategyType.RANDOM_ONEOFF, 0, rhos);
 
         // * Section 2a
-        // runSection(rootFolder, "section_2a", NetworkType.BARABASI_ALBERT, StrategyType.HIGHEST_ONEOFF, 0, rhos);
+        runSection(rootFolder, "section_2a", NetworkType.BARABASI_ALBERT, StrategyType.HIGHEST_ONEOFF, 0, rhos);
 
         // * Section 2b
-        // runSection(rootFolder, "section_2b", NetworkType.BARABASI_ALBERT, StrategyType.LOWEST_ONEOFF, 0, rhos);
+        runSection(rootFolder, "section_2b", NetworkType.BARABASI_ALBERT, StrategyType.LOWEST_ONEOFF, 0, rhos);
 
         // * Section 3a
-        // runSection(rootFolder, "section_3a", NetworkType.BARABASI_ALBERT, StrategyType.OLDEST_ONEOFF, 0, rhos);
+        runSection(rootFolder, "section_3a", NetworkType.BARABASI_ALBERT, StrategyType.OLDEST_ONEOFF, 0, rhos);
 
         // * Section 3b
         runSection(rootFolder, "section_3b", NetworkType.BARABASI_ALBERT, StrategyType.YOUNGEST_ONEOFF, 0, rhos);
