@@ -219,15 +219,14 @@ public class HelperFunctions {
      * @param runFolder
      */
     public static void stochasticSimulationReduced(NetworkFactory.NetworkType networkType, AbstractStrategy abstractStrategy,
-            File runFolder) {
+            File runFolder, Epidemic epidemic) {
 
         StochasticModel[] models = new StochasticModel[StochasticModel.SIMULATIONS];
-        Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
         // Setup the thread groups for multithreading
         int np = Runtime.getRuntime().availableProcessors();
 
-        ExecutorService executor = Executors.newFixedThreadPool(np * 2);
+        ExecutorService executor = Executors.newFixedThreadPool(np);
 
         for (int i = 0; i < StochasticModel.SIMULATIONS; i++) {
             models[i] = new StochasticModel(epidemic, networkType, abstractStrategy);

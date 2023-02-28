@@ -5,6 +5,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.SimpleFormatter;
 
 import com.lucaswarwick02.HelperFunctions;
+import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
 import com.lucaswarwick02.vaccination.AbstractStrategy;
 import com.lucaswarwick02.vaccination.StrategyFactory;
@@ -41,6 +42,8 @@ public class ResultsPart1Main {
     private static void runSection (String rootFolder, String run, NetworkType networkType, StrategyType strategyType, int timeDelay, float[] rhos) {
         HelperFunctions.LOGGER.info("### " + run + " ###");
 
+        Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
+
         // Create a new data folder for this current run-through
         File dataFolder = new File(rootFolder, "out");
         dataFolder.mkdir();
@@ -64,7 +67,7 @@ public class ResultsPart1Main {
             File strategyFolder = new File(runFolder, strategy.toString());
             strategyFolder.mkdir();
 
-            HelperFunctions.stochasticSimulationReduced(networkType, strategy, strategyFolder);
+            HelperFunctions.stochasticSimulationReduced(networkType, strategy, strategyFolder, epidemic);
         }
     }
 }

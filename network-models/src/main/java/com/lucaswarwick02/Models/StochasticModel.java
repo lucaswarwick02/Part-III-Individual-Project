@@ -23,7 +23,7 @@ public class StochasticModel implements Runnable {
     public static final int ITERATIONS = 150;
     public static final int INITIAL_INFECTED = 3;
     public static final int NUMBER_OF_NODES = 10000;
-    public static final int SIMULATIONS = 250;
+    public static final int SIMULATIONS = 96;
 
     Random r = new Random(); // Used for getting random numbers
 
