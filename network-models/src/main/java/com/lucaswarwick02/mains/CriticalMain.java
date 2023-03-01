@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.FileHandler;
-import java.util.logging.SimpleFormatter;
 
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.Epidemic;
@@ -20,26 +18,25 @@ public class CriticalMain {
 
         // Store arguments from command line
         String rootFolder = args[0];
-        String run = args[1];
 
         // Create a new data folder for this current run-through
         File dataFolder = new File(rootFolder, "out");
         dataFolder.mkdir();
-        File runFolder = new File(dataFolder, run);
+
+        runSection("critical_section_1a", dataFolder, NetworkType.ERDOS_REYNI, StrategyType.RANDOM_ONEOFF);
+        runSection("critical_section_1b", dataFolder, NetworkType.BARABASI_ALBERT, StrategyType.RANDOM_ONEOFF);
+        runSection("critical_section_2a", dataFolder, NetworkType.BARABASI_ALBERT, StrategyType.HIGHEST_ONEOFF);
+        runSection("critical_section_2b", dataFolder, NetworkType.BARABASI_ALBERT, StrategyType.LOWEST_ONEOFF);
+        runSection("critical_section_3a", dataFolder, NetworkType.BARABASI_ALBERT, StrategyType.OLDEST_ONEOFF);
+        runSection("critical_section_3b", dataFolder, NetworkType.BARABASI_ALBERT, StrategyType.YOUNGEST_ONEOFF);
+    }
+
+
+    private static void runSection (String folderName, File dataFolder, NetworkType networkType, StrategyType strategyType) {
+        File runFolder = new File(dataFolder, folderName);
         runFolder.mkdir();
 
-        // Setup the Logger to output all logs to a file
-        try {
-            FileHandler fileHandler = new FileHandler((new File(runFolder, "output.log")).getAbsolutePath(), true);
-            fileHandler.setFormatter(new SimpleFormatter());
-            HelperFunctions.LOGGER.addHandler(fileHandler);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         float[] rhos = new float[]{0f, 0.15f, 0.30f, 0.45f};
-        NetworkType networkType = NetworkType.BARABASI_ALBERT;
-        StrategyType strategyType = StrategyType.RANDOM_ONEOFF;
 
         for (float rho : rhos) {
             determineCriticalPoint(runFolder, networkType, strategyType, 0, rho);
