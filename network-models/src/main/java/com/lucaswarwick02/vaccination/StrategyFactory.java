@@ -10,9 +10,10 @@ public class StrategyFactory {
         YOUNGEST_ONEOFF
     }
 
-    private StrategyFactory () {}
+    private StrategyFactory() {
+    }
 
-    public static AbstractStrategy getStrategy (StrategyType strategyType, int timeDelay, float rho) {
+    public static AbstractStrategy getStrategy(StrategyType strategyType, int timeDelay, float rho) {
         switch (strategyType) {
             case RANDOM_ONEOFF:
                 return new RandomOneOff(timeDelay, rho);
