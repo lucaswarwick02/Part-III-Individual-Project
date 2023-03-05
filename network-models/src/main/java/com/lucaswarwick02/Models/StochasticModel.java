@@ -76,8 +76,9 @@ public class StochasticModel implements Runnable {
         abstractStrategy.performStrategy(this);
 
         // set initialInfected nodes to Infected
-        List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(underlyingNetwork.getNodesFromState(State.SUSCEPTIBLE),
-        ModelParameters.INITIAL_INFECTED);
+        List<Node> initialInfectedNodes = HelperFunctions.pickRandomNodes(
+                underlyingNetwork.getNodesFromState(State.SUSCEPTIBLE),
+                ModelParameters.INITIAL_INFECTED);
         initialInfectedNodes.forEach(node -> node.setState(Node.State.INFECTED));
 
         // Store the initial model state
@@ -110,7 +111,14 @@ public class StochasticModel implements Runnable {
             // ... maybe recover the Node
             if (r.nextFloat() <= epidemic.recoveryRate) {
                 nodesToRecover.add(infectedNode);
-            } else if (r.nextFloat() <= epidemic.hospitalisationRate * infectedNode.hospitalisationMultiplier()) {
+            }
+        }
+
+        for (Node infectedNode : underlyingNetwork.getNodesFromState(Node.State.INFECTED)) {
+            if (nodesToRecover.contains(infectedNode))
+                continue;
+
+            if (r.nextFloat() <= epidemic.hospitalisationRate * infectedNode.hospitalisationMultiplier()) {
                 nodesToHospitalise.add(infectedNode);
             }
         }
@@ -120,7 +128,14 @@ public class StochasticModel implements Runnable {
             // ... maybe recover the node
             if (r.nextFloat() <= epidemic.recoveryRate) {
                 nodesToRecover.add(hospitalisedNode);
-            } else if (r.nextFloat() <= epidemic.mortalityRate * hospitalisedNode.mortalityMultiplier()) {
+            }
+        }
+
+        for (Node hospitalisedNode : underlyingNetwork.getNodesFromState(Node.State.HOSPITALISED)) {
+            if (nodesToRecover.contains(hospitalisedNode))
+                continue;
+
+            if (r.nextFloat() <= epidemic.mortalityRate * hospitalisedNode.mortalityMultiplier()) {
                 nodesToKill.add(hospitalisedNode);
             }
         }
