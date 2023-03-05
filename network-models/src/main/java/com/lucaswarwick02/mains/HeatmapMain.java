@@ -30,7 +30,7 @@ public class HeatmapMain {
             for (float r : rs) {
                 HelperFunctions.LOGGER.info("r = " + r + ", rho = " + rho);
 
-                File strategyFolder = new File(runFolder, String.format("r=%.03f_rho=%.0f", r, rho));
+                File strategyFolder = new File(runFolder, String.format("r=%.03f_rho=%.03f", r, rho));
                 strategyFolder.mkdir();
 
                 AbstractStrategy strategy = new HeatmapStrategy(r, rho);
