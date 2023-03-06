@@ -7,7 +7,7 @@ import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
 
-public class RandomOneOff implements AbstractStrategy {
+public class RandomOneOff extends AbstractStrategy {
 
     private int timeDelay;
     private float rho;

@@ -75,6 +75,10 @@ public abstract class AbstractNetwork {
         return this.getNodes().stream().filter(node -> node.getState() == state).collect(Collectors.toList());
     }
 
+    public List<Node> getNodesFromAgeBracket(AgeBracket ageBracket) {
+        return this.getNodes().stream().filter(node -> node.ageBracket == ageBracket).collect(Collectors.toList());
+    }
+
     /**
      * Get the Nodes within the underlying network
      * 

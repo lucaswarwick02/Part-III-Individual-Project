@@ -3,13 +3,12 @@ package com.lucaswarwick02.vaccination;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
 
-public class HeatmapStrategy implements AbstractStrategy {
+public class HeatmapStrategy extends AbstractStrategy {
 
     private float r;
     private float rho;
@@ -34,8 +33,9 @@ public class HeatmapStrategy implements AbstractStrategy {
         // Remove the first numberToIgnore from the list
         List<Node> filteredNodes = new ArrayList<>();
         for (int i = 0; i < orderedNodes.size(); i++) {
-            if (i < numberToIgnore)
+            if (i < numberToIgnore) {
                 continue;
+            }
 
             filteredNodes.add(orderedNodes.get(i));
         }
@@ -43,12 +43,11 @@ public class HeatmapStrategy implements AbstractStrategy {
         // Vaccinate the first numberToVaccinate
         for (int i = 0; i < filteredNodes.size(); i++) {
             if (i < numberToVaccinate) {
-                orderedNodes.get(i).setState(State.VACCINATED);
+                filteredNodes.get(i).setState(State.VACCINATED);
             }
         }
 
-        HelperFunctions.LOGGER.info("Ignored = " + (ModelParameters.NUMBER_OF_NODES - filteredNodes.size())
-                + ", Vaccinated = " + model.getUnderlyingNetwork().getNodesFromState(State.VACCINATED).size());
+        // this.logVaccinationDistribution(model.getUnderlyingNetwork());
     }
 
 }
