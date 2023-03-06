@@ -23,8 +23,8 @@ public class HeatmapMain {
 
         // Iterate through rhos
         // Iterate through rs
-        float[] rhos = HelperFunctions.createIntervals(0, 1, 0.25f);
-        float[] rs = HelperFunctions.createIntervals(0, 1, 0.25f);
+        float[] rhos = HelperFunctions.createIntervals(0.125f, 1, 0.125f);
+        float[] rs = HelperFunctions.createIntervals(0, 1, 0.125f);
 
         for (float rho : rhos) {
             for (float r : rs) {
