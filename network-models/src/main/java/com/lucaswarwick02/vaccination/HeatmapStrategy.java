@@ -47,7 +47,7 @@ public class HeatmapStrategy extends AbstractStrategy {
             }
         }
 
-        // this.logVaccinationDistribution(model.getUnderlyingNetwork());
+        this.logVaccinationDistribution(model.getUnderlyingNetwork());
     }
 
 }
