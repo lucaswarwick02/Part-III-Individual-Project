@@ -18,15 +18,16 @@ public class MixedStrategy extends AbstractStrategy {
         if (model.getCurrentTime() != 0)
             return;
 
-        int partSize = (int) Math.floor(ModelParameters.NUMBER_OF_NODES * this.alpha);
+        int degreeSize = (int) Math.floor(ModelParameters.NUMBER_OF_NODES * this.alpha);
+        int ageSize = (int) Math.floor(ModelParameters.NUMBER_OF_NODES * (1 - this.alpha));
 
         // Vacciante the highest N * alpha degree nodes
-        for (Node node : model.getUnderlyingNetwork().getHighestDegreeNodes(partSize)) {
+        for (Node node : model.getUnderlyingNetwork().getHighestDegreeNodes(degreeSize)) {
             node.setState(State.VACCINATED);
         }
 
         // Vaccinate the oldest N * alpha degree nodes
-        for (Node node : model.getUnderlyingNetwork().getOldestNodes(partSize)) {
+        for (Node node : model.getUnderlyingNetwork().getOldestNodes(degreeSize)) {
             node.setState(State.VACCINATED);
         }
     }

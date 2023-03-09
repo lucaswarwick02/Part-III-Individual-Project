@@ -23,7 +23,7 @@ public class MixedMain {
         runFolder.mkdir();
 
         // Iterate through alphas
-        float[] alphas = HelperFunctions.createIntervals(0, 1, 0.125f);
+        float[] alphas = HelperFunctions.createIntervals(0, 0.35f, 0.025f);
 
         for (float alpha : alphas) {
             HelperFunctions.LOGGER.info(String.format("alpha = %.03f", alpha));
