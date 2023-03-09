@@ -4,6 +4,9 @@ import sys
 import os
 
 
+plt.style.use('seaborn')
+
+
 def add_plot(axes, df: pd.DataFrame, column: str, color: str, line_alpha=1.0, fill_alpha=0.2, ignore_std=False):
     axes.plot(df['Time'], df[column], label=column, color=color, alpha=line_alpha)
     

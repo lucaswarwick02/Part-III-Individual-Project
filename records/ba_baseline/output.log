@@ -1,0 +1,13 @@
+[2023-03-08 16:23:15] [INFO] ### Network Parameters ### 
+[2023-03-08 16:23:15] [INFO] ... BARABASI_ALBERT: m=5 
+[2023-03-08 16:23:15] [INFO] ### Simulation Parameters ### 
+[2023-03-08 16:23:15] [INFO] ... Running 120 Simulations, with 150 Iterations each 
+[2023-03-08 16:23:15] [INFO] ... Number of Nodes = 10000 
+[2023-03-08 16:23:15] [INFO] ### Running Simulations ### 
+[2023-03-08 16:25:22] [INFO] ... Completed (126.8160441s) 
+[2023-03-08 16:25:22] [INFO] ### Aggregating/Saving Results ### 
+[2023-03-08 16:25:22] [INFO] ... Total Infected = 96.50% 
+[2023-03-08 16:25:22] [INFO] ... Total Hospitalised = 45.21% 
+[2023-03-08 16:25:22] [INFO] ... Total Dead = 36.20% 
+[2023-03-08 16:25:22] [INFO] Peak Infected = 23.0 
+[2023-03-08 16:25:22] [INFO] ... Completed (0.0692575s) 

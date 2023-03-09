@@ -39,7 +39,7 @@ public class StochasticMain {
             e.printStackTrace();
         }
 
-        stochasticSimulation(NetworkType.BARABASI_ALBERT, runFolder);
+        stochasticSimulation(NetworkType.ERDOS_REYNI, runFolder);
     }
 
     /**
