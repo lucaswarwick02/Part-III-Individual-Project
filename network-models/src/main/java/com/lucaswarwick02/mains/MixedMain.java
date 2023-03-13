@@ -22,20 +22,21 @@ public class MixedMain {
         File runFolder = new File(dataFolder, run);
         runFolder.mkdir();
 
-        // Iterate through alphas
-        float[] alphas = HelperFunctions.createIntervals(0, 0.35f, 0.025f);
+        runMixed(runFolder, 0.1f);
+        runMixed(runFolder, 0.2f);
+        runMixed(runFolder, 0.3f);
+    }
 
-        for (float alpha : alphas) {
-            HelperFunctions.LOGGER.info(String.format("alpha = %.03f", alpha));
+    private static void runMixed(File runFolder, float alpha) {
+        File mixedFolder = new File(runFolder, String.format("alpha=%.03f", alpha));
+        mixedFolder.mkdir();
 
-            File strategyFolder = new File(runFolder, String.format("a=%.03f", alpha));
-            strategyFolder.mkdir();
+        float[] rhos = HelperFunctions.createIntervals(0, 1, 0.05f);
+        Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
-            AbstractStrategy strategy = new MixedStrategy(alpha);
-            Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
-
-            HelperFunctions.stochasticSimulationReduced(NetworkType.BARABASI_ALBERT, strategy, strategyFolder,
-                    epidemic);
+        for (float rho : rhos) {
+            AbstractStrategy strategy = new MixedStrategy(alpha, rho);
+            HelperFunctions.stochasticSimulationReduced(NetworkType.BARABASI_ALBERT, strategy, runFolder, epidemic);
         }
     }
 }
