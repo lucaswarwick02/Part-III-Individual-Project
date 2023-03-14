@@ -26,18 +26,18 @@ public class CriticalMain {
         runSectionBaseline("er_critical_baseline", dataFolder, NetworkType.ERDOS_REYNI);
         runSectionBaseline("ba_critical_baseline", dataFolder, NetworkType.BARABASI_ALBERT);
 
-        // runSection("critical_section_1a", dataFolder, NetworkType.ERDOS_REYNI,
-        // StrategyType.RANDOM_ONEOFF);
-        // runSection("critical_section_1b", dataFolder, NetworkType.BARABASI_ALBERT,
-        // StrategyType.RANDOM_ONEOFF);
-        // runSection("critical_section_2a", dataFolder, NetworkType.BARABASI_ALBERT,
-        // StrategyType.HIGHEST_ONEOFF);
-        // runSection("critical_section_2b", dataFolder, NetworkType.BARABASI_ALBERT,
-        // StrategyType.LOWEST_ONEOFF);
-        // runSection("critical_section_3a", dataFolder, NetworkType.BARABASI_ALBERT,
-        // StrategyType.OLDEST_ONEOFF);
-        // runSection("critical_section_3b", dataFolder, NetworkType.BARABASI_ALBERT,
-        // StrategyType.YOUNGEST_ONEOFF);
+        runSection("critical_section_1a", dataFolder, NetworkType.ERDOS_REYNI,
+                StrategyType.RANDOM_ONEOFF);
+        runSection("critical_section_1b", dataFolder, NetworkType.BARABASI_ALBERT,
+                StrategyType.RANDOM_ONEOFF);
+        runSection("critical_section_2a", dataFolder, NetworkType.BARABASI_ALBERT,
+                StrategyType.HIGHEST_ONEOFF);
+        runSection("critical_section_2b", dataFolder, NetworkType.BARABASI_ALBERT,
+                StrategyType.LOWEST_ONEOFF);
+        runSection("critical_section_3a", dataFolder, NetworkType.BARABASI_ALBERT,
+                StrategyType.OLDEST_ONEOFF);
+        runSection("critical_section_3b", dataFolder, NetworkType.BARABASI_ALBERT,
+                StrategyType.YOUNGEST_ONEOFF);
     }
 
     private static void runSectionBaseline(String folderName, File dataFolder, NetworkType networkType) {
