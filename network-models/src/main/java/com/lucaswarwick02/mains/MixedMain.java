@@ -22,10 +22,10 @@ public class MixedMain {
         File runFolder = new File(dataFolder, run);
         runFolder.mkdir();
 
-        runMixed(runFolder, 1.0f);
-        runMixed(runFolder, 0.9f);
-        runMixed(runFolder, 0.8f);
-        runMixed(runFolder, 0.7f);
+        runMixed(runFolder, 1.00f);
+        runMixed(runFolder, 0.75f);
+        runMixed(runFolder, 0.50f);
+        runMixed(runFolder, 0.25f);
     }
 
     private static void runMixed(File runFolder, float alpha) {
