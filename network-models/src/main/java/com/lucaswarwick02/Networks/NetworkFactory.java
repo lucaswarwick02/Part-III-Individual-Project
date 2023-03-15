@@ -2,7 +2,6 @@ package com.lucaswarwick02.networks;
 
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.archive.FixedDegreeNetwork;
-import com.lucaswarwick02.archive.FullyMixedNetwork;
 import com.lucaswarwick02.archive.ScaleFreeNetwork;
 
 /**

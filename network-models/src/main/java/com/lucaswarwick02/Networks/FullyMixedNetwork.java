@@ -1,8 +1,7 @@
-package com.lucaswarwick02.archive;
+package com.lucaswarwick02.networks;
 
 import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
-import com.lucaswarwick02.networks.AbstractNetwork;
 
 import java.util.ArrayList;
 

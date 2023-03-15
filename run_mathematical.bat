@@ -12,8 +12,3 @@ rem Move to the maven project and build/run
 cd network-models
 echo on
 call mvn clean compile exec:java -Dexec.args="%ROOTPATH% %FOLDER%" -Dexec.mainClass="com.lucaswarwick02.mains.MathematicalMain"
-
-rem Move back to the root folder and generate the python plots
-set ENVNAME=network-models
-cd ../
-conda run -n %ENVNAME% python python/mathematical.py %ROOTPATH% %FOLDER%
