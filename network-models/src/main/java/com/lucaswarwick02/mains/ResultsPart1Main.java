@@ -62,7 +62,7 @@ public class ResultsPart1Main {
 
         for (float rho : rhos) {
             AbstractStrategy strategy = StrategyFactory.getStrategy(strategyType, rho);
-
+            HelperFunctions.LOGGER.info(String.format("Running: %.03f", rho));
             HelperFunctions.stochasticSimulationReduced(networkType, strategy, runFolder, epidemic, true);
         }
     }
