@@ -12,7 +12,7 @@ import com.lucaswarwick02.vaccination.StrategyFactory;
 import com.lucaswarwick02.vaccination.StrategyFactory.StrategyType;
 
 public class ResultsPart1Main {
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-4s] %5$s %n");
 
         // Store arguments from command line
@@ -39,7 +39,8 @@ public class ResultsPart1Main {
         runSection(rootFolder, "section_3b", NetworkType.BARABASI_ALBERT, StrategyType.YOUNGEST_ONEOFF, 0, rhos);
     }
 
-    private static void runSection (String rootFolder, String run, NetworkType networkType, StrategyType strategyType, int timeDelay, float[] rhos) {
+    private static void runSection(String rootFolder, String run, NetworkType networkType, StrategyType strategyType,
+            int timeDelay, float[] rhos) {
         HelperFunctions.LOGGER.info("### " + run + " ###");
 
         Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
@@ -67,7 +68,7 @@ public class ResultsPart1Main {
             File strategyFolder = new File(runFolder, strategy.toString());
             strategyFolder.mkdir();
 
-            HelperFunctions.stochasticSimulationReduced(networkType, strategy, strategyFolder, epidemic);
+            HelperFunctions.stochasticSimulationReduced(networkType, strategy, strategyFolder, epidemic, true);
         }
     }
 }

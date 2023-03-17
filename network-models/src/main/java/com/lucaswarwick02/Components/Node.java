@@ -25,7 +25,7 @@ public class Node {
 
     private State state; // Compartmental model state
 
-    public AgeBracket ageBracket;
+    public AgeBracket ageBracket = AgeBracket.NONE;
 
     public final int ID; // Unique identifier
 

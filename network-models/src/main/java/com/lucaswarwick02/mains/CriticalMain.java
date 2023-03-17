@@ -84,7 +84,8 @@ public class CriticalMain {
 
             HelperFunctions.LOGGER.info(String.format("... Infection Rate: %.04f", infectionRate));
 
-            Map<String, double[]> totals = HelperFunctions.stochasticSimulationTotals(networkType, strategy, epidemic);
+            Map<String, double[]> totals = HelperFunctions.stochasticSimulationTotals(networkType, strategy, epidemic,
+                    true);
 
             double totalInfected = totals.get("Infected")[totals.get("Infected").length - 1];
 
@@ -131,7 +132,8 @@ public class CriticalMain {
 
             HelperFunctions.LOGGER.info(String.format("... Infection Rate: %.04f", infectionRate));
 
-            Map<String, double[]> totals = HelperFunctions.stochasticSimulationTotals(networkType, strategy, epidemic);
+            Map<String, double[]> totals = HelperFunctions.stochasticSimulationTotals(networkType, strategy, epidemic,
+                    true);
 
             double totalInfected = totals.get("Infected")[totals.get("Infected").length - 1];
 

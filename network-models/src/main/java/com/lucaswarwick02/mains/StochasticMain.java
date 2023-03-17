@@ -69,7 +69,7 @@ public class StochasticMain {
         ExecutorService executor = Executors.newFixedThreadPool(np);
 
         for (int i = 0; i < ModelParameters.SIMULATIONS; i++) {
-            models[i] = new StochasticModel(epidemic, networkType, new RandomOneOff(0, 0));
+            models[i] = new StochasticModel(epidemic, networkType, new RandomOneOff(0, 0), true);
             executor.execute(models[i]);
         }
         executor.shutdown();

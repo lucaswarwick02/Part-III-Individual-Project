@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <epidemic>
-    <infectionRate>0.0001</infectionRate>
+    <infectionRate>0.0003</infectionRate>
     <recoveryRate>0.04</recoveryRate>
     <hospitalisationRate>0.035</hospitalisationRate>
     <mortalityRate>0.05</mortalityRate>

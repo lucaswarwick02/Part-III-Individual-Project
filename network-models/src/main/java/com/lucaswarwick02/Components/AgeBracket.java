@@ -1,6 +1,7 @@
 package com.lucaswarwick02.components;
 
 public enum AgeBracket {
+    NONE(-1, 0f),
     BELOW_NINE(0, 0.1124f), // 0 - 9
     TEN_TO_NINETEEN(1, 0.1153f), // 10 - 19
     TWENTY_TO_THIRTYFOUR(2, 0.2043f), // 20 - 34

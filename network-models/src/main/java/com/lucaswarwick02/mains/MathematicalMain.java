@@ -12,7 +12,6 @@ import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
-import com.lucaswarwick02.vaccination.AbstractStrategy;
 import com.lucaswarwick02.vaccination.RandomOneOff;
 
 public class MathematicalMain {
@@ -31,12 +30,16 @@ public class MathematicalMain {
         Epidemic epidemic = Epidemic.loadFromResources("/mathematical.xml");
 
         // * Mathematical Section
+        HelperFunctions.LOGGER.info("Running mathematical simualtion...");
         Map<String, double[]> mathematicalResults = runMathematicalSimulation(epidemic);
         saveMathematicalToCSV(mathematicalResults, new File(runFolder, "mathematical.csv"));
+        HelperFunctions.LOGGER.info("... Done");
 
         // * Stochastic Section
+        HelperFunctions.LOGGER.info("Running " + ModelParameters.SIMULATIONS + " stochastic simulations...");
         HelperFunctions.stochasticSimulationReduced(NetworkType.FULLY_MIXED, new RandomOneOff(0, 0), runFolder,
-                epidemic);
+                epidemic, false);
+        HelperFunctions.LOGGER.info("... Done");
     }
 
     private static Map<String, double[]> runMathematicalSimulation(Epidemic epidemic) {
@@ -57,10 +60,19 @@ public class MathematicalMain {
         for (int i = 1; i < ModelParameters.ITERATIONS; i++) {
             states.get("Time")[i] = i;
 
+            // Newly infected
             double arg1 = states.get("Infected")[i - 1] * states.get("Susceptible")[i - 1] * epidemic.infectionRate;
+
+            // Newly recovered
             double arg2 = states.get("Infected")[i - 1] * epidemic.recoveryRate;
+
+            // Nodes that didnt recover, hospitalised
             double arg3 = (states.get("Infected")[i - 1] - arg2) * epidemic.hospitalisationRate;
+
+            // Nodes that were hospitalised, recovered
             double arg4 = states.get("Hospitalised")[i - 1] * epidemic.recoveryRate;
+
+            // Nodes that didnt recover from H, dead
             double arg5 = (states.get("Hospitalised")[i - 1] - arg4) * epidemic.mortalityRate;
 
             states.get("Susceptible")[i] = states.get("Susceptible")[i - 1] - arg1;

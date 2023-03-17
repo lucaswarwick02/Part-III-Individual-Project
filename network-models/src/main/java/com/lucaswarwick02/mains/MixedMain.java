@@ -41,7 +41,8 @@ public class MixedMain {
 
             AbstractStrategy strategy = new MixedStrategy(alpha, rho);
 
-            HelperFunctions.stochasticSimulationReduced(NetworkType.BARABASI_ALBERT, strategy, rhoFolder, epidemic);
+            HelperFunctions.stochasticSimulationReduced(NetworkType.BARABASI_ALBERT, strategy, rhoFolder, epidemic,
+                    true);
         }
     }
 }

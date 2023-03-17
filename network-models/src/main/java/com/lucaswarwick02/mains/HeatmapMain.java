@@ -37,7 +37,7 @@ public class HeatmapMain {
                 Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
                 HelperFunctions.stochasticSimulationReduced(NetworkType.BARABASI_ALBERT, strategy, strategyFolder,
-                        epidemic);
+                        epidemic, true);
             }
         }
     }

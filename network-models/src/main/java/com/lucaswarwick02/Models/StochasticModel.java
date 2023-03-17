@@ -23,6 +23,8 @@ public class StochasticModel implements Runnable {
 
     Random r = new Random(); // Used for getting random numbers
 
+    boolean includeAge;
+
     NetworkType networkType;
     AbstractNetwork underlyingNetwork; // Network used in the model
 
@@ -39,10 +41,12 @@ public class StochasticModel implements Runnable {
      * 
      * @param vaccinationStrategy Strategy used in the simulation
      */
-    public StochasticModel(Epidemic epidemic, NetworkType networkType, AbstractStrategy abstractStrategy) {
+    public StochasticModel(Epidemic epidemic, NetworkType networkType, AbstractStrategy abstractStrategy,
+            boolean includeAge) {
         this.epidemic = epidemic;
         this.networkType = networkType;
         this.abstractStrategy = abstractStrategy;
+        this.includeAge = includeAge;
     }
 
     @Override
@@ -50,7 +54,9 @@ public class StochasticModel implements Runnable {
         underlyingNetwork = NetworkFactory.getNetwork(networkType);
 
         underlyingNetwork.generateNetwork();
-        underlyingNetwork.assignAgeBrackets();
+        if (this.includeAge) {
+            underlyingNetwork.assignAgeBrackets();
+        }
 
         runSimulation();
     }

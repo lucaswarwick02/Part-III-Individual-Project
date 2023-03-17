@@ -165,7 +165,8 @@ public class HelperFunctions {
      * @return List of length N
      */
     public static <T> List<T> pickRandomNodes(List<T> list, int n) {
-        // return r.ints(n, 0, list.size()).mapToObj(list::get).collect(Collectors.toList());
+        // return r.ints(n, 0,
+        // list.size()).mapToObj(list::get).collect(Collectors.toList());
 
         if (list.size() < n) {
             return new ArrayList<>();
@@ -199,11 +200,13 @@ public class HelperFunctions {
     }
 
     public static void logPeakInfected(Map<String, double[]> states) {
-        IntStream.range(0, states.get("Time").length).reduce((a, b) -> states.get("Infected")[a] < states.get("Infected")[b] ? b : a).ifPresent(ix -> HelperFunctions.LOGGER.info("Peak Infected = " + states.get("Time")[ix]));
+        IntStream.range(0, states.get("Time").length)
+                .reduce((a, b) -> states.get("Infected")[a] < states.get("Infected")[b] ? b : a)
+                .ifPresent(ix -> HelperFunctions.LOGGER.info("Peak Infected = " + states.get("Time")[ix]));
     }
 
-    public static float[] createIntervals (float min, float max, float step) {
-        int size = (int)Math.ceil((max - min) / step) + 1;
+    public static float[] createIntervals(float min, float max, float step) {
+        int size = (int) Math.ceil((max - min) / step) + 1;
         float[] intervals = new float[size];
 
         for (int i = 0; i < size; i++) {
@@ -219,8 +222,9 @@ public class HelperFunctions {
      * @param networkType
      * @param runFolder
      */
-    public static void stochasticSimulationReduced(NetworkFactory.NetworkType networkType, AbstractStrategy abstractStrategy,
-            File runFolder, Epidemic epidemic) {
+    public static void stochasticSimulationReduced(NetworkFactory.NetworkType networkType,
+            AbstractStrategy abstractStrategy,
+            File runFolder, Epidemic epidemic, boolean includeAge) {
 
         StochasticModel[] models = new StochasticModel[ModelParameters.SIMULATIONS];
 
@@ -230,7 +234,7 @@ public class HelperFunctions {
         ExecutorService executor = Executors.newFixedThreadPool(np);
 
         for (int i = 0; i < ModelParameters.SIMULATIONS; i++) {
-            models[i] = new StochasticModel(epidemic, networkType, abstractStrategy);
+            models[i] = new StochasticModel(epidemic, networkType, abstractStrategy, includeAge);
             executor.execute(models[i]);
         }
         executor.shutdown();
@@ -258,7 +262,8 @@ public class HelperFunctions {
      * @param networkType
      * @param runFolder
      */
-    public static Map<String, double[]> stochasticSimulationTotals(NetworkFactory.NetworkType networkType, AbstractStrategy abstractStrategy, Epidemic epidemic) {
+    public static Map<String, double[]> stochasticSimulationTotals(NetworkFactory.NetworkType networkType,
+            AbstractStrategy abstractStrategy, Epidemic epidemic, boolean includeAge) {
 
         StochasticModel[] models = new StochasticModel[ModelParameters.SIMULATIONS];
 
@@ -268,7 +273,7 @@ public class HelperFunctions {
         ExecutorService executor = Executors.newFixedThreadPool(np);
 
         for (int i = 0; i < ModelParameters.SIMULATIONS; i++) {
-            models[i] = new StochasticModel(epidemic, networkType, abstractStrategy);
+            models[i] = new StochasticModel(epidemic, networkType, abstractStrategy, includeAge);
             executor.execute(models[i]);
         }
         executor.shutdown();
