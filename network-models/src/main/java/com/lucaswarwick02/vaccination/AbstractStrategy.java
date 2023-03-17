@@ -9,9 +9,19 @@ import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.AbstractNetwork;
+import com.lucaswarwick02.vaccination.StrategyFactory.StrategyType;
 
 public abstract class AbstractStrategy {
+
+    public float rho;
+
+    protected AbstractStrategy(float rho) {
+        this.rho = rho;
+    }
+
     public abstract void performStrategy(StochasticModel model);
+
+    public abstract StrategyType getStrategyType();
 
     public void logVaccinationDistribution(AbstractNetwork network) {
         for (AgeBracket ageBracket : AgeBracket.values()) {

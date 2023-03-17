@@ -4,15 +4,15 @@ import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.vaccination.StrategyFactory.StrategyType;
 
 public class MixedStrategy extends AbstractStrategy {
 
     private float alpha;
-    private float rho;
 
     public MixedStrategy(float alpha, float rho) {
+        super(rho);
         this.alpha = alpha;
-        this.rho = rho;
     }
 
     @Override
@@ -34,4 +34,8 @@ public class MixedStrategy extends AbstractStrategy {
         }
     }
 
+    @Override
+    public StrategyType getStrategyType() {
+        return StrategyType.MIXED;
+    }
 }

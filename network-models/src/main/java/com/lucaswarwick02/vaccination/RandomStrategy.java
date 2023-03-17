@@ -6,13 +6,12 @@ import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.vaccination.StrategyFactory.StrategyType;
 
 public class RandomStrategy extends AbstractStrategy {
 
-    private float rho;
-
     public RandomStrategy(float rho) {
-        this.rho = rho;
+        super(rho);
     }
 
     @Override
@@ -26,5 +25,10 @@ public class RandomStrategy extends AbstractStrategy {
                 numberOfNodes);
 
         nodesToVaccinate.forEach(node -> node.setState(State.VACCINATED));
+    }
+
+    @Override
+    public StrategyType getStrategyType() {
+        return StrategyType.RANDOM;
     }
 }

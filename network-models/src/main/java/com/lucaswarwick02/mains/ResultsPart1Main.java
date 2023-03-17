@@ -21,26 +21,26 @@ public class ResultsPart1Main {
         float[] rhos = HelperFunctions.createIntervals(0, 1, 0.05f);
 
         // * Section 1a
-        runSection(rootFolder, "section_1a", NetworkType.ERDOS_REYNI, StrategyType.RANDOM, 0, rhos);
+        runSection(rootFolder, "section_1a", NetworkType.ERDOS_REYNI, StrategyType.RANDOM, rhos);
 
         // * Section 1b
-        runSection(rootFolder, "section_1b", NetworkType.BARABASI_ALBERT, StrategyType.RANDOM, 0, rhos);
+        runSection(rootFolder, "section_1b", NetworkType.BARABASI_ALBERT, StrategyType.RANDOM, rhos);
 
         // * Section 2a
-        runSection(rootFolder, "section_2a", NetworkType.BARABASI_ALBERT, StrategyType.HIGHEST, 0, rhos);
+        runSection(rootFolder, "section_2a", NetworkType.BARABASI_ALBERT, StrategyType.HIGHEST, rhos);
 
         // * Section 2b
-        runSection(rootFolder, "section_2b", NetworkType.BARABASI_ALBERT, StrategyType.LOWEST, 0, rhos);
+        runSection(rootFolder, "section_2b", NetworkType.BARABASI_ALBERT, StrategyType.LOWEST, rhos);
 
         // * Section 3a
-        runSection(rootFolder, "section_3a", NetworkType.BARABASI_ALBERT, StrategyType.OLDEST, 0, rhos);
+        runSection(rootFolder, "section_3a", NetworkType.BARABASI_ALBERT, StrategyType.OLDEST, rhos);
 
         // * Section 3b
-        runSection(rootFolder, "section_3b", NetworkType.BARABASI_ALBERT, StrategyType.YOUNGEST, 0, rhos);
+        runSection(rootFolder, "section_3b", NetworkType.BARABASI_ALBERT, StrategyType.YOUNGEST, rhos);
     }
 
     private static void runSection(String rootFolder, String run, NetworkType networkType, StrategyType strategyType,
-            int timeDelay, float[] rhos) {
+            float[] rhos) {
         HelperFunctions.LOGGER.info("### " + run + " ###");
 
         Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
@@ -63,12 +63,7 @@ public class ResultsPart1Main {
         for (float rho : rhos) {
             AbstractStrategy strategy = StrategyFactory.getStrategy(strategyType, rho);
 
-            HelperFunctions.LOGGER.info("Running: " + strategy.toString());
-
-            File strategyFolder = new File(runFolder, strategy.toString());
-            strategyFolder.mkdir();
-
-            HelperFunctions.stochasticSimulationReduced(networkType, strategy, strategyFolder, epidemic, true);
+            HelperFunctions.stochasticSimulationReduced(networkType, strategy, runFolder, epidemic, true);
         }
     }
 }

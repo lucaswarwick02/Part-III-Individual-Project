@@ -5,14 +5,14 @@ import java.util.List;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.vaccination.StrategyFactory.StrategyType;
 
 public class DegreeStrategy extends AbstractStrategy {
 
-    private float rho;
     private boolean reverse;
 
     public DegreeStrategy(float rho, boolean reverse) {
-        this.rho = rho;
+        super(rho);
         this.reverse = reverse;
     }
 
@@ -25,5 +25,14 @@ public class DegreeStrategy extends AbstractStrategy {
         List<Node> nodesToVaccinate = model.getUnderlyingNetwork().getNodesByDegree(numberOfNodes, this.reverse);
 
         nodesToVaccinate.forEach(node -> node.setState(State.VACCINATED));
+    }
+
+    @Override
+    public StrategyType getStrategyType() {
+        if (this.reverse) {
+            return StrategyType.HIGHEST;
+        } else {
+            return StrategyType.LOWEST;
+        }
     }
 }

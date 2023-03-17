@@ -7,7 +7,9 @@ public class StrategyFactory {
         HIGHEST,
         LOWEST,
         OLDEST,
-        YOUNGEST
+        YOUNGEST,
+        MIXED,
+        HEATMAP
     }
 
     private StrategyFactory() {

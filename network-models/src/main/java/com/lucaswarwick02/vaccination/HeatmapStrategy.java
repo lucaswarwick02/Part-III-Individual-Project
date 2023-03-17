@@ -7,15 +7,15 @@ import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.vaccination.StrategyFactory.StrategyType;
 
 public class HeatmapStrategy extends AbstractStrategy {
 
     private float r;
-    private float rho;
 
     public HeatmapStrategy(float r, float rho) {
+        super(rho);
         this.r = r;
-        this.rho = rho;
     }
 
     @Override
@@ -48,6 +48,11 @@ public class HeatmapStrategy extends AbstractStrategy {
         }
 
         this.logVaccinationDistribution(model.getUnderlyingNetwork());
+    }
+
+    @Override
+    public StrategyType getStrategyType() {
+        return StrategyType.HEATMAP;
     }
 
 }

@@ -249,9 +249,12 @@ public class HelperFunctions {
         // Log key information on the simulations statistics
         HelperFunctions.evaluateAggregateModel(aggregateStates, aggregateTotals);
 
+        String simulationName = String.format("%s_%s_%.03f", networkType, abstractStrategy.getStrategyType(),
+                abstractStrategy.rho);
+
         // Save both the states and totals to the out folder
-        HelperFunctions.saveToCSV(aggregateStates, new File(runFolder, "states.csv"));
-        HelperFunctions.saveToCSV(aggregateTotals, new File(runFolder, "totals.csv"));
+        HelperFunctions.saveToCSV(aggregateStates, new File(runFolder, simulationName + "_states.csv"));
+        HelperFunctions.saveToCSV(aggregateTotals, new File(runFolder, simulationName + "_totals.csv"));
 
         HelperFunctions.LOGGER.info("... Completed");
     }
