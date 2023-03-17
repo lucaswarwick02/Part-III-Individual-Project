@@ -12,7 +12,7 @@ import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
-import com.lucaswarwick02.vaccination.RandomOneOff;
+import com.lucaswarwick02.vaccination.RandomStrategy;
 
 public class MathematicalMain {
     public static void main(String[] args) {
@@ -37,7 +37,7 @@ public class MathematicalMain {
 
         // * Stochastic Section
         HelperFunctions.LOGGER.info("Running " + ModelParameters.SIMULATIONS + " stochastic simulations...");
-        HelperFunctions.stochasticSimulationReduced(NetworkType.FULLY_MIXED, new RandomOneOff(0, 0), runFolder,
+        HelperFunctions.stochasticSimulationReduced(NetworkType.FULLY_MIXED, new RandomStrategy(0), runFolder,
                 epidemic, false);
         HelperFunctions.LOGGER.info("... Done");
     }

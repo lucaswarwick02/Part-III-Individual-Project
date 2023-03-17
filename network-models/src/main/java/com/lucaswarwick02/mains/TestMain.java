@@ -14,12 +14,12 @@ public class TestMain {
         network.assignAgeBrackets();
 
         System.out.println("Top N: ");
-        for (Node node : network.getOldestNodes(5)) {
+        for (Node node : network.getNodeByAge(5, false)) {
             System.out.printf("... Node %d: ageBracket = %d%n", node.ID, node.ageBracket.ageOrder);
         }
 
         System.out.println("Bottom N: ");
-        for (Node node : network.getYoungestNodes(5)) {
+        for (Node node : network.getNodeByAge(5, false)) {
             System.out.printf("... Node %d: ageBracket = %d%n", node.ID, node.ageBracket.ageOrder);
         }
 
@@ -30,12 +30,12 @@ public class TestMain {
         network.assignAgeBrackets();
 
         System.out.println("Top N: ");
-        for (Node node : network.getOldestNodes(5)) {
+        for (Node node : network.getNodeByAge(5, true)) {
             System.out.printf("... Node %d: ageBracket = %d%n", node.ID, node.ageBracket.ageOrder);
         }
 
         System.out.println("Bottom N: ");
-        for (Node node : network.getYoungestNodes(5)) {
+        for (Node node : network.getNodeByAge(5, true)) {
             System.out.printf("... Node %d: ageBracket = %d%n", node.ID, node.ageBracket.ageOrder);
         }
 

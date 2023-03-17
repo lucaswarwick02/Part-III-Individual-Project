@@ -28,7 +28,7 @@ public class HeatmapStrategy extends AbstractStrategy {
         int numberToVaccinate = Math.min(ModelParameters.NUMBER_OF_NODES - numberToIgnore,
                 (int) Math.floor(rho * ModelParameters.NUMBER_OF_NODES));
 
-        List<Node> orderedNodes = model.getUnderlyingNetwork().getOldestNodes(ModelParameters.NUMBER_OF_NODES);
+        List<Node> orderedNodes = model.getUnderlyingNetwork().getNodeByAge(ModelParameters.NUMBER_OF_NODES, true);
 
         // Remove the first numberToIgnore from the list
         List<Node> filteredNodes = new ArrayList<>();

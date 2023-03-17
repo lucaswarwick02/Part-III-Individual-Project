@@ -178,19 +178,20 @@ public abstract class AbstractNetwork {
         }
     };
 
-    public List<Node> getHighestDegreeNodes(int n) {
+    /**
+     * Reterns the nodes ordered by degree (lowest first)
+     * 
+     * @param n       Gets the top n
+     * @param reverse Whether to reverse the order of the nodes
+     * @return List of Nodes
+     */
+    public List<Node> getNodesByDegree(int n, boolean reverse) {
         List<Node> allNodes = new ArrayList<>(this.getNodes());
 
         Collections.sort(allNodes, degreeComparator);
-        Collections.reverse(allNodes);
 
-        return allNodes.stream().limit(n).collect(Collectors.toList());
-    }
-
-    public List<Node> getLowestDegreeNodes(int n) {
-        List<Node> allNodes = new ArrayList<>(this.getNodes());
-
-        Collections.sort(allNodes, degreeComparator);
+        if (reverse)
+            Collections.reverse(allNodes);
 
         return allNodes.stream().limit(n).collect(Collectors.toList());
     }
@@ -205,19 +206,20 @@ public abstract class AbstractNetwork {
         }
     };
 
-    public List<Node> getOldestNodes(int n) {
+    /**
+     * Returns the nodes ordered by age (youngest first)
+     * 
+     * @param n       Gets the top n
+     * @param reverse Whether to reverse the order of the nodes
+     * @return List of Nodes
+     */
+    public List<Node> getNodeByAge(int n, boolean reverse) {
         List<Node> allNodes = new ArrayList<>(this.getNodes());
 
         Collections.sort(allNodes, ageComparator);
-        Collections.reverse(allNodes);
 
-        return allNodes.stream().limit(n).collect(Collectors.toList());
-    }
-
-    public List<Node> getYoungestNodes(int n) {
-        List<Node> allNodes = new ArrayList<>(this.getNodes());
-
-        Collections.sort(allNodes, ageComparator);
+        if (reverse)
+            Collections.reverse(allNodes);
 
         return allNodes.stream().limit(n).collect(Collectors.toList());
     }

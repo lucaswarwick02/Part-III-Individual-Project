@@ -25,11 +25,11 @@ public class MixedStrategy extends AbstractStrategy {
         int degreeSize = (int) Math.floor(allToVaccinate * this.alpha);
         int ageSize = (int) Math.floor(allToVaccinate * (1 - this.alpha));
 
-        for (Node node : model.getUnderlyingNetwork().getHighestDegreeNodes(degreeSize)) {
+        for (Node node : model.getUnderlyingNetwork().getNodesByDegree(degreeSize, true)) {
             node.setState(State.VACCINATED);
         }
 
-        for (Node node : model.getUnderlyingNetwork().getOldestNodes(ageSize)) {
+        for (Node node : model.getUnderlyingNetwork().getNodeByAge(ageSize, true)) {
             node.setState(State.VACCINATED);
         }
     }
