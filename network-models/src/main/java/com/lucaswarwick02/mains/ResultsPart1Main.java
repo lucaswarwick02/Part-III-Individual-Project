@@ -19,30 +19,36 @@ public class ResultsPart1Main {
         String rootFolder = args[0];
 
         // * Full Scale (rho: 0-1)
-        float[] rhos = HelperFunctions.createIntervals(0, 1, 0.05f);
+        // float[] rhos = HelperFunctions.createIntervals(0, 1, 0.05f);
 
-        runSection(rootFolder, "section_1a", NetworkType.ERDOS_REYNI, StrategyType.RANDOM, rhos);
-        runSection(rootFolder, "section_1b", NetworkType.BARABASI_ALBERT, StrategyType.RANDOM, rhos);
-        runSection(rootFolder, "section_2a", NetworkType.BARABASI_ALBERT, StrategyType.HIGHEST, rhos);
-        runSection(rootFolder, "section_2b", NetworkType.BARABASI_ALBERT, StrategyType.LOWEST, rhos);
-        runSection(rootFolder, "section_3a", NetworkType.BARABASI_ALBERT, StrategyType.OLDEST, rhos);
-        runSection(rootFolder, "section_3b", NetworkType.BARABASI_ALBERT, StrategyType.YOUNGEST, rhos);
+        // runSection(rootFolder, "section_1a", NetworkType.ERDOS_REYNI,
+        // StrategyType.RANDOM, rhos);
+        // runSection(rootFolder, "section_1b", NetworkType.BARABASI_ALBERT,
+        // StrategyType.RANDOM, rhos);
+        // runSection(rootFolder, "section_2a", NetworkType.BARABASI_ALBERT,
+        // StrategyType.HIGHEST, rhos);
+        // runSection(rootFolder, "section_2b", NetworkType.BARABASI_ALBERT,
+        // StrategyType.LOWEST, rhos);
+        // runSection(rootFolder, "section_3a", NetworkType.BARABASI_ALBERT,
+        // StrategyType.OLDEST, rhos);
+        // runSection(rootFolder, "section_3b", NetworkType.BARABASI_ALBERT,
+        // StrategyType.YOUNGEST, rhos);
 
         // * Reduced Scale (rho: 0-0.2)
-        // float[] rhos = HelperFunctions.createIntervals(0, 0.2f, 0.0008f);
+        float[] rhos = HelperFunctions.createIntervals(0, 0.2f, 0.008f);
 
-        // runSection(rootFolder, "section_1a_reduced", NetworkType.ERDOS_REYNI,
-        // StrategyType.RANDOM, rhos);
-        // runSection(rootFolder, "section_1b_reduced", NetworkType.BARABASI_ALBERT,
-        // StrategyType.RANDOM, rhos);
-        // runSection(rootFolder, "section_2a_reduced", NetworkType.BARABASI_ALBERT,
-        // StrategyType.HIGHEST, rhos);
-        // runSection(rootFolder, "section_2b_reduced", NetworkType.BARABASI_ALBERT,
-        // StrategyType.LOWEST, rhos);
-        // runSection(rootFolder, "section_3a_reduced", NetworkType.BARABASI_ALBERT,
-        // StrategyType.OLDEST, rhos);
-        // runSection(rootFolder, "section_3b_reduced", NetworkType.BARABASI_ALBERT,
-        // StrategyType.YOUNGEST, rhos);
+        runSection(rootFolder, "section_1a_reduced", NetworkType.ERDOS_REYNI,
+                StrategyType.RANDOM, rhos);
+        runSection(rootFolder, "section_1b_reduced", NetworkType.BARABASI_ALBERT,
+                StrategyType.RANDOM, rhos);
+        runSection(rootFolder, "section_2a_reduced", NetworkType.BARABASI_ALBERT,
+                StrategyType.HIGHEST, rhos);
+        runSection(rootFolder, "section_2b_reduced", NetworkType.BARABASI_ALBERT,
+                StrategyType.LOWEST, rhos);
+        runSection(rootFolder, "section_3a_reduced", NetworkType.BARABASI_ALBERT,
+                StrategyType.OLDEST, rhos);
+        runSection(rootFolder, "section_3b_reduced", NetworkType.BARABASI_ALBERT,
+                StrategyType.YOUNGEST, rhos);
     }
 
     private static void runSection(String rootFolder, String run, NetworkType networkType, StrategyType strategyType,
