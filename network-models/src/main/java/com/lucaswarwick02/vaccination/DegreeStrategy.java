@@ -28,11 +28,11 @@ public class DegreeStrategy extends AbstractStrategy {
     }
 
     @Override
-    public StrategyType getStrategyType() {
+    public String getStrategyType() {
         if (this.reverse) {
-            return StrategyType.HIGHEST;
+            return StrategyType.HIGHEST.toString();
         } else {
-            return StrategyType.LOWEST;
+            return StrategyType.LOWEST.toString();
         }
     }
 }

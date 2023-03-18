@@ -51,8 +51,8 @@ public class HeatmapStrategy extends AbstractStrategy {
     }
 
     @Override
-    public StrategyType getStrategyType() {
-        return StrategyType.HEATMAP;
+    public String getStrategyType() {
+        return StrategyType.HEATMAP.toString();
     }
 
 }

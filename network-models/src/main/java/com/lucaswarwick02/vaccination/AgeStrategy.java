@@ -35,11 +35,11 @@ public class AgeStrategy extends AbstractStrategy {
     }
 
     @Override
-    public StrategyType getStrategyType() {
+    public String getStrategyType() {
         if (this.reverse) {
-            return StrategyType.OLDEST;
+            return StrategyType.OLDEST.toString();
         } else {
-            return StrategyType.YOUNGEST;
+            return StrategyType.YOUNGEST.toString();
         }
     }
 }

@@ -28,7 +28,7 @@ public class RandomStrategy extends AbstractStrategy {
     }
 
     @Override
-    public StrategyType getStrategyType() {
-        return StrategyType.RANDOM;
+    public String getStrategyType() {
+        return StrategyType.RANDOM.toString();
     }
 }

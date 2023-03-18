@@ -22,25 +22,23 @@ public class MixedMain {
         File runFolder = new File(dataFolder, run);
         runFolder.mkdir();
 
-        runMixed(runFolder, 1.00f);
-        runMixed(runFolder, 0.75f);
-        runMixed(runFolder, 0.50f);
         runMixed(runFolder, 0.25f);
+        runMixed(runFolder, 0.5f);
+        runMixed(runFolder, 0.75f);
     }
 
-    private static void runMixed(File runFolder, float alpha) {
-        File alphaFolder = new File(runFolder, String.format("alpha=%.03f", alpha));
-        alphaFolder.mkdir();
+    private static void runMixed(File runFolder, float rho) {
+        HelperFunctions.LOGGER.info(String.format("rho=%.03f", rho));
 
-        float[] rhos = HelperFunctions.createIntervals(0, 1, 0.05f);
+        File rhoFolder = new File(runFolder, String.format("rho=%.03f", rho));
+        rhoFolder.mkdir();
+
+        float[] alphas = HelperFunctions.createIntervals(0, 1, 0.05f);
         Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
-        for (float rho : rhos) {
-            File rhoFolder = new File(alphaFolder, String.format("rho=%.03f", rho));
-            rhoFolder.mkdir();
-
+        for (float alpha : alphas) {
+            HelperFunctions.LOGGER.info(String.format("... alpha=%.03f", alpha));
             AbstractStrategy strategy = new MixedStrategy(alpha, rho);
-
             HelperFunctions.stochasticSimulationReduced(NetworkType.BARABASI_ALBERT, strategy, rhoFolder, epidemic,
                     true);
         }

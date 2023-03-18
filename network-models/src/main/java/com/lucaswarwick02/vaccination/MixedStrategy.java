@@ -35,7 +35,7 @@ public class MixedStrategy extends AbstractStrategy {
     }
 
     @Override
-    public StrategyType getStrategyType() {
-        return StrategyType.MIXED;
+    public String getStrategyType() {
+        return String.format("%s_ALPHA=%.03f", StrategyType.MIXED.toString(), this.alpha);
     }
 }
