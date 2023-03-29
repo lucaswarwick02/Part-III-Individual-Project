@@ -23,8 +23,8 @@ public class MixedMain {
         runFolder.mkdir();
 
         runMixed(runFolder, 0.1f);
-        // runMixed(runFolder, 0.25f);
-        // runMixed(runFolder, 0.5f);
+        runMixed(runFolder, 0.25f);
+        runMixed(runFolder, 0.5f);
         // runMixed(runFolder, 0.75f);
     }
 

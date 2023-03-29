@@ -124,7 +124,7 @@ public class StochasticModel implements Runnable {
             if (nodesToRecover.contains(infectedNode))
                 continue;
 
-            if (r.nextFloat() <= epidemic.hospitalisationRate * infectedNode.hospitalisationMultiplier()) {
+            if (r.nextFloat() <= epidemic.hospitalisationRate * infectedNode.ageBracket.h) {
                 nodesToHospitalise.add(infectedNode);
             }
         }
@@ -141,7 +141,7 @@ public class StochasticModel implements Runnable {
             if (nodesToRecover.contains(hospitalisedNode))
                 continue;
 
-            if (r.nextFloat() <= epidemic.mortalityRate * hospitalisedNode.mortalityMultiplier()) {
+            if (r.nextFloat() <= epidemic.mortalityRate * hospitalisedNode.ageBracket.d) {
                 nodesToKill.add(hospitalisedNode);
             }
         }

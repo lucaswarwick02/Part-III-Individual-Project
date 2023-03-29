@@ -46,7 +46,7 @@ public abstract class AbstractNetwork {
         // For each node...
         for (AgeBracket ageBracket : AgeBracket.degreeOrder) {
             // Calculate the total number of nodes for this age bracket
-            int numberOfNodes = (int) Math.floor(ageBracket.percentageOfPopulation * ModelParameters.NUMBER_OF_NODES);
+            int numberOfNodes = (int) Math.floor(ageBracket.proportion * ModelParameters.NUMBER_OF_NODES);
 
             // Get a list of the first N nodes
             List<Node> nodesForAgeBracket = allNodes.stream().limit(numberOfNodes).collect(Collectors.toList());
