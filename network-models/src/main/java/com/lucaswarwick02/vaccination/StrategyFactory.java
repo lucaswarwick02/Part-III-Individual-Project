@@ -9,7 +9,8 @@ public class StrategyFactory {
         OLDEST,
         YOUNGEST,
         MIXED,
-        HEATMAP
+        HEATMAP,
+        TIME_DEPENDENT
     }
 
     private StrategyFactory() {

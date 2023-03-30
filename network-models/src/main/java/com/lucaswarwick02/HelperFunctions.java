@@ -216,6 +216,17 @@ public class HelperFunctions {
         return intervals;
     }
 
+    public static int[] createIntervals(int start, int end, int step) {
+        int size = ((end - start) / step) + 1;
+        int[] intervals = new int[size];
+
+        for (int i = 0; i < size; i++) {
+            intervals[i] = start + (i * step);
+        }
+
+        return intervals;
+    }
+
     /**
      * Variation of the same function in StochasticMain, but with minimal logging
      * 
