@@ -23,6 +23,7 @@ public class TimeDependentMain {
         runFolder.mkdir();
 
         runTimeDependent(runFolder, 0.25f);
+        runTimeDependent(runFolder, 0.1f);
     }
 
     private static void runTimeDependent(File runFolder, float rho) {
@@ -31,8 +32,8 @@ public class TimeDependentMain {
         File rhoFolder = new File(runFolder, String.format("rho=%.03f", rho));
         rhoFolder.mkdir();
 
-        int[] t1s = HelperFunctions.createIntervals(0, 50, 10);
-        int[] t2s = HelperFunctions.createIntervals(50, 100, 10);
+        int[] t1s = HelperFunctions.createIntervals(0, 50, 5);
+        int[] t2s = HelperFunctions.createIntervals(50, 100, 5);
 
         Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
