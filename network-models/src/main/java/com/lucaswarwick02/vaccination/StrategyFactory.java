@@ -10,7 +10,8 @@ public class StrategyFactory {
         YOUNGEST,
         MIXED,
         HEATMAP,
-        TIME_DEPENDENT
+        TIME_DEPENDENT,
+        THRESHOLD_DEPENDENT
     }
 
     private StrategyFactory() {
