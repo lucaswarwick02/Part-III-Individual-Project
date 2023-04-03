@@ -6,9 +6,10 @@ import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
 import com.lucaswarwick02.vaccination.AbstractStrategy;
-import com.lucaswarwick02.vaccination.TimeDependent;
+import com.lucaswarwick02.vaccination.ThresholdDependent;
 
-public class TimeDependentMain {
+public class ThresholdDependentMain {
+
     public static void main(String[] args) {
         System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-4s] %5$s %n");
 
@@ -22,29 +23,26 @@ public class TimeDependentMain {
         File runFolder = new File(dataFolder, run);
         runFolder.mkdir();
 
-        runTimeDependent(runFolder, 0.25f);
-        runTimeDependent(runFolder, 0.1f);
+        runThresholdDependent(runFolder, 0.25f);
+        runThresholdDependent(runFolder, 0.1f);
     }
 
-    private static void runTimeDependent(File runFolder, float rho) {
+    private static void runThresholdDependent(File runFolder, float rho) {
         HelperFunctions.LOGGER.info(String.format("rho=%.03f", rho));
 
         File rhoFolder = new File(runFolder, String.format("rho=%.03f", rho));
         rhoFolder.mkdir();
 
-        int[] t1s = HelperFunctions.createIntervals(0, 25, 5);
-        int[] t2s = HelperFunctions.createIntervals(25, 50, 5);
+        float[] thresholds = HelperFunctions.createIntervals(0.0f, 1.0f, 0.05f);
 
         Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
-        for (int t1 : t1s) {
-            for (int t2 : t2s) {
-                HelperFunctions.LOGGER.info(String.format("... t1=%d, t2=%d", t1, t2));
-                AbstractStrategy strategy = new TimeDependent(rho, t1, t2);
-                HelperFunctions.stochasticSimulationReduced(NetworkType.BARABASI_ALBERT, strategy, rhoFolder, epidemic,
-                        true);
-            }
+        for (float threshold : thresholds) {
+            HelperFunctions.LOGGER.info(String.format("... threshold=%.03f", threshold));
+            AbstractStrategy strategy = new ThresholdDependent(rho, threshold);
+            HelperFunctions.stochasticSimulationReduced(NetworkType.BARABASI_ALBERT, strategy, rhoFolder, epidemic,
+                    true);
         }
-
     }
+
 }

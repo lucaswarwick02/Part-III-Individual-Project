@@ -11,7 +11,7 @@ public class ThresholdDependent extends AbstractStrategy {
 
     private float threshold;
 
-    public ThresholdDependent(float rho, int threshold) {
+    public ThresholdDependent(float rho, float threshold) {
         super(rho);
         this.threshold = threshold;
     }
