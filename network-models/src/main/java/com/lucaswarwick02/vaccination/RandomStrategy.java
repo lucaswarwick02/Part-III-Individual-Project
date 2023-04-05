@@ -19,7 +19,7 @@ public class RandomStrategy extends AbstractStrategy {
         if (model.getCurrentTime() != 0)
             return;
 
-        int numberOfNodes = (int) Math.floor(model.getUnderlyingNetwork().getNodes().size() * rho);
+        int numberOfNodes = this.numberOfNodesToVaccinate();
         List<Node> nodesToVaccinate = HelperFunctions.pickRandomNodes(
                 model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE),
                 numberOfNodes);

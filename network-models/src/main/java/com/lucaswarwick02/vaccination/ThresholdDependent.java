@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
+import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.vaccination.StrategyFactory.StrategyType;
 
 public class ThresholdDependent extends AbstractStrategy {
@@ -25,8 +27,9 @@ public class ThresholdDependent extends AbstractStrategy {
                 / (float) ModelParameters.NUMBER_OF_NODES;
 
         if (infectedPercentage >= this.threshold) {
-            int numberOfNodes = (int) Math.floor(model.getUnderlyingNetwork().getNodes().size() * this.rho);
-            List<Node> nodesToVaccinate = model.getUnderlyingNetwork().getNodeByAge(numberOfNodes, true);
+            int numberOfNodes = numberOfNodesToVaccinate();
+            List<Node> nodesToVaccinate = AbstractNetwork.getNodeByAge(
+                    model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE), numberOfNodes, true);
             nodesToVaccinate.forEach(node -> node.setState(Node.State.VACCINATED));
         }
     }

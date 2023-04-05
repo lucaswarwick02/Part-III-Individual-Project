@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.AgeBracket;
+import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
@@ -21,6 +22,10 @@ public abstract class AbstractStrategy {
     public abstract void performStrategy(StochasticModel model);
 
     public abstract String getStrategyType();
+
+    public int numberOfNodesToVaccinate() {
+        return (int) Math.floor(ModelParameters.NUMBER_OF_NODES * this.rho);
+    }
 
     public void logVaccinationDistribution(AbstractNetwork network) {
         for (AgeBracket ageBracket : AgeBracket.values()) {

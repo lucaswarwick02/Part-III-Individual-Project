@@ -168,7 +168,7 @@ public abstract class AbstractNetwork {
 
     }
 
-    private Comparator<Node> degreeComparator = (Node n1, Node n2) -> {
+    private static Comparator<Node> degreeComparator = (Node n1, Node n2) -> {
         if (n1.getDegree() == n2.getDegree()) {
             return 0;
         } else if (n1.getDegree() < n2.getDegree()) {
@@ -185,8 +185,8 @@ public abstract class AbstractNetwork {
      * @param reverse Whether to reverse the order of the nodes
      * @return List of Nodes
      */
-    public List<Node> getNodesByDegree(int n, boolean reverse) {
-        List<Node> allNodes = new ArrayList<>(this.getNodes());
+    public static List<Node> getNodesByDegree(List<Node> nodes, int n, boolean reverse) {
+        List<Node> allNodes = new ArrayList<>(nodes);
 
         Collections.sort(allNodes, degreeComparator);
 
@@ -196,7 +196,7 @@ public abstract class AbstractNetwork {
         return allNodes.stream().limit(n).collect(Collectors.toList());
     }
 
-    private Comparator<Node> ageComparator = (Node n1, Node n2) -> {
+    private static Comparator<Node> ageComparator = (Node n1, Node n2) -> {
         if (n1.ageBracket.ageOrder == n2.ageBracket.ageOrder) {
             return 0;
         } else if (n1.ageBracket.ageOrder < n2.ageBracket.ageOrder) {
@@ -213,8 +213,8 @@ public abstract class AbstractNetwork {
      * @param reverse Whether to reverse the order of the nodes
      * @return List of Nodes
      */
-    public List<Node> getNodeByAge(int n, boolean reverse) {
-        List<Node> allNodes = new ArrayList<>(this.getNodes());
+    public static List<Node> getNodeByAge(List<Node> nodes, int n, boolean reverse) {
+        List<Node> allNodes = new ArrayList<>(nodes);
 
         Collections.sort(allNodes, ageComparator);
 

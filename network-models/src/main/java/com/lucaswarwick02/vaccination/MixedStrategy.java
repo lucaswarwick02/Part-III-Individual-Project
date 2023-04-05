@@ -1,9 +1,9 @@
 package com.lucaswarwick02.vaccination;
 
-import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.vaccination.StrategyFactory.StrategyType;
 
 public class MixedStrategy extends AbstractStrategy {
@@ -20,16 +20,18 @@ public class MixedStrategy extends AbstractStrategy {
         if (model.getCurrentTime() != 0)
             return;
 
-        int allToVaccinate = (int) Math.floor(ModelParameters.NUMBER_OF_NODES * this.rho);
+        int allToVaccinate = this.numberOfNodesToVaccinate();
 
         int degreeSize = (int) Math.floor(allToVaccinate * this.alpha);
         int ageSize = (int) Math.floor(allToVaccinate * (1 - this.alpha));
 
-        for (Node node : model.getUnderlyingNetwork().getNodesByDegree(degreeSize, true)) {
+        for (Node node : AbstractNetwork.getNodesByDegree(
+                model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE), degreeSize, true)) {
             node.setState(State.VACCINATED);
         }
 
-        for (Node node : model.getUnderlyingNetwork().getNodeByAge(ageSize, true)) {
+        for (Node node : AbstractNetwork.getNodeByAge(model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE),
+                ageSize, true)) {
             node.setState(State.VACCINATED);
         }
     }

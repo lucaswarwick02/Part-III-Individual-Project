@@ -5,6 +5,7 @@ import java.util.List;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.vaccination.StrategyFactory.StrategyType;
 
 public class TimeDependent extends AbstractStrategy {
@@ -21,21 +22,19 @@ public class TimeDependent extends AbstractStrategy {
     @Override
     public void performStrategy(StochasticModel model) {
         if (model.getCurrentTime() == this.t1) {
-            // Vaccinate first half
-            int numberOfNodes = (int) Math.floor(model.getUnderlyingNetwork().getNodes().size() * this.rho);
-            List<Node> nodesToVaccinate = model.getUnderlyingNetwork().getNodeByAge(numberOfNodes, true);
-
-            List<Node> nodesSublist = nodesToVaccinate.subList(nodesToVaccinate.size() / 2, nodesToVaccinate.size());
-            nodesSublist.forEach(node -> node.setState(State.VACCINATED));
+            int numberOfNodesToVaccinate = (int) Math.floor(this.numberOfNodesToVaccinate() / 2f);
+            List<Node> nodesToVaccinate = AbstractNetwork.getNodeByAge(
+                    model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE), numberOfNodesToVaccinate,
+                    true);
+            nodesToVaccinate.forEach(node -> node.setState(State.VACCINATED));
 
         }
         if (model.getCurrentTime() == this.t2) {
-            // Vaccinate second half
-            int numberOfNodes = (int) Math.floor(model.getUnderlyingNetwork().getNodes().size() * this.rho);
-            List<Node> nodesToVaccinate = model.getUnderlyingNetwork().getNodeByAge(numberOfNodes, true);
-
-            List<Node> nodesSublist = nodesToVaccinate.subList(0, nodesToVaccinate.size() / 2);
-            nodesSublist.forEach(node -> node.setState(State.VACCINATED));
+            int numberOfNodesToVaccinate = (int) Math.floor(this.numberOfNodesToVaccinate() / 2f);
+            List<Node> nodesToVaccinate = AbstractNetwork.getNodeByAge(
+                    model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE), numberOfNodesToVaccinate,
+                    true);
+            nodesToVaccinate.forEach(node -> node.setState(State.VACCINATED));
         }
     }
 

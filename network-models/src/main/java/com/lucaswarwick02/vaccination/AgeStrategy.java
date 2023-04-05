@@ -5,6 +5,7 @@ import java.util.List;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.vaccination.StrategyFactory.StrategyType;
 
 public class AgeStrategy extends AbstractStrategy {
@@ -27,9 +28,10 @@ public class AgeStrategy extends AbstractStrategy {
         if (model.getCurrentTime() != 0)
             return;
 
-        int numberOfNodes = (int) Math.floor(model.getUnderlyingNetwork().getNodes().size() * this.rho);
+        int numberOfNodes = this.numberOfNodesToVaccinate();
 
-        List<Node> nodesToVaccinate = model.getUnderlyingNetwork().getNodeByAge(numberOfNodes, this.reverse);
+        List<Node> nodesToVaccinate = AbstractNetwork.getNodeByAge(
+                model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE), numberOfNodes, this.reverse);
 
         nodesToVaccinate.forEach(node -> node.setState(State.VACCINATED));
     }

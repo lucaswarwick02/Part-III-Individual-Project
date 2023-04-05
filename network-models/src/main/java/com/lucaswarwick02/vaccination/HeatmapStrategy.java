@@ -7,6 +7,7 @@ import com.lucaswarwick02.components.ModelParameters;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.vaccination.StrategyFactory.StrategyType;
 
 public class HeatmapStrategy extends AbstractStrategy {
@@ -26,9 +27,11 @@ public class HeatmapStrategy extends AbstractStrategy {
         int numberToIgnore = (int) Math.floor(r * ModelParameters.NUMBER_OF_NODES);
 
         int numberToVaccinate = Math.min(ModelParameters.NUMBER_OF_NODES - numberToIgnore,
-                (int) Math.floor(rho * ModelParameters.NUMBER_OF_NODES));
+                this.numberOfNodesToVaccinate());
 
-        List<Node> orderedNodes = model.getUnderlyingNetwork().getNodeByAge(ModelParameters.NUMBER_OF_NODES, true);
+        List<Node> orderedNodes = AbstractNetwork.getNodeByAge(
+                model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE), ModelParameters.NUMBER_OF_NODES,
+                true);
 
         // Remove the first numberToIgnore from the list
         List<Node> filteredNodes = new ArrayList<>();

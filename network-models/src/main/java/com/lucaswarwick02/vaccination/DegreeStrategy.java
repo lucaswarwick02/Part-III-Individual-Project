@@ -5,6 +5,7 @@ import java.util.List;
 import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.components.Node.State;
 import com.lucaswarwick02.models.StochasticModel;
+import com.lucaswarwick02.networks.AbstractNetwork;
 import com.lucaswarwick02.vaccination.StrategyFactory.StrategyType;
 
 public class DegreeStrategy extends AbstractStrategy {
@@ -21,8 +22,10 @@ public class DegreeStrategy extends AbstractStrategy {
         if (model.getCurrentTime() != 0)
             return;
 
-        int numberOfNodes = (int) Math.floor(model.getUnderlyingNetwork().getNodes().size() * rho);
-        List<Node> nodesToVaccinate = model.getUnderlyingNetwork().getNodesByDegree(numberOfNodes, this.reverse);
+        int numberOfNodes = this.numberOfNodesToVaccinate();
+
+        List<Node> nodesToVaccinate = AbstractNetwork.getNodesByDegree(
+                model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE), numberOfNodes, this.reverse);
 
         nodesToVaccinate.forEach(node -> node.setState(State.VACCINATED));
     }
