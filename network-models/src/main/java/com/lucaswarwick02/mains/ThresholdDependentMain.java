@@ -5,8 +5,6 @@ import java.io.File;
 import com.lucaswarwick02.HelperFunctions;
 import com.lucaswarwick02.components.Epidemic;
 import com.lucaswarwick02.networks.NetworkFactory.NetworkType;
-import com.lucaswarwick02.vaccination.AbstractStrategy;
-import com.lucaswarwick02.vaccination.ThresholdDependent;
 
 public class ThresholdDependentMain {
 
@@ -23,25 +21,23 @@ public class ThresholdDependentMain {
         File runFolder = new File(dataFolder, run);
         runFolder.mkdir();
 
-        runThresholdDependent(runFolder, 0.25f);
-        runThresholdDependent(runFolder, 0.1f);
+        runThresholdDependent(runFolder);
     }
 
-    private static void runThresholdDependent(File runFolder, float rho) {
-        HelperFunctions.LOGGER.info(String.format("rho=%.03f", rho));
-
-        File rhoFolder = new File(runFolder, String.format("rho=%.03f", rho));
-        rhoFolder.mkdir();
-
-        float[] thresholds = HelperFunctions.createIntervals(0.0f, 1.0f, 0.05f);
+    private static void runThresholdDependent(File runFolder) {
+        float[] thresholds = HelperFunctions.createIntervals(0.0f, 1.0f, 0.1f);
+        float[] rhos = HelperFunctions.createIntervals(0.000f, 1.000f, 0.1f);
 
         Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
         for (float threshold : thresholds) {
-            HelperFunctions.LOGGER.info(String.format("... threshold=%.03f", threshold));
-            AbstractStrategy strategy = new ThresholdDependent(rho, threshold);
-            HelperFunctions.stochasticSimulationReduced(NetworkType.BARABASI_ALBERT, strategy, rhoFolder, epidemic,
-                    true);
+            for (float rho : rhos) {
+                HelperFunctions.LOGGER.info(String.format("... threshold=%.03f, rho=%.03f", threshold, rho));
+                HelperFunctions.stochasticSimulationReducedThreshold(NetworkType.BARABASI_ALBERT, rho, threshold,
+                        runFolder,
+                        epidemic,
+                        true);
+            }
         }
     }
 

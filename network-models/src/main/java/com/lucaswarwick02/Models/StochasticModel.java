@@ -47,6 +47,8 @@ public class StochasticModel implements Runnable {
         this.networkType = networkType;
         this.abstractStrategy = abstractStrategy;
         this.includeAge = includeAge;
+
+        this.abstractStrategy.initialiseStrategy();
     }
 
     @Override

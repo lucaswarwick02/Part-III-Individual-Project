@@ -13,24 +13,41 @@ public class ThresholdDependent extends AbstractStrategy {
 
     private float threshold;
 
+    private boolean hasVaccinationOccured;
+
     public ThresholdDependent(float rho, float threshold) {
         super(rho);
         this.threshold = threshold;
     }
 
     @Override
-    public void performStrategy(StochasticModel model) {
-        if (model.getCurrentTime() == 0)
-            return;
+    public void initialiseStrategy() {
+        this.hasVaccinationOccured = false;
+    }
 
+    @Override
+    public void performStrategy(StochasticModel model) {
+        if (model.getCurrentTime() == 0 || hasVaccinationOccured) {
+            return;
+        }
+        // Percentage of infected required for vaccianation
         float infectedPercentage = model.totals.get("Infected")[model.getCurrentTime() - 1]
                 / (float) ModelParameters.NUMBER_OF_NODES;
 
+        // If the percentage of people infected is greater than the threshold, vaccinate
         if (infectedPercentage >= this.threshold) {
+            // Vaccinate a percentage of the population
             int numberOfNodes = numberOfNodesToVaccinate();
+
+            // Get a random sample of nodes to vaccinate
             List<Node> nodesToVaccinate = AbstractNetwork.getNodeByAge(
-                    model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE), numberOfNodes, true);
+                    model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE), numberOfNodes, false);
+
+            // Vaccinate the nodes
             nodesToVaccinate.forEach(node -> node.setState(Node.State.VACCINATED));
+
+            // Update flag
+            hasVaccinationOccured = true;
         }
     }
 

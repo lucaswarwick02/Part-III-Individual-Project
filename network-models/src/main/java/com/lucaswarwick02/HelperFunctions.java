@@ -19,6 +19,7 @@ import com.lucaswarwick02.components.Node;
 import com.lucaswarwick02.models.StochasticModel;
 import com.lucaswarwick02.networks.NetworkFactory;
 import com.lucaswarwick02.vaccination.AbstractStrategy;
+import com.lucaswarwick02.vaccination.ThresholdDependent;
 
 public class HelperFunctions {
 
@@ -262,6 +263,54 @@ public class HelperFunctions {
 
         String simulationName = String.format("%s_%s_%.03f", networkType, abstractStrategy.getStrategyType(),
                 abstractStrategy.rho);
+
+        // Save both the states and totals to the out folder
+        HelperFunctions.saveToCSV(aggregateStates, new File(runFolder, simulationName + "_states.csv"));
+        HelperFunctions.saveToCSV(aggregateTotals, new File(runFolder, simulationName + "_totals.csv"));
+
+        HelperFunctions.LOGGER.info("... Completed");
+    }
+
+    /**
+     * Variation of the same function in StochasticMain, but with minimal logging
+     * 
+     * @param networkType
+     * @param runFolder
+     */
+    public static void stochasticSimulationReducedThreshold(NetworkFactory.NetworkType networkType,
+            float rho, float threshold,
+            File runFolder, Epidemic epidemic, boolean includeAge) {
+
+        StochasticModel[] models = new StochasticModel[ModelParameters.SIMULATIONS];
+
+        // Setup the thread groups for multithreading
+        int np = Runtime.getRuntime().availableProcessors();
+
+        ExecutorService executor = Executors.newFixedThreadPool(np);
+
+        for (int i = 0; i < ModelParameters.SIMULATIONS; i++) {
+            // Must create a new strategy for each simulation as the flag needs to be
+            // independent
+            models[i] = new StochasticModel(epidemic, networkType, new ThresholdDependent(rho, threshold), includeAge);
+            executor.execute(models[i]);
+        }
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            // Wait until the executor has finished the simulations
+        }
+
+        // Aggregate together all of the simulations
+        Map<String, double[]> aggregateStates = HelperFunctions.aggregateStates(models);
+        Map<String, double[]> aggregateTotals = HelperFunctions.aggregateTotals(models);
+
+        // Log key information on the simulations statistics
+        HelperFunctions.evaluateAggregateModel(aggregateStates, aggregateTotals);
+
+        // Create an unused strategy just for logging information
+        AbstractStrategy debugStrategy = new ThresholdDependent(rho, threshold);
+
+        String simulationName = String.format("%s_%s_%.03f", networkType, debugStrategy.getStrategyType(),
+                debugStrategy.rho);
 
         // Save both the states and totals to the out folder
         HelperFunctions.saveToCSV(aggregateStates, new File(runFolder, simulationName + "_states.csv"));

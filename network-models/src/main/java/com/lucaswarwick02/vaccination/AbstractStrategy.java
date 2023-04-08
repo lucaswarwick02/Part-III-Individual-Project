@@ -19,6 +19,10 @@ public abstract class AbstractStrategy {
         this.rho = rho;
     }
 
+    public void initialiseStrategy() {
+        // Only override if necessary (e.g. ThresholdDependent's flag)
+    }
+
     public abstract void performStrategy(StochasticModel model);
 
     public abstract String getStrategyType();
