@@ -41,7 +41,7 @@ public class ThresholdDependent extends AbstractStrategy {
 
             // Get a random sample of nodes to vaccinate
             List<Node> nodesToVaccinate = AbstractNetwork.getNodeByAge(
-                    model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE), numberOfNodes, false);
+                    model.getUnderlyingNetwork().getNodesFromState(State.SUSCEPTIBLE), numberOfNodes, true);
 
             // Vaccinate the nodes
             nodesToVaccinate.forEach(node -> node.setState(Node.State.VACCINATED));
