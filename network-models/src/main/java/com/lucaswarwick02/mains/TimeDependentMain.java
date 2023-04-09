@@ -32,8 +32,8 @@ public class TimeDependentMain {
         File rhoFolder = new File(runFolder, String.format("rho=%.03f", rho));
         rhoFolder.mkdir();
 
-        int[] t1s = HelperFunctions.createIntervals(0, 28, 4);
-        int[] t2s = HelperFunctions.createIntervals(28, 56, 4);
+        int[] t1s = HelperFunctions.createIntervals(0, 30, 3);
+        int[] t2s = HelperFunctions.createIntervals(30, 60, 3);
 
         Epidemic epidemic = Epidemic.loadFromResources("/stochastic.xml");
 
