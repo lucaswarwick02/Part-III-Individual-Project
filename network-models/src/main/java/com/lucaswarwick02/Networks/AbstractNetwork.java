@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -114,16 +115,22 @@ public abstract class AbstractNetwork {
     }
 
     public void logAgeDistribution() {
+        EnumMap<AgeBracket, Integer> ageDistribution = getAgeDistribution();
+
+        for (AgeBracket ageBracket : AgeBracket.values()) {
+            HelperFunctions.LOGGER.info(
+                    ageBracket + ": " + ((ageDistribution.get(ageBracket) / (float) this.nodes.size()) * 100) + "%");
+        }
+    }
+
+    public EnumMap<AgeBracket, Integer> getAgeDistribution() {
         EnumMap<AgeBracket, Integer> ageDistribution = new EnumMap<>(AgeBracket.class);
 
         for (Node node : this.nodes) {
             ageDistribution.put(node.ageBracket, ageDistribution.getOrDefault(node.ageBracket, 0) + 1);
         }
 
-        for (AgeBracket ageBracket : AgeBracket.values()) {
-            HelperFunctions.LOGGER.info(
-                    ageBracket + ": " + ((ageDistribution.get(ageBracket) / (float) this.nodes.size()) * 100) + "%");
-        }
+        return ageDistribution;
     }
 
     public void logStateDistribution() {
