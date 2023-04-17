@@ -346,4 +346,48 @@ public class HelperFunctions {
 
         return HelperFunctions.aggregateTotals(models);
     }
+
+    public static Map<String, double[]> stochasticSimulationStates(NetworkFactory.NetworkType networkType,
+            AbstractStrategy abstractStrategy, Epidemic epidemic, boolean includeAge) {
+
+        StochasticModel[] models = new StochasticModel[ModelParameters.SIMULATIONS];
+
+        // Setup the thread groups for multithreading
+        int np = Runtime.getRuntime().availableProcessors();
+
+        ExecutorService executor = Executors.newFixedThreadPool(np);
+
+        for (int i = 0; i < ModelParameters.SIMULATIONS; i++) {
+            models[i] = new StochasticModel(epidemic, networkType, abstractStrategy, includeAge);
+            executor.execute(models[i]);
+        }
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            // Wait until the executor has finished the simulations
+        }
+
+        return HelperFunctions.aggregateStates(models);
+    }
+
+    public static Map<String, double[]> stochasticSimulationThresholdStates(NetworkFactory.NetworkType networkType,
+            float rho, float threshold, Epidemic epidemic, boolean includeAge) {
+
+        StochasticModel[] models = new StochasticModel[ModelParameters.SIMULATIONS];
+
+        // Setup the thread groups for multithreading
+        int np = Runtime.getRuntime().availableProcessors();
+
+        ExecutorService executor = Executors.newFixedThreadPool(np);
+
+        for (int i = 0; i < ModelParameters.SIMULATIONS; i++) {
+            models[i] = new StochasticModel(epidemic, networkType, new ThresholdDependent(rho, threshold), includeAge);
+            executor.execute(models[i]);
+        }
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            // Wait until the executor has finished the simulations
+        }
+
+        return HelperFunctions.aggregateStates(models);
+    }
 }

@@ -1,3 +1,5 @@
+package com.lucaswarwick02;
+
 import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.params.ParameterizedTest;
