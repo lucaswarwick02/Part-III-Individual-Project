@@ -59,6 +59,27 @@ public class NetworkTests {
     }
 
     /**
+     * Test that the Erdos-Reyni network has only one component.
+     */
+    @Test
+    public void ErdosReyni_Components_Test() {
+        boolean flag = true;
+
+        for (int i = 0; i < 25; i++) {
+            AbstractNetwork network = NetworkFactory.getNetwork(NetworkType.ERDOS_REYNI);
+            network.generateNetwork();
+
+            int numberOfComponents = network.calculateNumberOfComponents();
+            if (numberOfComponents != 1) {
+                flag = false;
+                break;
+            }
+        }
+
+        assertTrue(flag);
+    }
+
+    /**
      * Test that the average degree of the Barabasi-Albert network is close to the
      * target degree.
      */
@@ -102,5 +123,26 @@ public class NetworkTests {
         }
 
         assertTrue(distributionCorrect);
+    }
+
+    /**
+     * Test that the Barabasi-Albert network has only one component.
+     */
+    @Test
+    public void BarabasiAlbert_Components_Test() {
+        boolean flag = true;
+
+        for (int i = 0; i < 25; i++) {
+            AbstractNetwork network = NetworkFactory.getNetwork(NetworkType.BARABASI_ALBERT);
+            network.generateNetwork();
+
+            int numberOfComponents = network.calculateNumberOfComponents();
+            if (numberOfComponents != 1) {
+                flag = false;
+                break;
+            }
+        }
+
+        assertTrue(flag);
     }
 }
