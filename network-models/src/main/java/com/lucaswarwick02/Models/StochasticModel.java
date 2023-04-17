@@ -203,4 +203,12 @@ public class StochasticModel implements Runnable {
     public Random getRandom() {
         return this.r;
     }
+
+    public AbstractStrategy getAbstractStrategy() {
+        return this.abstractStrategy;
+    }
+
+    public void createNetwork() {
+        this.underlyingNetwork = NetworkFactory.getNetwork(this.networkType);
+    }
 }

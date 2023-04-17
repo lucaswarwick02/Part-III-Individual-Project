@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<epidemic>
+    <infectionRate>0.055</infectionRate>
+    <recoveryRate>0.06</recoveryRate>
+    <hospitalisationRate>0.04</hospitalisationRate>
+    <mortalityRate>0.1</mortalityRate>
+</epidemic>
