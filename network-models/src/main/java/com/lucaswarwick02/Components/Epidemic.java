@@ -43,6 +43,11 @@ public class Epidemic {
         HelperFunctions.LOGGER.info("... mortalityRate: " + mortalityRate);
     }
 
+    /**
+     * Save an example Epidemic to a file.
+     * 
+     * @param file
+     */
     public static void saveExample(File file) {
         Epidemic epidemic = new Epidemic();
 
@@ -59,6 +64,12 @@ public class Epidemic {
         }
     }
 
+    /**
+     * Load an Epidemic from a file in the resources folder.
+     * 
+     * @param fileName
+     * @return Epidemic
+     */
     public static Epidemic loadFromResources(String fileName) {
         Epidemic epidemic = new Epidemic();
 

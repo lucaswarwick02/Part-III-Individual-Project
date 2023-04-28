@@ -347,6 +347,15 @@ public class HelperFunctions {
         return HelperFunctions.aggregateTotals(models);
     }
 
+    /**
+     * Runs and aggregates multiple stochastic simulations, returning the states
+     * 
+     * @param networkType      The type of network to use
+     * @param abstractStrategy The strategy to use
+     * @param epidemic         The epidemic to use
+     * @param includeAge       Whether to include age in the simulation
+     * @return A map of the states
+     */
     public static Map<String, double[]> stochasticSimulationStates(NetworkFactory.NetworkType networkType,
             AbstractStrategy abstractStrategy, Epidemic epidemic, boolean includeAge) {
 
@@ -369,6 +378,17 @@ public class HelperFunctions {
         return HelperFunctions.aggregateStates(models);
     }
 
+    /**
+     * Runs and aggregates multiple stochastic simulations, returning the states.
+     * Only for the threshold strategy
+     * 
+     * @param networkType The type of network to use
+     * @param rho         The rho value to use
+     * @param threshold   The threshold value to use
+     * @param epidemic    The epidemic to use
+     * @param includeAge  Whether to include age in the simulation
+     * @return A map of the states
+     */
     public static Map<String, double[]> stochasticSimulationThresholdStates(NetworkFactory.NetworkType networkType,
             float rho, float threshold, Epidemic epidemic, boolean includeAge) {
 

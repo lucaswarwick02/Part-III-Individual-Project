@@ -33,10 +33,18 @@ public class Node {
 
     public int stubs; // Used for generating the network using the Configuration Model
 
+    /**
+     * Get the state of the Node
+     * 
+     * @return State of the Node
+     */
     public State getState() {
         return this.state;
     }
 
+    /**
+     * Set the state of the Node
+     */
     public void setState(State state) {
         this.state = state;
     }

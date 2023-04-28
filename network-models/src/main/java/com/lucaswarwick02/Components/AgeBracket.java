@@ -22,6 +22,7 @@ public enum AgeBracket {
         this.d = d;
     }
 
+    /// Order of age brackets from lowest average degree, to highest.
     public static final AgeBracket[] degreeOrder = {
             ABOVE_EIGHTY,
             BELOW_NINE,

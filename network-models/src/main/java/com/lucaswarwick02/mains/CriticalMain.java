@@ -23,9 +23,11 @@ public class CriticalMain {
                 File dataFolder = new File(rootFolder, "out");
                 dataFolder.mkdir();
 
+                // Generate the baseline results for both types of networks
                 runSectionBaseline("er_critical_baseline", dataFolder, NetworkType.ERDOS_REYNI);
                 runSectionBaseline("ba_critical_baseline", dataFolder, NetworkType.BARABASI_ALBERT);
 
+                // Run the following strategies: random, highest, lowest, oldest, youngest
                 runSection("critical_section_1a", dataFolder, NetworkType.ERDOS_REYNI,
                                 StrategyType.RANDOM);
                 runSection("critical_section_1b", dataFolder, NetworkType.BARABASI_ALBERT,
@@ -40,6 +42,9 @@ public class CriticalMain {
                                 StrategyType.YOUNGEST);
         }
 
+        /**
+         * Calculate the critical threshold for a given network type.
+         */
         private static void runSectionBaseline(String folderName, File dataFolder, NetworkType networkType) {
                 File runFolder = new File(dataFolder, folderName);
                 runFolder.mkdir();
@@ -47,6 +52,9 @@ public class CriticalMain {
                 determineCriticalPointBaseline(runFolder, networkType);
         }
 
+        /**
+         * Run the simulation for a given network type and strategy type.
+         */
         private static void runSection(String folderName, File dataFolder, NetworkType networkType,
                         StrategyType strategyType) {
                 File runFolder = new File(dataFolder, folderName);
@@ -60,6 +68,7 @@ public class CriticalMain {
         }
 
         private static void determineCriticalPointBaseline(File runFolder, NetworkType networkType) {
+                // Set the parameters for the simulation
                 float infectionRateLowerBount = 0f;
                 float infectionRateUpperBound = 0.03f;
                 float infectionStepSize = 0.0025f;
@@ -72,11 +81,13 @@ public class CriticalMain {
 
                 HelperFunctions.LOGGER.info(String.format("Running: %s", networkType.toString()));
 
+                // For each infection rate, run the simulation and store the total infected
                 for (float infectionRate : HelperFunctions.createIntervals(infectionRateLowerBount,
                                 infectionRateUpperBound,
                                 infectionStepSize)) {
                         AbstractStrategy strategy = StrategyFactory.getStrategy(StrategyType.RANDOM, 0);
 
+                        // Generate the unique epidemic
                         Epidemic epidemic = new Epidemic();
                         epidemic.infectionRate = infectionRate;
                         epidemic.recoveryRate = recoveryRate;
@@ -107,6 +118,15 @@ public class CriticalMain {
                 }
         }
 
+        /**
+         * Determine the critical point for a given network type, strategy type
+         * 
+         * @param runFolder    The folder to save the results to
+         * @param networkType  The type of network to use
+         * @param strategyType The type of strategy to use
+         * @param timeDelay    The time delay for the strategy
+         * @param rho          The rho value for the strategy
+         */
         private static void determineCriticalPoint(File runFolder, NetworkType networkType, StrategyType strategyType,
                         int timeDelay, float rho) {
                 float infectionRateLowerBount = 0f;
